@@ -3,7 +3,7 @@
  * Supports:
  * - Grouping raw PDF text content items into structured lines and paragraphs
  * - Generating 100% valid Microsoft Word OpenXML (.docx) files using JSZip
- * - Extracting text and structure from uploaded .docx files
+ * - Extracting text, paragraphs, headings, and EMBEDDED IMAGES from uploaded .docx files
  */
 import JSZip from 'jszip';
 
@@ -18,11 +18,22 @@ export interface ExtractedPdfTextItem {
 export interface ExtractedParagraph {
   text: string;
   isHeading: boolean;
+  imageDataUrl?: string;
+  imageType?: 'png' | 'jpeg';
 }
 
 export interface PageTextContent {
   pageNumber: number;
   paragraphs: ExtractedParagraph[];
+}
+
+export interface DocxBlock {
+  type: 'paragraph' | 'heading' | 'image';
+  text?: string;
+  isHeading?: boolean;
+  dataUrl?: string; // base64 data url for images (data:image/png;base64,...)
+  rawBytes?: Uint8Array;
+  mimeType?: string;
 }
 
 /**
@@ -133,22 +144,63 @@ export function groupTextItemsIntoParagraphs(
 
 /**
  * Builds an OpenXML .docx file structure and returns the binary ZIP array buffer.
+ * Supports paragraphs, headings, page breaks, AND EMBEDDED IMAGES.
  */
 export async function createDocxZip(pages: PageTextContent[]): Promise<Uint8Array> {
   const zip = new JSZip();
 
-  // 1. [Content_Types].xml
+  // Track embedded images
+  interface DocxImageEntry {
+    rId: string;
+    zipPath: string;
+    bytes: Uint8Array;
+    extension: string;
+  }
+  const embeddedImages: DocxImageEntry[] = [];
+  let imageCounter = 0;
+
+  // 1. First pass: find images and prepare media entries
+  pages.forEach((page) => {
+    page.paragraphs.forEach((p) => {
+      if (p.imageDataUrl) {
+        imageCounter++;
+        const parts = p.imageDataUrl.split(',');
+        const base64Data = parts.length > 1 ? parts[1] : parts[0];
+        const isJpg = p.imageDataUrl.includes('jpeg') || p.imageDataUrl.includes('jpg');
+        const ext = isJpg ? 'jpeg' : 'png';
+        const binStr = atob(base64Data);
+        const bytes = new Uint8Array(binStr.length);
+        for (let b = 0; b < binStr.length; b++) {
+          bytes[b] = binStr.charCodeAt(b);
+        }
+
+        const rId = `rIdImg${imageCounter}`;
+        const zipPath = `media/image${imageCounter}.${ext}`;
+        embeddedImages.push({ rId, zipPath, bytes, extension: ext });
+      }
+    });
+  });
+
+  // Write images to zip
+  embeddedImages.forEach((img) => {
+    zip.file(`word/${img.zipPath}`, img.bytes);
+  });
+
+  // 2. [Content_Types].xml
   zip.file(
     '[Content_Types].xml',
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
   <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
   <Default Extension="xml" ContentType="application/xml"/>
+  <Default Extension="png" ContentType="image/png"/>
+  <Default Extension="jpeg" ContentType="image/jpeg"/>
+  <Default Extension="jpg" ContentType="image/jpeg"/>
   <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
 </Types>`
   );
 
-  // 2. _rels/.rels
+  // 3. _rels/.rels
   zip.file(
     '_rels/.rels',
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -157,10 +209,23 @@ export async function createDocxZip(pages: PageTextContent[]): Promise<Uint8Arra
 </Relationships>`
   );
 
-  // 3. word/document.xml
+  // 4. word/_rels/document.xml.rels
+  let docRelsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">`;
+  embeddedImages.forEach((img) => {
+    docRelsXml += `
+  <Relationship Id="${img.rId}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="${img.zipPath}"/>`;
+  });
+  docRelsXml += `
+</Relationships>`;
+  zip.file('word/_rels/document.xml.rels', docRelsXml);
+
+  // 5. word/document.xml
   let documentXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
   <w:body>`;
+
+  let currentImgIndex = 0;
 
   pages.forEach((page, pIdx) => {
     // Add page break if not first page
@@ -174,7 +239,46 @@ export async function createDocxZip(pages: PageTextContent[]): Promise<Uint8Arra
     }
 
     page.paragraphs.forEach((p) => {
-      const escaped = escapeXml(p.text);
+      // Check for image
+      if (p.imageDataUrl && currentImgIndex < embeddedImages.length) {
+        const imgEntry = embeddedImages[currentImgIndex++];
+        documentXml += `
+    <w:p>
+      <w:pPr>
+        <w:jc w:val="center"/>
+        <w:spacing w:before="180" w:after="180"/>
+      </w:pPr>
+      <w:r>
+        <w:drawing>
+          <wp:inline distT="0" distB="0" distL="0" distR="0">
+            <wp:extent cx="5486400" cy="3657600"/>
+            <wp:docPr id="${currentImgIndex}" name="Picture ${currentImgIndex}"/>
+            <a:graphic>
+              <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                <pic:pic>
+                  <pic:nvPicPr>
+                    <pic:cNvPr id="${currentImgIndex}" name="Image ${currentImgIndex}"/>
+                    <pic:cNvPicPr/>
+                  </pic:nvPicPr>
+                  <pic:blipFill>
+                    <a:blip r:embed="${imgEntry.rId}"/>
+                    <a:stretch><a:fillRect/></a:stretch>
+                  </pic:blipFill>
+                  <pic:spPr>
+                    <a:xfrm><a:off x="0" y="0"/><a:ext cx="5486400" cy="3657600"/></a:xfrm>
+                    <a:prstGeom prst="rect"><a:avLst/></a:prstGeom>
+                  </pic:spPr>
+                </pic:pic>
+              </a:graphicData>
+            </a:graphic>
+          </wp:inline>
+        </w:drawing>
+      </w:r>
+    </w:p>`;
+        return;
+      }
+
+      const escaped = escapeXml(p.text || '');
       if (p.isHeading) {
         documentXml += `
     <w:p>
@@ -227,30 +331,84 @@ export async function createDocxZip(pages: PageTextContent[]): Promise<Uint8Arra
 }
 
 /**
- * Extracts plain text and paragraph structure from a .docx binary file.
+ * Extracts structured content (paragraphs, headings, AND embedded images) from a .docx binary file.
  */
-export async function extractTextFromDocx(buffer: ArrayBuffer | Uint8Array): Promise<string> {
+export async function extractDocxContent(buffer: ArrayBuffer | Uint8Array): Promise<DocxBlock[]> {
   const zip = await JSZip.loadAsync(buffer);
   const docXmlFile = zip.file('word/document.xml');
   if (!docXmlFile) {
     throw new Error('Invalid Word document: word/document.xml not found.');
   }
 
+  // 1. Build relationships map (e.g. rId4 -> media/image1.png)
+  const relsMap: Record<string, string> = {};
+  const relsFile = zip.file('word/_rels/document.xml.rels');
+  if (relsFile) {
+    try {
+      const relsXml = await relsFile.async('text');
+      const relRegex = /<Relationship[^>]*Id="([^"]+)"[^>]*Target="([^"]+)"/g;
+      let relMatch: RegExpExecArray | null;
+      while ((relMatch = relRegex.exec(relsXml)) !== null) {
+        relsMap[relMatch[1]] = relMatch[2];
+      }
+    } catch (e) {
+      console.warn('Could not parse docx relationships:', e);
+    }
+  }
+
   const xmlText = await docXmlFile.async('text');
+  const blocks: DocxBlock[] = [];
 
-  // Extract paragraphs by matching <w:p>...</w:p>
+  // Extract paragraphs in sequential order
   const pRegex = /<w:p(?: [^>]*)?>([\s\S]*?)<\/w:p>/g;
-  const tRegex = /<w:t(?: [^>]*)?>([\s\S]*?)<\/w:t>/g;
-  const result: string[] = [];
-
   let pMatch: RegExpExecArray | null;
+
   while ((pMatch = pRegex.exec(xmlText)) !== null) {
     const pContent = pMatch[1];
+
+    // Check for images inside this paragraph
+    const blipMatch =
+      /<a:blip[^>]*r:embed="([^"]+)"/i.exec(pContent) ||
+      /<v:imagedata[^>]*r:id="([^"]+)"/i.exec(pContent) ||
+      /embed="([^"]+)"/i.exec(pContent);
+
+    if (blipMatch) {
+      const rId = blipMatch[1];
+      const target = relsMap[rId] || rId;
+      // Clean path to point inside zip
+      const cleanPath = target.startsWith('word/')
+        ? target
+        : target.startsWith('/')
+        ? target.substring(1)
+        : 'word/' + target.replace(/^(\.\.\/)+/, '');
+
+      const imgFile = zip.file(cleanPath);
+      if (imgFile) {
+        try {
+          const rawBytes = await imgFile.async('uint8array');
+          const base64 = await imgFile.async('base64');
+          const isJpg = cleanPath.toLowerCase().endsWith('.jpg') || cleanPath.toLowerCase().endsWith('.jpeg');
+          const mimeType = isJpg ? 'image/jpeg' : 'image/png';
+          blocks.push({
+            type: 'image',
+            dataUrl: `data:${mimeType};base64,${base64}`,
+            rawBytes,
+            mimeType,
+          });
+        } catch (imgReadErr) {
+          console.warn('Could not read image from docx zip:', cleanPath, imgReadErr);
+        }
+      }
+    }
+
+    // Check for text inside this paragraph
+    const tRegex = /<w:t(?: [^>]*)?>([\s\S]*?)<\/w:t>/g;
     let paraText = '';
     let tMatch: RegExpExecArray | null;
     while ((tMatch = tRegex.exec(pContent)) !== null) {
       paraText += tMatch[1];
     }
+
     const clean = paraText
       .replace(/&amp;/g, '&')
       .replace(/&lt;/g, '<')
@@ -258,12 +416,80 @@ export async function extractTextFromDocx(buffer: ArrayBuffer | Uint8Array): Pro
       .replace(/&quot;/g, '"')
       .replace(/&apos;/g, "'")
       .trim();
+
     if (clean) {
-      result.push(clean);
+      // Determine if heading
+      const isHeading =
+        /w:pStyle w:val="Heading/i.test(pContent) ||
+        (/w:b/i.test(pContent) && clean.length < 80 && !clean.endsWith('.')) ||
+        (clean.length < 60 && !clean.endsWith('.') && clean.length > 2);
+
+      blocks.push({
+        type: isHeading ? 'heading' : 'paragraph',
+        text: clean,
+        isHeading,
+      });
     }
   }
 
-  return result.join('\n\n');
+  return blocks;
+}
+
+/**
+ * Extracts plain text and paragraph structure from a .docx binary file.
+ */
+export async function extractTextFromDocx(buffer: ArrayBuffer | Uint8Array): Promise<string> {
+  const blocks = await extractDocxContent(buffer);
+  return blocks
+    .filter((b) => b.text)
+    .map((b) => b.text)
+    .join('\n\n');
+}
+
+/**
+ * Extracts HTML string from a .docx file for rich visual rendering in the Viewer and Editor.
+ * Includes both text and embedded images with responsive CSS classes.
+ */
+export async function extractDocxHtml(buffer: ArrayBuffer | Uint8Array): Promise<{
+  html: string;
+  text: string;
+  blocks: DocxBlock[];
+  imageCount: number;
+}> {
+  const blocks = await extractDocxContent(buffer);
+  const htmlParts: string[] = [];
+  const textParts: string[] = [];
+
+  for (const b of blocks) {
+    if (b.type === 'image' && b.dataUrl) {
+      htmlParts.push(
+        `<div class="my-6 text-center"><img src="${b.dataUrl}" alt="Document Image" class="max-w-full h-auto mx-auto rounded-2xl shadow-lg border border-slate-200 dark:border-slate-800 object-contain" style="max-height: 520px;" /></div>`
+      );
+    } else if (b.isHeading && b.text) {
+      textParts.push(b.text);
+      htmlParts.push(
+        `<h3 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-8 mb-3 tracking-tight">${escapeXml(
+          b.text
+        )}</h3>`
+      );
+    } else if (b.text) {
+      textParts.push(b.text);
+      htmlParts.push(
+        `<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4 text-justify">${escapeXml(
+          b.text
+        )}</p>`
+      );
+    }
+  }
+
+  const imageCount = blocks.filter((b) => b.type === 'image').length;
+
+  return {
+    html: htmlParts.join('\n'),
+    text: textParts.join('\n\n'),
+    blocks,
+    imageCount,
+  };
 }
 
 /**
@@ -279,4 +505,3 @@ export async function generateDocx(paragraphs: string[]): Promise<Blob> {
     type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   });
 }
-

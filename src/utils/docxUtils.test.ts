@@ -5,6 +5,8 @@ import {
   groupTextItemsIntoParagraphs,
   createDocxZip,
   extractTextFromDocx,
+  extractDocxContent,
+  extractDocxHtml,
 } from './docxUtils.ts';
 
 test('escapeXml escapes XML special characters correctly', () => {
@@ -46,4 +48,36 @@ test('createDocxZip generates valid OpenXML ZIP that can be parsed back', async 
   const extracted = await extractTextFromDocx(docxBytes);
   assert.ok(extracted.includes('Quarterly Financial Report'));
   assert.ok(extracted.includes('Revenue increased by 14%'));
+});
+
+test('createDocxZip with embedded images can be parsed by extractDocxContent and extractDocxHtml', async () => {
+  const tinyPngDataUrl =
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+
+  const pages = [
+    {
+      pageNumber: 1,
+      paragraphs: [
+        { text: 'DOCX with Photos', isHeading: true },
+        { imageDataUrl: tinyPngDataUrl, isHeading: false },
+        { text: 'Figure caption goes here.', isHeading: false },
+      ],
+    },
+  ];
+
+  const docxBytes = await createDocxZip(pages);
+  assert.ok(docxBytes.length > 500);
+
+  // Test extractDocxContent
+  const blocks = await extractDocxContent(docxBytes);
+  assert.ok(blocks.length >= 2);
+  const imageBlocks = blocks.filter((b) => b.type === 'image');
+  assert.equal(imageBlocks.length, 1, 'Should extract embedded image block');
+  assert.ok(imageBlocks[0].dataUrl?.startsWith('data:image/'));
+
+  // Test extractDocxHtml
+  const { html, imageCount } = await extractDocxHtml(docxBytes);
+  assert.equal(imageCount, 1, 'Should count 1 embedded image in docx');
+  assert.ok(html.includes('<img src="data:image/'), 'HTML should render responsive <img> tag');
+  assert.ok(html.includes('DOCX with Photos'));
 });

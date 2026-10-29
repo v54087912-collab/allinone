@@ -1,13 +1,16 @@
 /**
  * Word (.docx) to PDF Converter Tool (100% In-Browser)
+ * Preserves text, headings, and embedded images while sanitizing Unicode/WinAnsi characters.
  */
-import { extractTextFromDocx } from '../utils/docxUtils.ts';
+import { extractDocxContent, extractTextFromDocx, type DocxBlock } from '../utils/docxUtils.ts';
 import { convertParagraphsToPdf, type DocParagraph } from '../utils/wordToPdfUtils.ts';
 import { formatBytes } from '../utils/image-math.ts';
 import { showToast } from '../shared/site-shell.ts';
 
 let originalFile: File | null = null;
 let parsedParagraphs: DocParagraph[] = [];
+let loadedDocxBlocks: DocxBlock[] = [];
+let originalExtractedText = '';
 
 // DOM Elements
 const dropzone = document.getElementById('word2pdf-dropzone') as HTMLElement | null;
@@ -57,6 +60,8 @@ export function initWordToPdfTool(): void {
   resetBtn?.addEventListener('click', () => {
     originalFile = null;
     parsedParagraphs = [];
+    loadedDocxBlocks = [];
+    originalExtractedText = '';
     if (textArea) textArea.value = '';
     workspace?.classList.add('hidden');
     dropzone?.classList.remove('hidden');
@@ -73,20 +78,27 @@ async function handleFile(file: File) {
 
     if (progressContainer) progressContainer.classList.remove('hidden');
     if (progressBar) progressBar.style.width = '30%';
-    if (progressText) progressText.textContent = 'Parsing Word .docx structure...';
+    if (progressText) progressText.textContent = 'Parsing Word .docx structure & images...';
 
     const arrayBuffer = await file.arrayBuffer();
-    const rawText = await extractTextFromDocx(arrayBuffer);
+    loadedDocxBlocks = await extractDocxContent(arrayBuffer);
+    originalExtractedText = loadedDocxBlocks
+      .filter((b) => b.text)
+      .map((b) => b.text)
+      .join('\n\n');
+
+    const imageCount = loadedDocxBlocks.filter((b) => b.type === 'image').length;
 
     if (progressBar) progressBar.style.width = '85%';
     if (progressText) progressText.textContent = 'Formatting document...';
 
     if (textArea) {
-      textArea.value = rawText;
+      textArea.value = originalExtractedText;
     }
 
     if (metaBadge) {
-      metaBadge.textContent = `${file.name} \u2022 ${formatBytes(file.size)}`;
+      const imgInfo = imageCount > 0 ? ` \u2022 ${imageCount} embedded ${imageCount === 1 ? 'image' : 'images'}` : '';
+      metaBadge.textContent = `${file.name} \u2022 ${formatBytes(file.size)}${imgInfo}`;
     }
 
     if (progressBar) progressBar.style.width = '100%';
@@ -94,7 +106,11 @@ async function handleFile(file: File) {
       progressContainer?.classList.add('hidden');
     }, 1000);
 
-    showToast('Word document loaded! Ready to generate PDF.', 'success');
+    const toastMsg =
+      imageCount > 0
+        ? `Word document loaded with ${imageCount} ${imageCount === 1 ? 'image' : 'images'}! Ready to generate PDF.`
+        : 'Word document loaded! Ready to generate PDF.';
+    showToast(toastMsg, 'success');
   } catch (err: any) {
     console.error('Word extraction error:', err);
     showToast('Failed to parse .docx: ' + err.message, 'error');
@@ -105,20 +121,26 @@ async function handleFile(file: File) {
 function loadDemoWord() {
   dropzone?.classList.add('hidden');
   workspace?.classList.remove('hidden');
+  loadedDocxBlocks = [];
 
   const demoText = `# Project Proposal: Next-Gen Web Applications
 
 1. Executive Overview
-This document outlines the strategic roadmap for client-side web application migration. By leveraging WebAssembly and in-browser processing, organisations can achieve 100% data privacy and reduce infrastructure costs.
+This document outlines the strategic roadmap for client-side web application migration. By leveraging WebAssembly and in-browser processing, organisations can achieve complete data privacy and reduce infrastructure costs.
 
-2. Architecture & Design Principles
+2. Mathematical Verification
+When calculating confidence intervals: x ≈ 3.14 ± 0.05, where y ≠ 0 and z ≤ 100.
+Estimated efficiency gain: ΔE ≥ 42%.
+
+3. Architecture & Design Principles
 - Zero Data Ingestion: All computations happen in client memory.
 - Instant Response: Eliminate network latency for batch conversions.
-- Accessible UX: Modern interface compliant with WCAG guidelines.
+- Universal Compatibility: Works offline across all modern browsers.
 
-3. Conclusion and Deliverables
-The project will be completed in phases with production validation across all modern browsers.`;
+4. Conclusion and Deliverables
+The project will be completed in phases with production validation across all platforms.`;
 
+  originalExtractedText = demoText;
   if (textArea) textArea.value = demoText;
   if (metaBadge) metaBadge.textContent = 'Demo_Proposal.docx \u2022 14 KB';
   showToast('Demo document loaded into editor!', 'success');
@@ -126,25 +148,50 @@ The project will be completed in phases with production validation across all mo
 
 async function handleConvertToPdf() {
   const text = textArea?.value || '';
-  if (!text.trim()) {
+  if (!text.trim() && loadedDocxBlocks.length === 0) {
     showToast('Document text cannot be empty.', 'error');
     return;
   }
 
   try {
     if (convertBtn) convertBtn.disabled = true;
-    showToast('Synthesizing PDF pages...', 'info');
+    showToast('Synthesizing PDF pages with images & symbols...', 'info');
 
-    // Parse paragraphs from text
-    const rawParagraphs = text.split(/\r?\n\s*\r?\n/).filter((p) => p.trim().length > 0);
-    parsedParagraphs = rawParagraphs.map((p) => {
-      const trimmed = p.trim();
-      const isHeading = trimmed.startsWith('#') || (trimmed.length < 55 && !trimmed.endsWith('.'));
-      return {
-        text: trimmed.replace(/^#+\s*/, ''),
-        isHeading,
-      };
-    });
+    // If loaded directly from docx and user has not modified the text:
+    if (loadedDocxBlocks.length > 0 && text.trim() === originalExtractedText.trim()) {
+      parsedParagraphs = loadedDocxBlocks.map((b) => {
+        if (b.type === 'image') {
+          return {
+            imageDataUrl: b.dataUrl,
+            imageBytes: b.rawBytes,
+          };
+        }
+        return {
+          text: b.text || '',
+          isHeading: !!b.isHeading,
+        };
+      });
+    } else {
+      // User typed or edited text
+      const rawParagraphs = text.split(/\r?\n\s*\r?\n/).filter((p) => p.trim().length > 0);
+      parsedParagraphs = rawParagraphs.map((p) => {
+        const trimmed = p.trim();
+        const isHeading = trimmed.startsWith('#') || (trimmed.length < 55 && !trimmed.endsWith('.'));
+        return {
+          text: trimmed.replace(/^#+\s*/, ''),
+          isHeading,
+        };
+      });
+
+      // Append any embedded images from the source docx
+      const imagesInDoc = loadedDocxBlocks.filter((b) => b.type === 'image');
+      for (const img of imagesInDoc) {
+        parsedParagraphs.push({
+          imageDataUrl: img.dataUrl,
+          imageBytes: img.rawBytes,
+        });
+      }
+    }
 
     const pageSize = (pageSizeSelect?.value || 'a4') as 'a4' | 'letter';
     const margin = parseInt(marginSelect?.value || '40', 10);

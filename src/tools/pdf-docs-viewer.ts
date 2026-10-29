@@ -4,7 +4,7 @@
  */
 import * as pdfjsLib from 'pdfjs-dist';
 import '../utils/pdfWorkerSetup.ts';
-import { extractTextFromDocx } from '../utils/docxUtils.ts';
+import { extractDocxHtml, extractTextFromDocx } from '../utils/docxUtils.ts';
 import { formatBytes } from '../utils/image-math.ts';
 import { initSiteShell, showToast } from '../shared/site-shell.ts';
 import {
@@ -403,12 +403,14 @@ async function loadDocx(arrayBuffer: ArrayBuffer): Promise<void> {
   if (docxContainer) docxContainer.classList.remove('hidden');
   if (thumbnailsSidebar) thumbnailsSidebar.classList.add('hidden');
 
-  const text = await extractTextFromDocx(arrayBuffer);
+  const { html, text } = await extractDocxHtml(arrayBuffer);
   extractedFullText = text;
   totalPages = 1;
   updatePaginationUI();
 
-  renderDocxContent(text);
+  if (docxContent) {
+    docxContent.innerHTML = html;
+  }
 }
 
 function renderDocxContent(text: string): void {

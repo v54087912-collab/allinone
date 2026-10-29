@@ -7,6 +7,7 @@
  */
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import { parsePageRange } from './pdfUtils.ts';
+import { sanitizeWinAnsiText } from './wordToPdfUtils.ts';
 
 export type PageNumberPosition =
   | 'bottom-center'
@@ -113,7 +114,7 @@ export async function stampPageNumbers(
     const { width: pWidth, height: pHeight } = page.getSize();
 
     const displayNum = config.startNumber + (page1Based - 1);
-    const text = formatPageNumberText(config.format, displayNum, totalPages);
+    const text = sanitizeWinAnsiText(formatPageNumberText(config.format, displayNum, totalPages));
     const textWidth = font.widthOfTextAtSize(text, config.fontSize);
     const textHeight = font.heightAtSize(config.fontSize);
 

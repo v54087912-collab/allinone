@@ -7,7 +7,7 @@
 import { PDFDocument, rgb } from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist';
 import '../utils/pdfWorkerSetup.ts';
-import { createDocxZip, extractTextFromDocx, type PageTextContent } from '../utils/docxUtils.ts';
+import { createDocxZip, extractDocxHtml, extractTextFromDocx, type PageTextContent } from '../utils/docxUtils.ts';
 import { convertParagraphsToPdf } from '../utils/wordToPdfUtils.ts';
 import { formatBytes } from '../utils/image-math.ts';
 import { initSiteShell, showToast } from '../shared/site-shell.ts';
@@ -20,7 +20,7 @@ import {
 } from '../utils/pdfDocsUtils.ts';
 
 // Annotation types
-export type ToolType = 'select' | 'pen' | 'highlighter' | 'text' | 'rect' | 'circle' | 'signature' | 'whiteout';
+export type ToolType = 'select' | 'pen' | 'highlighter' | 'text' | 'rect' | 'circle' | 'signature' | 'whiteout' | 'image';
 
 interface AnnotationItem {
   type: ToolType;
@@ -58,8 +58,9 @@ let currentPath: Array<{ x: number; y: number }> = [];
 let shapeStartX = 0;
 let shapeStartY = 0;
 
-// Signature state
+// Signature & Image Stamp state
 let signatureDataUrl: string | null = null;
+let imageStampDataUrl: string | null = null;
 
 // DOM Elements - Navigation & Modes
 const tabPdfBtn = document.getElementById('editor-tab-pdf') as HTMLButtonElement | null;
@@ -100,6 +101,8 @@ const toolButtons = document.querySelectorAll<HTMLButtonElement>('[data-editor-t
 const colorPicker = document.getElementById('editor-color-picker') as HTMLInputElement | null;
 const sizeSlider = document.getElementById('editor-size-slider') as HTMLInputElement | null;
 const sizeDisplay = document.getElementById('editor-size-display') as HTMLElement | null;
+const addImageStampBtn = document.getElementById('editor-add-image-stamp-btn') as HTMLButtonElement | null;
+const imageStampInput = document.getElementById('editor-image-stamp-input') as HTMLInputElement | null;
 
 // Signature Modal
 const signatureModal = document.getElementById('editor-sig-modal') as HTMLElement | null;
@@ -117,6 +120,8 @@ const docWordCount = document.getElementById('editor-doc-word-count') as HTMLEle
 const docCharCount = document.getElementById('editor-doc-char-count') as HTMLElement | null;
 const docDemoBtn = document.getElementById('editor-doc-demo-btn') as HTMLButtonElement | null;
 const docNewBlankBtn = document.getElementById('editor-doc-new-blank') as HTMLButtonElement | null;
+const docInsertImgBtn = document.getElementById('editor-doc-insert-img') as HTMLButtonElement | null;
+const docImgInput = document.getElementById('editor-doc-img-input') as HTMLInputElement | null;
 
 // Doc Export
 const exportDocxBtn = document.getElementById('editor-export-docx-btn') as HTMLButtonElement | null;
@@ -274,6 +279,29 @@ function setupPdfEditor(): void {
     if (sizeDisplay) sizeDisplay.textContent = `${currentStrokeSize}px`;
   });
 
+  // Image stamp tool
+  addImageStampBtn?.addEventListener('click', () => {
+    imageStampInput?.click();
+  });
+
+  imageStampInput?.addEventListener('change', (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        imageStampDataUrl = reader.result as string;
+        currentTool = 'image';
+        toolButtons.forEach((b) => {
+          b.classList.remove('bg-blue-600', 'text-white');
+          b.classList.add('bg-white', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+        });
+        showToast('Image stamp loaded! Click anywhere on the PDF page to place it.', 'success');
+      };
+      reader.readAsDataURL(file);
+    }
+    imageStampInput.value = '';
+  });
+
   // Undo / Clear
   undoBtn?.addEventListener('click', handleUndo);
   clearPageBtn?.addEventListener('click', handleClearPage);
@@ -426,6 +454,36 @@ function setupDrawingCanvas(): void {
       isDrawing = false;
       return;
     }
+
+    if (currentTool === 'image' && imageStampDataUrl) {
+      const currentStamp = imageStampDataUrl;
+      const img = new Image();
+      img.onload = () => {
+        let w = img.naturalWidth || 200;
+        let h = img.naturalHeight || 150;
+        const maxWidth = 250;
+        if (w > maxWidth) {
+          const ratio = maxWidth / w;
+          w = maxWidth;
+          h = Math.round(h * ratio);
+        }
+        saveAnnotationToCurrentPage({
+          type: 'image',
+          color: currentColor,
+          size: currentStrokeSize,
+          opacity: 1.0,
+          text: currentStamp,
+          x: pos.x,
+          y: pos.y,
+          width: w,
+          height: h,
+        });
+        showToast('Image stamp placed on page!', 'success');
+      };
+      img.src = currentStamp;
+      isDrawing = false;
+      return;
+    }
   };
 
   const moveDraw = (e: MouseEvent | TouchEvent) => {
@@ -542,7 +600,7 @@ function redrawDrawCanvas(): void {
       ctx.font = `bold ${ann.size}px sans-serif`;
       ctx.textBaseline = 'top';
       ctx.fillText(ann.text || '', ann.x || 0, ann.y || 0);
-    } else if (ann.type === 'signature' && ann.text) {
+    } else if ((ann.type === 'signature' || ann.type === 'image') && ann.text) {
       const img = new Image();
       img.src = ann.text;
       ctx.drawImage(img, ann.x || 0, ann.y || 0, ann.width || 140, ann.height || 60);
@@ -752,7 +810,7 @@ async function handleExportPdf(): Promise<void> {
               offCtx.font = `bold ${ann.size}px sans-serif`;
               offCtx.textBaseline = 'top';
               offCtx.fillText(ann.text || '', ann.x || 0, ann.y || 0);
-            } else if (ann.type === 'signature' && ann.text) {
+            } else if ((ann.type === 'signature' || ann.type === 'image') && ann.text) {
               const img = new Image();
               img.src = ann.text;
               offCtx.drawImage(img, ann.x || 0, ann.y || 0, ann.width || 140, ann.height || 60);
@@ -961,6 +1019,24 @@ function setupDocEditor(): void {
     }
   });
 
+  // Insert image in doc editor
+  docInsertImgBtn?.addEventListener('click', () => docImgInput?.click());
+  docImgInput?.addEventListener('change', (e) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const dataUrl = reader.result as string;
+        const imgHtml = `<p class="my-3 text-center"><img src="${dataUrl}" alt="Inserted Image" class="max-w-full h-auto mx-auto rounded-xl shadow-md border border-slate-200 dark:border-slate-700" /></p><p><br></p>`;
+        document.execCommand('insertHTML', false, imgHtml);
+        updateDocStats();
+        showToast('Image inserted into document!', 'success');
+      };
+      reader.readAsDataURL(file);
+    }
+    docImgInput.value = '';
+  });
+
   // Formatting toolbar
   document.querySelectorAll<HTMLButtonElement>('[data-doc-cmd]').forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -991,10 +1067,9 @@ async function handleDocFile(file: File): Promise<void> {
   try {
     if (docType === 'docx') {
       const buffer = await file.arrayBuffer();
-      const text = await extractTextFromDocx(buffer);
+      const { html } = await extractDocxHtml(buffer);
       if (docContent) {
-        const paragraphs = text.split('\n\n').map((p) => `<p>${escapeHtml(p)}</p>`).join('');
-        docContent.innerHTML = paragraphs;
+        docContent.innerHTML = html;
       }
     } else {
       const text = await file.text();
@@ -1013,6 +1088,49 @@ async function handleDocFile(file: File): Promise<void> {
   }
 }
 
+function parseDocContentToParagraphs(container: HTMLElement): ExtractedParagraph[] {
+  const result: ExtractedParagraph[] = [];
+  const nodes = Array.from(container.children);
+
+  if (nodes.length === 0) {
+    const raw = container.innerText.trim();
+    if (raw) {
+      const lines = raw.split(/\r?\n/).filter((l) => l.trim().length > 0);
+      lines.forEach((l, idx) => {
+        result.push({ text: l, isHeading: idx === 0 && l.length < 50 });
+      });
+    }
+    return result;
+  }
+
+  for (const node of nodes) {
+    const el = node as HTMLElement;
+    const tagName = el.tagName.toLowerCase();
+
+    // Look for image inside this block
+    const img = el.querySelector('img') || (tagName === 'img' ? (el as HTMLImageElement) : null);
+    if (img && img.src && (img.src.startsWith('data:image/') || img.src.startsWith('blob:') || img.src.startsWith('http'))) {
+      result.push({
+        text: '',
+        isHeading: false,
+        imageDataUrl: img.src,
+        imageType: img.src.includes('jpeg') || img.src.includes('jpg') ? 'jpeg' : 'png',
+      });
+    }
+
+    const text = el.innerText.trim();
+    if (text) {
+      const isHeading = tagName === 'h1' || tagName === 'h2' || tagName === 'h3';
+      result.push({
+        text,
+        isHeading,
+      });
+    }
+  }
+
+  return result;
+}
+
 function updateDocStats(): void {
   if (!docContent) return;
   const text = docContent.innerText || '';
@@ -1023,15 +1141,10 @@ function updateDocStats(): void {
 
 async function handleExportDocx(): Promise<void> {
   if (!docContent) return;
-  const rawText = docContent.innerText || '';
-  const lines = rawText.split(/\r?\n/).filter((l) => l.trim().length > 0);
-
+  const paragraphs = parseDocContentToParagraphs(docContent);
   const page: PageTextContent = {
     pageNumber: 1,
-    paragraphs: lines.map((text, i) => ({
-      text,
-      isHeading: i === 0 || text.length < 50 && !text.endsWith('.'),
-    })),
+    paragraphs: paragraphs.length > 0 ? paragraphs : [{ text: 'Empty Document', isHeading: false }],
   };
 
   showToast('Generating Microsoft Word (.docx)...', 'info');
@@ -1053,15 +1166,18 @@ async function handleExportDocx(): Promise<void> {
 
 async function handleExportDocPdf(): Promise<void> {
   if (!docContent) return;
-  const rawText = docContent.innerText || '';
-  const lines = rawText.split(/\r?\n/).filter((l) => l.trim().length > 0);
+  const paragraphs = parseDocContentToParagraphs(docContent);
 
-  showToast('Converting text to PDF...', 'info');
+  showToast('Converting document to PDF...', 'info');
   const pdfBytes = await convertParagraphsToPdf(
-    lines.map((text, i) => ({
-      text,
-      isHeading: i === 0 || (text.length < 50 && !text.endsWith('.')),
-    }))
+    paragraphs.length > 0
+      ? paragraphs.map((p) => ({
+          text: p.text,
+          isHeading: p.isHeading,
+          imageDataUrl: p.imageDataUrl,
+          imageType: p.imageType,
+        }))
+      : [{ text: 'Empty Document', isHeading: false }]
   );
 
   const blob = new Blob([pdfBytes as any], { type: 'application/pdf' });
@@ -1071,6 +1187,7 @@ async function handleExportDocPdf(): Promise<void> {
   a.download = currentFile ? `${currentFile.name.replace(/\.[^/.]+$/, '')}.pdf` : 'document.pdf';
   document.body.appendChild(a);
   a.click();
+  document.body.removeChild(a);
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
   showToast('PDF document downloaded!', 'success');

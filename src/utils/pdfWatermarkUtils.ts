@@ -7,6 +7,7 @@
  */
 import { PDFDocument, StandardFonts, degrees, rgb, type PDFImage } from 'pdf-lib';
 import { parsePageRange } from './pdfUtils.ts';
+import { sanitizeWinAnsiText } from './wordToPdfUtils.ts';
 
 export interface PdfWatermarkConfig {
   type: 'text' | 'image';
@@ -66,7 +67,7 @@ export async function applyPdfWatermark(
     const { width: pW, height: pH } = page.getSize();
 
     if (config.type === 'text') {
-      const text = (config.text || 'CONFIDENTIAL').trim();
+      const text = sanitizeWinAnsiText((config.text || 'CONFIDENTIAL').trim());
       const textW = font.widthOfTextAtSize(text, fontSize);
       const textH = font.heightAtSize(fontSize);
 
