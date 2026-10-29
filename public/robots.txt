@@ -1,9 +1,23 @@
+# Toolora robots.txt - Optimized for Google Search Console & Top Search Ranking
 User-agent: *
 Allow: /
-
-# Disallow build and private assets from index clutter
 Disallow: /dist/
 Disallow: /node_modules/
 
-# Canonical Sitemap URL for Google Search Console
+# Search Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+Allow: /*.jpg$
+Allow: /*.png$
+Allow: /*.svg$
+Allow: /*.webp$
+Allow: /*.ico$
+
+User-agent: Bingbot
+Allow: /
+
+# Canonical Sitemap URL
 Sitemap: https://toolora0.pages.dev/sitemap.xml

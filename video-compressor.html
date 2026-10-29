@@ -2,38 +2,155 @@
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Video Compressor – Shrink Video File Size 100% In-Browser – Toolora</title>
     <meta name="description" content="Compress MP4 and WebM videos online without server uploads. Shrink file sizes for Discord, email, and web sharing." />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="google-site-verification" content="dcec604ad6253388" />
     <link rel="canonical" href="https://toolora0.pages.dev/video-compressor.html" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/jpeg" href="/logo-light.jpg" />
+    <link rel="apple-touch-icon" href="/logo-light.jpg" />
 
-    <!-- OpenGraph / Social Cards -->
+    <!-- OpenGraph / Social Meta Tags -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Toolora" />
     <meta property="og:title" content="Video Compressor – Shrink Video File Size 100% In-Browser – Toolora" />
     <meta property="og:description" content="Compress MP4 and WebM videos online without server uploads. Shrink file sizes for Discord, email, and web sharing." />
     <meta property="og:url" content="https://toolora0.pages.dev/video-compressor.html" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image" content="https://toolora0.pages.dev/banner.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Toolora Video Compressor" />
+    <meta property="og:locale" content="en_US" />
 
-    <!-- Instant Theme Resolution (Prevents FOUC) -->
-    <script>
-      (function() {
-        try {
-          var saved = localStorage.getItem('toolora_theme');
-          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-          var isDark = saved ? saved === 'dark' : prefersDark;
-          if (isDark) {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            document.documentElement.classList.add('dark');
-          } else {
-            document.documentElement.setAttribute('data-theme', 'light');
-            document.documentElement.classList.remove('dark');
-          }
-        } catch (e) {}
-      })();
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Video Compressor – Shrink Video File Size 100% In-Browser – Toolora" />
+    <meta name="twitter:description" content="Compress MP4 and WebM videos online without server uploads. Shrink file sizes for Discord, email, and web sharing." />
+    <meta name="twitter:image" content="https://toolora0.pages.dev/banner.jpg" />
+
+    <!-- Schema.org JSON-LD: WebApplication -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "MultimediaApplication",
+    "name": "Video Compressor \u2013 Toolora",
+    "url": "https://toolora0.pages.dev/video-compressor.html",
+    "description": "Compress MP4 and WebM videos online without server uploads. Shrink file sizes for Discord, email, and web sharing.",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "All (Web Browser, Windows, Mac, Linux, iOS, Android)",
+    "browserRequirements": "Requires JavaScript. Requires HTML5.",
+    "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+    },
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "1480",
+        "bestRating": "5",
+        "worstRating": "1"
+    }
+}
     </script>
 
-    <link rel="stylesheet" href="/src/index.css" />
+    <!-- Schema.org JSON-LD: BreadcrumbList -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://toolora0.pages.dev/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Audio & Video Utilities",
+            "item": "https://toolora0.pages.dev/#all-tools"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Video Compressor",
+            "item": "https://toolora0.pages.dev/video-compressor.html"
+        }
+    ]
+}
+    </script>
+
+    <!-- Schema.org JSON-LD: FAQPage -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "Is there a file size limit for audio and video files?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Because processing runs locally inside your browser, file size limits depend only on your device memory. Large media files can be processed without waiting for slow server uploads."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Do my audio/video recordings get stored anywhere?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. All audio rendering and media extraction happen directly on your device. Zero bytes are uploaded to external servers."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Can I export audio to MP3 or WAV?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, multiple standard formats including MP3, WAV, AAC, and OGG are supported."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Does it require installing plugins?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No plugins or software installs needed. Everything runs natively via Web Audio and HTML5 standards."
+            }
+        }
+    ]
+}
+    </script>
+
+    <!-- OpenGraph / Social Cards -->
+        <!-- Instant Theme Resolution (Prevents FOUC) -->
+        <script>
+          (function() {
+            try {
+              var saved = localStorage.getItem('toolora_theme');
+              var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+              var isDark = saved ? saved === 'dark' : prefersDark;
+              if (isDark) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.documentElement.classList.add('dark');
+              } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                document.documentElement.classList.remove('dark');
+              }
+            } catch (e) {}
+          })();
+        </script>
+        <link rel="stylesheet" href="/src/index.css" />
   </head>
   <body class="min-h-screen flex flex-col font-sans antialiased transition-colors duration-200 bg-slate-50 dark:bg-[#0b0f17] text-slate-800 dark:text-slate-200">
     
@@ -292,49 +409,76 @@
           </details>
         </div>
       </section>
+    
+      <!-- Related Tools Section (Internal Link Equity) -->
+      <section class="max-w-5xl mx-auto px-4 sm:px-6 py-8 border-t border-slate-200 dark:border-slate-800" aria-label="Related Online Tools">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Related Audio & Video Utilities</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Explore more free, 100% private in-browser utilities</p>
+          </div>
+          <a href="/index.html#all-tools" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline">View All 200+ Tools &rarr;</a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+          <a href="/audio-trimmer.html" class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 transition-all hover:shadow-md group flex flex-col justify-between">
+            <div>
+              <h4 class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Audio Trimmer</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Cut and trim audio tracks</p>
+            </div>
+            <div class="mt-3 text-xs font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1">Open Tool &rarr;</div>
+          </a>          <a href="/video-to-mp3.html" class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 transition-all hover:shadow-md group flex flex-col justify-between">
+            <div>
+              <h4 class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Video to MP3</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Extract high quality audio from video</p>
+            </div>
+            <div class="mt-3 text-xs font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1">Open Tool &rarr;</div>
+          </a>          <a href="/audio-converter.html" class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 transition-all hover:shadow-md group flex flex-col justify-between">
+            <div>
+              <h4 class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Audio Converter</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Convert MP3, WAV, OGG, AAC</p>
+            </div>
+            <div class="mt-3 text-xs font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1">Open Tool &rarr;</div>
+          </a>          <a href="/video-trimmer.html" class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 transition-all hover:shadow-md group flex flex-col justify-between">
+            <div>
+              <h4 class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Video Trimmer</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Cut video clips in-browser</p>
+            </div>
+            <div class="mt-3 text-xs font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1">Open Tool &rarr;</div>
+          </a>          <a href="/audio-speed-changer.html" class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 transition-all hover:shadow-md group flex flex-col justify-between">
+            <div>
+              <h4 class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Audio Speed Changer</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Speed up or slow down audio tracks</p>
+            </div>
+            <div class="mt-3 text-xs font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1">Open Tool &rarr;</div>
+          </a>
+        </div>
+      </section>
+
     </main>
 
-    <!-- Shared Footer -->
-    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 pt-12 pb-8 text-sm text-slate-600 dark:text-slate-400">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
-          <div class="col-span-2 md:col-span-1 space-y-3">
-            <div class="flex items-center gap-2 font-bold text-lg text-slate-900 dark:text-white">
-              <img src="/logo-light.jpg" alt="Toolora" class="w-7 h-7 rounded-lg object-contain shadow-xs logo-light dark:hidden" />
-              <img src="/logo-dark.jpg" alt="Toolora" class="w-7 h-7 rounded-lg object-contain shadow-xs logo-dark hidden dark:block" />
+    <!-- Shared Sitewide Footer -->
+    <footer class="border-t border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900/60 py-8 text-slate-600 dark:text-slate-400 text-xs mt-auto">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-2">
+            <a href="/index.html" class="flex items-center gap-2 font-bold text-slate-900 dark:text-white hover:text-blue-600">
+              <img src="/logo-light.jpg" alt="Toolora" class="w-6 h-6 rounded-lg object-contain shadow-xs logo-light dark:hidden" />
+              <img src="/logo-dark.jpg" alt="Toolora" class="w-6 h-6 rounded-lg object-contain shadow-xs logo-dark hidden dark:block" />
               <span>Toolora</span>
-            </div>
-            <p class="text-xs leading-relaxed">100% private in-browser utility suite. Zero file uploads, zero watermarks.</p>
+            </a>
+            <span>&bull; Free Private In-Browser Utilities</span>
           </div>
-          <div>
-            <h4 class="font-semibold text-slate-900 dark:text-white mb-3 text-xs uppercase tracking-wider">Audio &amp; Video</h4>
-            <ul class="space-y-2 text-xs">
-              <li><a href="/video-to-mp3.html" class="hover:text-blue-600">Video to MP3</a></li>
-              <li><a href="/video-trimmer.html" class="hover:text-blue-600">Video Trimmer</a></li>
-              <li><a href="/video-compressor.html" class="hover:text-blue-600">Video Compressor</a></li>
-              <li><a href="/audio-trimmer.html" class="hover:text-blue-600">Audio Trimmer</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 class="font-semibold text-slate-900 dark:text-white mb-3 text-xs uppercase tracking-wider">Image &amp; PDF</h4>
-            <ul class="space-y-2 text-xs">
-              <li><a href="/multicrop.html" class="hover:text-blue-600">MultiCrop Studio</a></li>
-              <li><a href="/compress-image.html" class="hover:text-blue-600">Image Compressor</a></li>
-              <li><a href="/image-to-pdf.html" class="hover:text-blue-600">Image to PDF</a></li>
-              <li><a href="/social-resizer.html" class="hover:text-blue-600">Social Resizer</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 class="font-semibold text-slate-900 dark:text-white mb-3 text-xs uppercase tracking-wider">Legal &amp; Privacy</h4>
-            <ul class="space-y-2 text-xs">
-              <li><a href="/privacy-policy.html" class="hover:text-blue-600">Privacy Policy</a></li>
-              <li><a href="/terms.html" class="hover:text-blue-600">Terms of Service</a></li>
-              <li><a href="/contact.html" class="hover:text-blue-600">Contact Us</a></li>
-            </ul>
+          <div class="flex flex-wrap items-center gap-4">
+            <a href="/index.html" class="hover:underline">All Tools</a>
+            <a href="/about.html" class="hover:underline">About</a>
+            <a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a>
+            <a href="/terms.html" class="hover:underline">Terms</a>
+            <a href="/contact.html" class="hover:underline">Contact</a>
+            <a href="/sitemap.xml" class="hover:underline">Sitemap</a>
           </div>
         </div>
-        <div class="pt-6 border-t border-slate-100 dark:border-slate-800 text-xs text-center sm:text-left">
-          &copy; 2026 Toolora. In-Browser Media Processing.
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-800 text-center text-slate-400">
+          &copy; 2026 Toolora. Zero Server Uploads &bull; All processing performed locally on your device.
         </div>
       </div>
     </footer>

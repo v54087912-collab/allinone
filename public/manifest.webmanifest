@@ -1,0 +1,25 @@
+{
+  "name": "Toolora – Free In-Browser Online Tools",
+  "short_name": "Toolora",
+  "description": "200+ Free online tools for PDF, Word, images, text, developers, and calculators. 100% private in-browser utilities.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b0f17",
+  "theme_color": "#2563eb",
+  "categories": ["utilities", "productivity", "photo", "business"],
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/logo-light.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}

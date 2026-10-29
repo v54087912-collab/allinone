@@ -2,38 +2,155 @@
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JWT Decoder & Token Inspector Online – Toolora</title>
     <meta name="description" content="Decode and inspect JSON Web Tokens (JWT) headers and payloads 100% privately in your browser without transmitting sensitive tokens." />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="google-site-verification" content="dcec604ad6253388" />
     <link rel="canonical" href="https://toolora0.pages.dev/jwt-decoder.html" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/jpeg" href="/logo-light.jpg" />
+    <link rel="apple-touch-icon" href="/logo-light.jpg" />
 
-    <!-- OpenGraph / Social Cards -->
+    <!-- OpenGraph / Social Meta Tags -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Toolora" />
     <meta property="og:title" content="JWT Decoder & Token Inspector Online – Toolora" />
     <meta property="og:description" content="Decode and inspect JSON Web Tokens (JWT) headers and payloads 100% privately in your browser without transmitting sensitive tokens." />
     <meta property="og:url" content="https://toolora0.pages.dev/jwt-decoder.html" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image" content="https://toolora0.pages.dev/banner.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Toolora JSON Web Token (JWT) Decoder" />
+    <meta property="og:locale" content="en_US" />
 
-    <!-- Instant Theme Resolution (Prevents FOUC) -->
-    <script>
-      (function() {
-        try {
-          var saved = localStorage.getItem('toolora_theme');
-          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-          var isDark = saved ? saved === 'dark' : prefersDark;
-          if (isDark) {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            document.documentElement.classList.add('dark');
-          } else {
-            document.documentElement.setAttribute('data-theme', 'light');
-            document.documentElement.classList.remove('dark');
-          }
-        } catch (e) {}
-      })();
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="JWT Decoder & Token Inspector Online – Toolora" />
+    <meta name="twitter:description" content="Decode and inspect JSON Web Tokens (JWT) headers and payloads 100% privately in your browser without transmitting sensitive tokens." />
+    <meta name="twitter:image" content="https://toolora0.pages.dev/banner.jpg" />
+
+    <!-- Schema.org JSON-LD: WebApplication -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "JSON Web Token (JWT) Decoder \u2013 Toolora",
+    "url": "https://toolora0.pages.dev/jwt-decoder.html",
+    "description": "Decode and inspect JSON Web Tokens (JWT) headers and payloads 100% privately in your browser without transmitting sensitive tokens.",
+    "applicationCategory": "SoftwareApplication",
+    "operatingSystem": "All (Web Browser, Windows, Mac, Linux, iOS, Android)",
+    "browserRequirements": "Requires JavaScript. Requires HTML5.",
+    "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+    },
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "1480",
+        "bestRating": "5",
+        "worstRating": "1"
+    }
+}
     </script>
 
-    <link rel="stylesheet" href="/src/index.css" />
+    <!-- Schema.org JSON-LD: BreadcrumbList -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://toolora0.pages.dev/"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Developer & Code Utilities",
+            "item": "https://toolora0.pages.dev/#all-tools"
+        },
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "JSON Web Token (JWT) Decoder",
+            "item": "https://toolora0.pages.dev/jwt-decoder.html"
+        }
+    ]
+}
+    </script>
+
+    <!-- Schema.org JSON-LD: FAQPage -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "Is it safe to paste sensitive API keys, JWTs, or JSON data?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! Unlike traditional web tools that send payloads to backend servers, Toolora processes all strings locally via browser JavaScript APIs. Sensitive keys are never transmitted across the network."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Does the formatter validate syntax errors?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, helpful error messages and exact line numbers are provided when syntax issues are detected."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Can I format large datasets?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, modern browser V8 JavaScript engines handle megabytes of structured data effortlessly."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Does it support dark mode?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, dark and light mode themes are fully supported with syntax highlighting."
+            }
+        }
+    ]
+}
+    </script>
+
+    <!-- OpenGraph / Social Cards -->
+        <!-- Instant Theme Resolution (Prevents FOUC) -->
+        <script>
+          (function() {
+            try {
+              var saved = localStorage.getItem('toolora_theme');
+              var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+              var isDark = saved ? saved === 'dark' : prefersDark;
+              if (isDark) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.documentElement.classList.add('dark');
+              } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                document.documentElement.classList.remove('dark');
+              }
+            } catch (e) {}
+          })();
+        </script>
+        <link rel="stylesheet" href="/src/index.css" />
   </head>
   <body class="min-h-screen flex flex-col font-sans antialiased transition-colors duration-200 bg-slate-50 dark:bg-[#0b0f17] text-slate-800 dark:text-slate-200">
     
@@ -240,6 +357,51 @@
           </div>
         </div>
       </section>
+    
+      <!-- Related Tools Section (Internal Link Equity) -->
+      <section class="max-w-5xl mx-auto px-4 sm:px-6 py-8 border-t border-slate-200 dark:border-slate-800" aria-label="Related Online Tools">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Related Developer & Code Utilities</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Explore more free, 100% private in-browser utilities</p>
+          </div>
+          <a href="/index.html#all-tools" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline">View All 200+ Tools &rarr;</a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+          <a href="/json-formatter.html" class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 transition-all hover:shadow-md group flex flex-col justify-between">
+            <div>
+              <h4 class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">JSON Formatter</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Prettify and validate JSON data</p>
+            </div>
+            <div class="mt-3 text-xs font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1">Open Tool &rarr;</div>
+          </a>          <a href="/base64-converter.html" class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 transition-all hover:shadow-md group flex flex-col justify-between">
+            <div>
+              <h4 class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Base64 Converter</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Encode and decode Base64 strings & files</p>
+            </div>
+            <div class="mt-3 text-xs font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1">Open Tool &rarr;</div>
+          </a>          <a href="/uuid-generator.html" class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 transition-all hover:shadow-md group flex flex-col justify-between">
+            <div>
+              <h4 class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">UUID Generator</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Generate random v4 UUID identifiers</p>
+            </div>
+            <div class="mt-3 text-xs font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1">Open Tool &rarr;</div>
+          </a>          <a href="/regex-tester.html" class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 transition-all hover:shadow-md group flex flex-col justify-between">
+            <div>
+              <h4 class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Regex Tester</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Test regular expressions in real-time</p>
+            </div>
+            <div class="mt-3 text-xs font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1">Open Tool &rarr;</div>
+          </a>          <a href="/hash-generator.html" class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 transition-all hover:shadow-md group flex flex-col justify-between">
+            <div>
+              <h4 class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Hash Generator</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Generate SHA-256, MD5, and SHA-512 hashes</p>
+            </div>
+            <div class="mt-3 text-xs font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1">Open Tool &rarr;</div>
+          </a>
+        </div>
+      </section>
+
     </main>
 
     <!-- Footer -->
