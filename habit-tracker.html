@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Habit Tracker - Free Daily Habit & Streak Tracker</title>
+    <meta name="description" content="Build consistent daily habits, log completions, track consecutive streaks, and visualize weekly completion rates with 100% private in-browser storage." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/habit-tracker.html" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button data-theme-toggle type="button" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+          <a href="/" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition-colors">
+            All 130 Tools
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <!-- Title & Intro -->
+      <div class="mb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-violet-50 text-violet-700 dark:bg-violet-950/60 dark:text-violet-300 border border-violet-200 dark:border-violet-800 mb-3">
+          <span>🔥 Streak &amp; Habit Builder</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Habit Tracker</h1>
+        <p class="mt-2 text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-2xl">
+          Build lasting routines with daily tracking, consecutive streaks, and weekly completion rates. 100% private in-browser storage.
+        </p>
+      </div>
+
+      <!-- Stats Overview Banner -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-orange-50 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 flex items-center justify-center text-2xl shrink-0">
+            🔥
+          </div>
+          <div>
+            <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Active Streaks</span>
+            <div id="habits-total-streaks" class="text-2xl font-extrabold text-slate-800 dark:text-slate-100 mt-0.5">0 Days</div>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-2xl shrink-0">
+            🎯
+          </div>
+          <div>
+            <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Completed Today</span>
+            <div id="habits-today-count" class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-0.5">0 / 0</div>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center text-2xl shrink-0">
+            📊
+          </div>
+          <div>
+            <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">7-Day Completion Rate</span>
+            <div id="habits-overall-rate" class="text-2xl font-extrabold text-blue-600 dark:text-blue-400 mt-0.5">0%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add New Habit Form -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 mb-8 shadow-xs">
+        <h2 class="text-sm font-bold text-slate-800 dark:text-slate-200 mb-3">+ Create New Habit</h2>
+        <form id="habit-add-form" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <select id="habit-icon-select" class="px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none">
+            <option value="💧">💧 Water</option>
+            <option value="🏃">🏃 Fitness</option>
+            <option value="📖">📖 Reading</option>
+            <option value="🧘">🧘 Mindfulness</option>
+            <option value="💻">💻 Coding</option>
+            <option value="🥗">🥗 Nutrition</option>
+            <option value="💤">💤 Sleep</option>
+            <option value="✍️">✍️ Journaling</option>
+            <option value="⭐">⭐ General</option>
+          </select>
+          <input
+            type="text"
+            id="habit-name-input"
+            placeholder="e.g. 30 Minutes Cardio, Floss Teeth, Learn Spanish..."
+            required
+            class="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:ring-2 focus:ring-violet-500 focus:outline-none"
+          />
+          <select id="habit-category-select" class="px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none">
+            <option value="Health">Health</option>
+            <option value="Fitness">Fitness</option>
+            <option value="Learning">Learning</option>
+            <option value="Productivity">Productivity</option>
+            <option value="Mindfulness">Mindfulness</option>
+            <option value="Personal">Personal</option>
+          </select>
+          <button
+            type="submit"
+            class="px-5 py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-semibold text-sm rounded-xl shadow-xs transition-colors shrink-0"
+          >
+            Add Habit
+          </button>
+        </form>
+      </div>
+
+      <!-- Habits List -->
+      <div id="habits-list-container" class="space-y-4 mb-8">
+        <!-- Rendered dynamically -->
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500">
+      100% In-Browser Offline Utility &bull; Zero Server Tracking
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/habit-tracker.ts"></script>
+  </body>
+</html>

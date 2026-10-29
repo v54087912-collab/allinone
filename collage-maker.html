@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Photo Collage Maker – Free Online Grid &amp; Layout Creator | Toolora</title>
+    <meta
+      name="description"
+      content="Create beautiful photo collages online for free. 2-photo side-by-side, 2x2 grids, featured stories, custom spacing, rounded borders, and social aspect ratios (1:1, 4:5, 16:9, 9:16) with 100% in-browser privacy."
+    />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/collage-maker.html" />
+
+    <!-- OpenGraph / Social Cards -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Photo Collage Maker – Toolora" />
+    <meta
+      property="og:description"
+      content="Combine multiple photos into modern grid collages with custom spacing, corner radiuses, and social aspect ratios."
+    />
+    <meta property="og:url" content="https://quickpic-studio.pages.dev/collage-maker.html" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Instant Theme Resolution (Prevents FOUC) -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('toolora_theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = saved ? saved === 'dark' : prefersDark;
+          if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="min-h-screen flex flex-col font-sans antialiased transition-colors duration-200 bg-slate-50 dark:bg-[#0b0f17] text-slate-800 dark:text-slate-200">
+    
+    <!-- Shared Header -->
+    <header class="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 dark:border-slate-800 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden xl:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <a href="/index.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Home</a>
+          <a href="/multicrop.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">MultiCrop</a>
+          <a href="/remove-background.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Remove BG</a>
+          <a href="/compress-image.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Compress</a>
+          <a href="/blur-image.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Blur &amp; Censor</a>
+          <a href="/watermark-image.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Watermark</a>
+          <a href="/split-image.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Split Image</a>
+          <a href="/collage-maker.html" class="px-2.5 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold bg-blue-50/50 dark:bg-blue-950/30">Collage</a>
+          <a href="/pixel-art.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Pixel Art</a>
+          <a href="/about.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">About</a>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            100% Client-Side
+          </span>
+
+          <button
+            type="button"
+            data-theme-toggle
+            aria-label="Toggle dark mode"
+            class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+
+          <button
+            type="button"
+            id="mobile-nav-toggle"
+            aria-label="Open mobile navigation menu"
+            aria-expanded="false"
+            class="xl:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+        <!-- Mobile Navigation Drawer (Scrollable & Responsive) -->
+        <!-- Mobile Navigation Drawer (Scrollable & Responsive) -->
+    <div id="mobile-nav-menu" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-end">
+      <div class="w-80 max-w-[85vw] bg-white dark:bg-slate-900 h-full shadow-2xl flex flex-col overflow-hidden">
+        <!-- Drawer Header (Fixed) -->
+        <div class="flex items-center justify-between p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 shrink-0">
+          <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+            <img src="/logo-light.jpg" alt="Toolora" class="h-8 w-auto rounded-lg object-contain shadow-xs logo-light dark:hidden" />
+            <img src="/logo-dark.jpg" alt="Toolora" class="h-8 w-auto rounded-lg object-contain shadow-xs logo-dark hidden dark:block" />
+            <span class="font-bold text-lg tracking-tight text-slate-900 dark:text-white">Toolora</span>
+          </a>
+          <button id="mobile-nav-close" aria-label="Close menu" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 text-2xl leading-none cursor-pointer">&times;</button>
+        </div>
+
+        <!-- Drawer Body (Scrollable touch list) -->
+        <div class="flex-1 overflow-y-auto overscroll-contain p-4 sm:p-5 space-y-4 touch-pan-y" style="-webkit-overflow-scrolling: touch;">
+          <nav class="flex flex-col space-y-1 text-sm font-medium text-slate-700 dark:text-slate-200">
+            <a href="/index.html" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Home</a>
+
+            <div class="pt-2 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Image Tools</div>
+            <a href="/multicrop.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">MultiCrop Studio</a>
+            <a href="/remove-background.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Remove Background</a>
+            <a href="/compress-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image Compressor</a>
+            <a href="/convert-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image Converter</a>
+            <a href="/color-picker.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Color Picker</a>
+            <a href="/merge-images.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Merge Images</a>
+            <a href="/passport-photo.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Passport Photo</a>
+            <a href="/metadata-viewer.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">EXIF Metadata</a>
+            <a href="/blur-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Blur &amp; Censor</a>
+            <a href="/watermark-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image Watermark</a>
+            <a href="/split-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Split Image</a>
+            <a href="/collage-maker.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Photo Collage</a>
+            <a href="/pixel-art.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Pixel Art</a>
+
+            <div class="pt-3 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">PDF &amp; Document Tools</div>
+            <a href="/pdf-to-word.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF to Word</a>
+            <a href="/word-to-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Word to PDF</a>
+            <a href="/protect-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Protect PDF</a>
+            <a href="/number-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Number PDF</a>
+            <a href="/rotate-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Rotate PDF</a>
+            <a href="/watermark-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF Watermark</a>            <a href="/pdf-metadata.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF Metadata</a>
+            <a href="/image-to-text.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image to Text (OCR)</a>
+            <a href="/image-to-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image to PDF</a>
+            <a href="/pdf-to-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF to Image</a>
+            <a href="/split-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Split PDF</a>
+            <a href="/crop-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Crop PDF</a>
+
+            <div class="pt-3 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Information</div>
+            <a href="/about.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">About &amp; Guide</a>
+            <a href="/contact.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Contact</a>
+            <a href="/privacy-policy.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Privacy Policy</a>
+            <a href="/terms.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Terms of Service</a>
+          </nav>
+        </div>
+
+        <!-- Drawer Footer (Fixed) -->
+        <div class="p-4 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500 shrink-0 bg-slate-50/50 dark:bg-slate-900/50">
+          Toolora &bull; 100% In-Browser Privacy
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow">
+      <section class="max-w-6xl mx-auto px-4 pt-8 pb-6 text-center">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          Photo Collage Maker
+        </h1>
+        <p class="mt-2 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">
+          Stitch multiple memories together into beautiful grid layouts. Customize spacing gaps, rounded corners, canvas ratios, and border colors with 100% in-browser privacy.
+        </p>
+      </section>
+
+      <section class="max-w-6xl mx-auto px-4 pb-12">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
+          
+          <!-- Dropzone -->
+          <div
+            id="collage-dropzone"
+            class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-8 sm:p-12 text-center hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-950/20 transition-all cursor-pointer group"
+          >
+            <div class="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform shadow-inner">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path>
+              </svg>
+            </div>
+            <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-1">
+              Select or Drop 2 to 9 Photos
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-4">
+              Supports PNG, JPG, WebP, GIF &bull; Multiple files selected at once
+            </p>
+            <div class="flex items-center justify-center gap-3">
+              <button
+                type="button"
+                class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-md shadow-blue-500/20 transition-all cursor-pointer"
+              >
+                Choose Photos
+              </button>
+              <button
+                type="button"
+                id="collage-demo-btn"
+                class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-sm transition-all cursor-pointer"
+              >
+                Try Demo Set
+              </button>
+            </div>
+            <input id="collage-file-input" type="file" multiple accept="image/*" class="hidden" />
+          </div>
+
+          <!-- Workspace (Hidden until photos loaded) -->
+          <div id="collage-workspace" class="hidden space-y-6">
+            
+            <!-- Preset Templates Bar -->
+            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 space-y-3">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-slate-800 dark:text-slate-200">Choose Layout Template:</span>
+                <span id="collage-photo-count" class="font-mono text-blue-600 dark:text-blue-400 font-semibold">4 photos</span>
+              </div>
+              
+              <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 text-xs">
+                <button type="button" data-collage-preset="2-side-by-side" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-blue-500 transition-colors font-medium text-center cursor-pointer">
+                  2 Side-by-Side
+                </button>
+                <button type="button" data-collage-preset="2-stacked" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-blue-500 transition-colors font-medium text-center cursor-pointer">
+                  2 Stacked
+                </button>
+                <button type="button" data-collage-preset="3-top1-bottom2" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-blue-500 transition-colors font-medium text-center cursor-pointer">
+                  3 (1 Top, 2 Bot)
+                </button>
+                <button type="button" data-collage-preset="3-left1-right2" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-blue-500 transition-colors font-medium text-center cursor-pointer">
+                  3 (1 Left, 2 Right)
+                </button>
+                <button type="button" data-collage-preset="4-grid" class="p-2.5 rounded-xl border-2 border-blue-600 bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 transition-colors font-bold text-center cursor-pointer">
+                  4 (2&times;2 Grid)
+                </button>
+                <button type="button" data-collage-preset="4-featured-left" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-blue-500 transition-colors font-medium text-center cursor-pointer">
+                  4 (1 Hero + 3)
+                </button>
+                <button type="button" data-collage-preset="6-grid" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-blue-500 transition-colors font-medium text-center cursor-pointer">
+                  6 (3&times;2 Grid)
+                </button>
+                <button type="button" data-collage-preset="9-grid" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:border-blue-500 transition-colors font-medium text-center cursor-pointer">
+                  9 (3&times;3 Grid)
+                </button>
+              </div>
+            </div>
+
+            <!-- Customization Controls Bar -->
+            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+              
+              <!-- Aspect Ratio -->
+              <div>
+                <label for="collage-aspect-select" class="block font-medium text-slate-700 dark:text-slate-300 mb-1">Canvas Aspect Ratio</label>
+                <select id="collage-aspect-select" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 cursor-pointer">
+                  <option value="1:1" selected>1:1 Square (Instagram Post)</option>
+                  <option value="4:5">4:5 Portrait (IG Feed)</option>
+                  <option value="16:9">16:9 Landscape (YouTube)</option>
+                  <option value="9:16">9:16 Story / Reel / TikTok</option>
+                  <option value="4:3">4:3 Standard</option>
+                </select>
+              </div>
+
+              <!-- Spacing Gap -->
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <label for="collage-spacing-slider" class="font-medium text-slate-700 dark:text-slate-300">Border Spacing</label>
+                  <span id="collage-spacing-val" class="font-mono text-blue-600 dark:text-blue-400 font-semibold">16px</span>
+                </div>
+                <input type="range" id="collage-spacing-slider" min="0" max="40" value="16" class="w-full accent-blue-600 cursor-pointer" />
+              </div>
+
+              <!-- Corner Radius -->
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <label for="collage-radius-slider" class="font-medium text-slate-700 dark:text-slate-300">Corner Roundness</label>
+                  <span id="collage-radius-val" class="font-mono text-blue-600 dark:text-blue-400 font-semibold">12px</span>
+                </div>
+                <input type="range" id="collage-radius-slider" min="0" max="36" value="12" class="w-full accent-blue-600 cursor-pointer" />
+              </div>
+
+              <!-- Background Color -->
+              <div>
+                <label for="collage-bg-color" class="block font-medium text-slate-700 dark:text-slate-300 mb-1">Background Color</label>
+                <div class="flex items-center gap-2">
+                  <input type="color" id="collage-bg-color" value="#ffffff" class="w-10 h-8 rounded-lg cursor-pointer border border-slate-300 dark:border-slate-700" />
+                  <span class="text-slate-500 text-[11px]">Canvas Matting</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Uploaded Photo Strip -->
+            <div class="flex items-center justify-between gap-3 text-xs">
+              <div class="flex items-center gap-2 overflow-x-auto py-1" id="collage-photo-strip">
+                <!-- Photo chips rendered dynamically -->
+              </div>
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <button type="button" id="collage-add-more-btn" class="text-blue-600 dark:text-blue-400 font-semibold hover:underline cursor-pointer">
+                  + Add Photos
+                </button>
+                <button type="button" id="collage-clear-btn" class="text-rose-500 hover:underline cursor-pointer">
+                  Clear All
+                </button>
+              </div>
+            </div>
+
+            <!-- Canvas Viewport Area -->
+            <div class="relative bg-slate-100 dark:bg-slate-950 rounded-2xl p-4 flex items-center justify-center min-h-[420px] max-h-[70vh] overflow-auto border border-slate-200 dark:border-slate-800">
+              <canvas
+                id="collage-canvas"
+                class="max-w-full max-h-[65vh] object-contain rounded shadow-2xl bg-white"
+              ></canvas>
+            </div>
+
+            <!-- Export Bar -->
+            <div class="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200 dark:border-slate-800">
+              <div class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span>High-resolution export with smart object-fit cover alignment</span>
+              </div>
+
+              <div class="flex items-center gap-3 w-full sm:w-auto">
+                <select
+                  id="collage-format-select"
+                  class="px-3 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-xs cursor-pointer font-medium"
+                >
+                  <option value="image/png" selected>PNG (Lossless)</option>
+                  <option value="image/jpeg">JPG (Photo)</option>
+                </select>
+
+                <button
+                  type="button"
+                  id="collage-download-btn"
+                  class="flex-1 sm:flex-initial px-8 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-500/25 transition-all cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                  </svg>
+                  <span>Download Collage</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Educational FAQ -->
+      <article class="max-w-6xl mx-auto px-4 py-8 space-y-6 text-slate-700 dark:text-slate-300">
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white">Why Create Collages with Toolora?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs leading-relaxed">
+          <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h3 class="font-bold text-sm text-slate-900 dark:text-white">📱 Perfect Social Dimensions</h3>
+            <p>One-click aspect ratio switching ensures your photo collages fit Instagram feed posts (1:1 and 4:5), TikTok &amp; IG Stories (9:16), or YouTube thumbnails (16:9).</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h3 class="font-bold text-sm text-slate-900 dark:text-white">🎨 Aesthetic Rounded Borders</h3>
+            <p>Adjust corner radius and border spacing dynamically to give your collage modern rounded Polaroid cards or sleek borderless magazine spreads.</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h3 class="font-bold text-sm text-slate-900 dark:text-white">🔒 Zero Uploads &bull; High Resolution</h3>
+            <p>Renders locally in high-definition canvas (up to 1920px wide) without lossy compression or sending your family vacations to third-party cloud servers.</p>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <!-- Shared Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 text-center text-xs text-slate-500">
+      <div class="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-between gap-4">
+        <div>Toolora &bull; 100% In-Browser Private Utilities</div>
+        <div class="flex items-center gap-4">
+          <a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a>
+          <a href="/terms.html" class="hover:underline">Terms</a>
+          <a href="/contact.html" class="hover:underline">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/collage-maker.ts"></script>
+  </body>
+</html>

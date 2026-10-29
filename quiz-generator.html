@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz Generator - AI Multiple Choice Quiz Maker from Notes</title>
+    <meta name="description" content="Generate interactive multiple-choice test quizzes directly from your notes and study materials." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/quiz-generator.html" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button data-theme-toggle type="button" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+          <a href="/" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition-colors">
+            All Tools
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 max-w-4xl mx-auto px-4 py-8 sm:px-6 w-full space-y-6">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Quiz Generator</h1>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Turn lecture notes and text summaries into instant practice quizzes with automated grading.</p>
+      </div>
+
+      
+          <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-6 max-w-2xl mx-auto">
+            <div class="space-y-2">
+              <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider">Paste Study Notes / Text Material</label>
+              <textarea id="notes-input" rows="6" placeholder="Paste definitions, lecture notes, or key facts here..." class="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs"></textarea>
+            </div>
+            <button type="button" id="generate-btn" class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs cursor-pointer">Generate Practice Quiz</button>
+            
+            <div id="quiz-view" class="hidden p-6 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 space-y-4">
+              <div id="question-box" class="text-sm font-bold text-slate-900 dark:text-slate-100"></div>
+              <div id="options-box" class="space-y-2"></div>
+            </div>
+
+            <div id="score-report" class="hidden p-6 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-center space-y-2">
+              <span class="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Quiz Completed!</span>
+              <h2 id="score-val" class="text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">5 / 5</h2>
+            </div>
+          </div>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500">
+      100% In-Browser Offline Utility &bull; Zero Server Tracking
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/quiz-generator.ts"></script>
+  </body>
+</html>

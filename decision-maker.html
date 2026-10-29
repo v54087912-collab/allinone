@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Decision Maker - Free Choice Picker, Coin Flipper & Pros and Cons Analyzer</title>
+    <meta name="description" content="Overcome decision paralysis with random choice picker, 3D coin flip, and weighted pros and cons rational decision analyzer." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/decision-maker.html" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button data-theme-toggle type="button" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+          <a href="/" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition-colors">
+            All 130 Tools
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <!-- Title & Intro -->
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800 mb-3">
+          <span>⚖️ Resolve Indecision Fast</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Decision Maker</h1>
+        <p class="mt-2 text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-md mx-auto">
+          Need a quick answer or deep rational analysis? Choose between Random Choice, Coin Flip, or Weighted Pros &amp; Cons.
+        </p>
+      </div>
+
+      <!-- Mode Tabs -->
+      <div class="flex items-center justify-center gap-2 p-1.5 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl mb-8 text-xs sm:text-sm shadow-xs max-w-md mx-auto">
+        <button type="button" id="tab-choice-btn" class="flex-1 py-2 rounded-xl transition-all font-bold bg-amber-600 text-white cursor-pointer">
+          🎲 Random Choice
+        </button>
+        <button type="button" id="tab-coin-btn" class="flex-1 py-2 rounded-xl transition-all font-semibold cursor-pointer">
+          🪙 Coin Flip
+        </button>
+        <button type="button" id="tab-pros-cons-btn" class="flex-1 py-2 rounded-xl transition-all font-semibold cursor-pointer">
+          ⚖️ Pros &amp; Cons
+        </button>
+      </div>
+
+      <!-- SECTION 1: RANDOM CHOICE -->
+      <div id="section-choice" class="space-y-6">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xs text-center max-w-lg mx-auto">
+          <!-- Result Banner -->
+          <div class="p-6 bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-900/60 rounded-2xl mb-6 min-h-[100px] flex flex-col items-center justify-center">
+            <span class="text-xs uppercase font-extrabold tracking-widest text-amber-600 dark:text-amber-400 mb-1">Your Decision:</span>
+            <div id="choice-result-display" class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white transition-transform duration-200">
+              Hit "Pick for Me!" below
+            </div>
+          </div>
+
+          <label for="choice-options-textarea" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 text-left">
+            Options (1 choice per line)
+          </label>
+          <textarea
+            id="choice-options-textarea"
+            rows="5"
+            placeholder="Pizza&#10;Sushi&#10;Burgers&#10;Thai food&#10;Tacos..."
+            class="w-full p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none font-sans mb-4"
+          >Option A: Start the new project
+Option B: Polish existing features
+Option C: Take a break and review</textarea>
+
+          <button
+            type="button"
+            id="choice-pick-btn"
+            class="w-full py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-sm sm:text-base rounded-2xl shadow-md transition-all transform hover:-translate-y-0.5 cursor-pointer"
+          >
+            🎲 Pick for Me!
+          </button>
+        </div>
+      </div>
+
+      <!-- SECTION 2: COIN FLIP -->
+      <div id="section-coin" class="hidden space-y-6">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-xs text-center max-w-md mx-auto">
+          <!-- Big Coin Visual -->
+          <div class="my-6">
+            <div
+              id="coin-display"
+              class="w-36 h-36 mx-auto rounded-full bg-gradient-to-tr from-amber-400 to-yellow-300 border-4 border-amber-500 shadow-xl flex items-center justify-center text-lg font-black text-amber-950 transition-all select-none"
+            >
+              🪙 FLIP
+            </div>
+          </div>
+
+          <div id="coin-result-text" class="text-base font-bold text-slate-800 dark:text-slate-200 mb-6">
+            Click Flip to toss the coin!
+          </div>
+
+          <button
+            type="button"
+            id="coin-flip-btn"
+            class="w-full py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-base rounded-2xl shadow-md transition-all cursor-pointer"
+          >
+            🪙 Flip Coin
+          </button>
+
+          <!-- Flip Stats -->
+          <div class="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-slate-100 dark:border-slate-800 text-xs">
+            <div>
+              <span class="text-slate-400">Heads</span>
+              <div id="coin-heads-count" class="text-xl font-bold text-slate-900 dark:text-white mt-0.5">0</div>
+            </div>
+            <div>
+              <span class="text-slate-400">Tails</span>
+              <div id="coin-tails-count" class="text-xl font-bold text-slate-900 dark:text-white mt-0.5">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 3: WEIGHTED PROS & CONS -->
+      <div id="section-pros-cons" class="hidden space-y-6">
+        <!-- Recommendation Output -->
+        <div class="text-center p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xs">
+          <span class="text-xs uppercase font-bold text-slate-400 block mb-1">Rational Assessment:</span>
+          <div id="pros-cons-recommendation" class="inline-block text-xs font-bold px-4 py-2 rounded-2xl border">
+            Evaluating options...
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Pros Column -->
+          <div class="bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-900/60 rounded-3xl p-5 shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between pb-3 border-b border-emerald-100 dark:border-emerald-900/60 mb-3">
+                <h3 class="font-bold text-sm text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                  ✅ Pros (Advantages)
+                </h3>
+                <span id="pros-total-score" class="text-sm font-black text-emerald-600">+0</span>
+              </div>
+              <div id="pros-list-container" class="space-y-2 mb-4">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+
+            <!-- Add Pro Input -->
+            <div class="flex gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+              <input
+                type="text"
+                id="add-pro-input"
+                placeholder="Add pro argument..."
+                class="flex-1 px-3 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none"
+              />
+              <select id="add-pro-weight" class="px-2 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none" title="Importance Weight 1-5">
+                <option value="5">W5 (Vital)</option>
+                <option value="4">W4 (High)</option>
+                <option value="3" selected>W3 (Med)</option>
+                <option value="2">W2 (Low)</option>
+                <option value="1">W1 (Minor)</option>
+              </select>
+              <button type="button" id="add-pro-btn" class="px-3 py-1.5 bg-emerald-600 text-white font-semibold text-xs rounded-xl cursor-pointer">
+                + Add
+              </button>
+            </div>
+          </div>
+
+          <!-- Cons Column -->
+          <div class="bg-white dark:bg-slate-900 border border-rose-200 dark:border-rose-900/60 rounded-3xl p-5 shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between pb-3 border-b border-rose-100 dark:border-rose-900/60 mb-3">
+                <h3 class="font-bold text-sm text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
+                  ❌ Cons (Drawbacks)
+                </h3>
+                <span id="cons-total-score" class="text-sm font-black text-rose-600">-0</span>
+              </div>
+              <div id="cons-list-container" class="space-y-2 mb-4">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+
+            <!-- Add Con Input -->
+            <div class="flex gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+              <input
+                type="text"
+                id="add-con-input"
+                placeholder="Add con argument..."
+                class="flex-1 px-3 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none"
+              />
+              <select id="add-con-weight" class="px-2 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none" title="Risk Weight 1-5">
+                <option value="5">W5 (Dealbreaker)</option>
+                <option value="4">W4 (High)</option>
+                <option value="3" selected>W3 (Med)</option>
+                <option value="2">W2 (Low)</option>
+                <option value="1">W1 (Minor)</option>
+              </select>
+              <button type="button" id="add-con-btn" class="px-3 py-1.5 bg-rose-600 text-white font-semibold text-xs rounded-xl cursor-pointer">
+                + Add
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500">
+      100% In-Browser Offline Utility &bull; Zero Server Tracking
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/decision-maker.ts"></script>
+  </body>
+</html>

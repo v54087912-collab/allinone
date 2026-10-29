@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Color Picker &amp; Palette Extractor (Free &amp; In-Browser) | Toolora</title>
+    <meta
+      name="description"
+      content="Pick exact pixel colors from any image with a magnifying loupe. Get HEX, RGB, HSL, CMYK values, extract dominant color palettes, and export CSS variables 100% in your browser."
+    />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/color-picker.html" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Image Color Picker &amp; Dominant Palette Generator" />
+    <meta
+      property="og:description"
+      content="Inspect pixel colors with a magnified lens and extract dominant palettes in HEX, RGB, and HSL without server uploads."
+    />
+    <meta property="og:url" content="https://quickpic-studio.pages.dev/color-picker.html" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Toolora Image Color Picker",
+      "applicationCategory": "DesignApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "description": "Inspect pixel colors with a magnifier loupe and extract dominant palettes directly in the browser."
+    }
+    </script>
+
+    <script>
+      (function () {
+        try {
+          const theme = localStorage.getItem('toolora_theme');
+          const isDark = theme ? theme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="min-h-screen flex flex-col font-sans antialiased transition-colors duration-200 bg-slate-50 dark:bg-[#0b0f17] text-slate-800 dark:text-slate-200">
+    
+    <!-- Shared Header -->
+    <header class="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 dark:border-slate-800 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+
+        <nav class="hidden xl:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <a href="/index.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Home</a>
+          <a href="/multicrop.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">MultiCrop</a>
+          <a href="/remove-background.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Remove BG</a>
+          <a href="/compress-image.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Compress</a>
+          <a href="/convert-image.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Convert</a>
+          <a href="/image-to-pdf.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Image to PDF</a>
+          <a href="/pdf-to-image.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">PDF to Image</a>
+          <a href="/split-pdf.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Split PDF</a>
+          <a href="/crop-pdf.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Crop PDF</a>
+          <a href="/about.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">About</a>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            100% Client-Side
+          </span>
+
+          <button
+            type="button"
+            data-theme-toggle
+            aria-label="Toggle dark mode"
+            class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+            <svg data-theme-icon-moon class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+          </button>
+
+          <button
+            type="button"
+            id="mobile-nav-toggle"
+            aria-label="Open mobile navigation menu"
+            aria-expanded="false"
+            class="xl:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+        <!-- Mobile Navigation Drawer (Scrollable & Responsive) -->
+        <!-- Mobile Navigation Drawer (Scrollable & Responsive) -->
+    <div id="mobile-nav-menu" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-end">
+      <div class="w-80 max-w-[85vw] bg-white dark:bg-slate-900 h-full shadow-2xl flex flex-col overflow-hidden">
+        <!-- Drawer Header (Fixed) -->
+        <div class="flex items-center justify-between p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 shrink-0">
+          <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+            <img src="/logo-light.jpg" alt="Toolora" class="h-8 w-auto rounded-lg object-contain shadow-xs logo-light dark:hidden" />
+            <img src="/logo-dark.jpg" alt="Toolora" class="h-8 w-auto rounded-lg object-contain shadow-xs logo-dark hidden dark:block" />
+            <span class="font-bold text-lg tracking-tight text-slate-900 dark:text-white">Toolora</span>
+          </a>
+          <button id="mobile-nav-close" aria-label="Close menu" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 text-2xl leading-none cursor-pointer">&times;</button>
+        </div>
+
+        <!-- Drawer Body (Scrollable touch list) -->
+        <div class="flex-1 overflow-y-auto overscroll-contain p-4 sm:p-5 space-y-4 touch-pan-y" style="-webkit-overflow-scrolling: touch;">
+          <nav class="flex flex-col space-y-1 text-sm font-medium text-slate-700 dark:text-slate-200">
+            <a href="/index.html" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Home</a>
+
+            <div class="pt-2 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Image Tools</div>
+            <a href="/multicrop.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">MultiCrop Studio</a>
+            <a href="/remove-background.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Remove Background</a>
+            <a href="/compress-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image Compressor</a>
+            <a href="/convert-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image Converter</a>
+            <a href="/color-picker.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Color Picker</a>
+            <a href="/merge-images.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Merge Images</a>
+            <a href="/passport-photo.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Passport Photo</a>
+            <a href="/metadata-viewer.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">EXIF Metadata</a>
+            <a href="/blur-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Blur &amp; Censor</a>
+            <a href="/watermark-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image Watermark</a>
+            <a href="/split-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Split Image</a>
+            <a href="/collage-maker.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Photo Collage</a>
+            <a href="/pixel-art.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Pixel Art</a>
+
+            <div class="pt-3 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">PDF &amp; Document Tools</div>
+            <a href="/pdf-to-word.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF to Word</a>
+            <a href="/word-to-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Word to PDF</a>
+            <a href="/protect-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Protect PDF</a>
+            <a href="/number-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Number PDF</a>
+            <a href="/rotate-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Rotate PDF</a>
+            <a href="/watermark-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF Watermark</a>            <a href="/pdf-metadata.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF Metadata</a>
+            <a href="/image-to-text.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image to Text (OCR)</a>
+            <a href="/image-to-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image to PDF</a>
+            <a href="/pdf-to-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF to Image</a>
+            <a href="/split-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Split PDF</a>
+            <a href="/crop-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Crop PDF</a>
+
+            <div class="pt-3 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Information</div>
+            <a href="/about.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">About &amp; Guide</a>
+            <a href="/contact.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Contact</a>
+            <a href="/privacy-policy.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Privacy Policy</a>
+            <a href="/terms.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Terms of Service</a>
+          </nav>
+        </div>
+
+        <!-- Drawer Footer (Fixed) -->
+        <div class="p-4 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500 shrink-0 bg-slate-50/50 dark:bg-slate-900/50">
+          Toolora &bull; 100% In-Browser Privacy
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+      <section class="max-w-5xl mx-auto px-4 pt-8 pb-6 text-center">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          Image Color Picker &amp; Palette Extractor
+        </h1>
+        <p class="mt-2 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">
+          Inspect pixel colors with a precision magnifying loupe. Get HEX, RGB, HSL, and CMYK codes, extract the top dominant color palette, and export CSS variables.
+        </p>
+      </section>
+
+      <!-- Tool Workspace -->
+      <section class="max-w-6xl mx-auto px-4 pb-12" aria-label="Color Picker Tool Workspace">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden p-4 sm:p-8 space-y-6">
+          
+          <!-- Dropzone & Empty State -->
+          <div id="picker-empty-state" class="py-8">
+            <div
+              id="picker-dropzone"
+              class="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-400 rounded-2xl p-6 sm:p-10 text-center cursor-pointer transition-colors bg-slate-50/50 dark:bg-slate-800/20"
+            >
+              <input type="file" id="picker-file-input" accept="image/*" class="hidden" />
+              <div class="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                </svg>
+              </div>
+              <h2 class="text-lg font-bold text-slate-800 dark:text-slate-200">
+                Drag &amp; drop an image, or <span class="text-blue-600 dark:text-blue-400 underline">browse files</span>
+              </h2>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                Click any pixel to inspect color codes &bull; Extract dominant palette &bull; 100% In-Browser
+              </p>
+            </div>
+
+            <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
+              <button
+                type="button"
+                id="picker-demo-btn"
+                class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold cursor-pointer transition-colors shadow-xs"
+              >
+                ⚡ Try with Sunset Demo Image
+              </button>
+            </div>
+          </div>
+
+          <!-- Active State -->
+          <div id="picker-active-state" class="hidden space-y-6">
+            
+            <!-- Top Controls & Actions -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
+              <div class="flex items-center gap-2">
+                <button
+                  type="button"
+                  id="picker-extract-btn"
+                  class="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors shadow-xs flex items-center gap-1.5 cursor-pointer"
+                >
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                  <span>Re-Extract Dominant Palette</span>
+                </button>
+                <button
+                  type="button"
+                  onclick="document.getElementById('picker-file-input').click()"
+                  class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
+                >
+                  Change Image
+                </button>
+              </div>
+
+              <div class="flex items-center gap-2 text-xs">
+                <button type="button" id="picker-export-css-btn" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold cursor-pointer">
+                  Copy as CSS
+                </button>
+                <button type="button" id="picker-export-json-btn" class="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold cursor-pointer">
+                  Copy as JSON
+                </button>
+              </div>
+            </div>
+
+            <!-- Dominant Palette Strip -->
+            <div>
+              <div class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Dominant Palette</div>
+              <div id="picker-palette-container" class="flex flex-wrap gap-2"></div>
+            </div>
+
+            <!-- Two-column workspace: Canvas vs Inspector -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              
+              <!-- Left Column: Image Canvas with Loupe (8 cols) -->
+              <div class="lg:col-span-8 space-y-2">
+                <div class="flex items-center justify-between text-xs text-slate-500">
+                  <span>Hover to preview with magnifier • Click to pin color swatch</span>
+                </div>
+                <div class="relative bg-checkered rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex items-center justify-center p-2 min-h-[360px] sm:min-h-[460px]">
+                  <canvas id="picker-canvas" class="max-w-full max-h-[540px] object-contain rounded shadow-lg cursor-crosshair"></canvas>
+                  
+                  <!-- Floating Loupe Canvas -->
+                  <canvas
+                    id="picker-loupe"
+                    class="fixed z-50 rounded-full border-2 border-white shadow-2xl pointer-events-none hidden"
+                    style="width: 100px; height: 100px;"
+                  ></canvas>
+                </div>
+              </div>
+
+              <!-- Right Column: Color Details & Swatches (4 cols) -->
+              <div class="lg:col-span-4 space-y-5">
+                
+                <!-- Current Selected Color Card -->
+                <div class="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 space-y-4">
+                  <div class="flex items-center gap-3">
+                    <div id="picker-current-swatch" class="w-16 h-16 rounded-xl border border-slate-300 dark:border-slate-700 shadow-md shrink-0 transition-colors"></div>
+                    <div class="min-w-0">
+                      <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Selected Color</div>
+                      <div id="picker-val-hex" class="text-xl font-bold font-mono text-slate-900 dark:text-white uppercase truncate">#3B82F6</div>
+                      <button type="button" data-copy-target="picker-val-hex" class="text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline mt-0.5 cursor-pointer">
+                        Copy HEX
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Color Code Formats -->
+                  <div class="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-700/80 text-xs">
+                    <div class="flex items-center justify-between p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                      <span class="text-slate-400 font-medium">RGB:</span>
+                      <span id="picker-val-rgb" class="font-mono font-semibold text-slate-800 dark:text-slate-200">rgb(59, 130, 246)</span>
+                      <button type="button" data-copy-target="picker-val-rgb" class="text-blue-600 dark:text-blue-400 hover:underline text-[11px] font-semibold cursor-pointer">Copy</button>
+                    </div>
+
+                    <div class="flex items-center justify-between p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                      <span class="text-slate-400 font-medium">HSL:</span>
+                      <span id="picker-val-hsl" class="font-mono font-semibold text-slate-800 dark:text-slate-200">hsl(217, 91%, 60%)</span>
+                      <button type="button" data-copy-target="picker-val-hsl" class="text-blue-600 dark:text-blue-400 hover:underline text-[11px] font-semibold cursor-pointer">Copy</button>
+                    </div>
+
+                    <div class="flex items-center justify-between p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                      <span class="text-slate-400 font-medium">CMYK:</span>
+                      <span id="picker-val-cmyk" class="font-mono font-semibold text-slate-800 dark:text-slate-200">cmyk(76%, 47%, 0%, 4%)</span>
+                      <button type="button" data-copy-target="picker-val-cmyk" class="text-blue-600 dark:text-blue-400 hover:underline text-[11px] font-semibold cursor-pointer">Copy</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Pinned Swatches History -->
+                <div class="space-y-2">
+                  <div class="flex items-center justify-between text-xs">
+                    <span class="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                      Pinned Swatches (<span id="picker-swatches-count">0</span>)
+                    </span>
+                    <button type="button" id="picker-clear-swatches-btn" class="text-rose-500 hover:underline cursor-pointer">
+                      Clear
+                    </button>
+                  </div>
+                  <div id="picker-swatches-list" class="max-h-[220px] overflow-y-auto space-y-1.5 pr-1"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Documentation & Guide -->
+      <article class="max-w-5xl mx-auto px-4 py-8 space-y-6 text-slate-700 dark:text-slate-300">
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white">How to Use Image Color Picker</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs leading-relaxed">
+          <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h3 class="font-bold text-sm text-slate-900 dark:text-white">🔍 8× Magnifier Loupe</h3>
+            <p>Hover anywhere on the photo to zoom in 800% with high-contrast targeting to isolate single-pixel shades and subtle gradients.</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h3 class="font-bold text-sm text-slate-900 dark:text-white">🎨 Dominant Palette Extractor</h3>
+            <p>Toolora automatically clusters image pixels and computes the top dominant color palette with frequency percentages.</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h3 class="font-bold text-sm text-slate-900 dark:text-white">📋 Multiple Export Formats</h3>
+            <p>Get HEX, RGB, HSL, and CMYK with 1-click clipboard copy, or export entire palettes as standard CSS variables or JSON.</p>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <!-- Shared Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 text-center text-xs text-slate-500">
+      <div class="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-between gap-4">
+        <div>Toolora &bull; 100% In-Browser Private Image Utilities</div>
+        <div class="flex items-center gap-4">
+          <a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a>
+          <a href="/terms.html" class="hover:underline">Terms</a>
+          <a href="/contact.html" class="hover:underline">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/color-picker.ts"></script>
+  </body>
+</html>

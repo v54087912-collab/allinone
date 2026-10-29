@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subtitle File Converter - SRT, VTT, ASS, CSV, JSON</title>
+    <meta name="description" content="Convert between subtitle formats with timestamp offset timing adjustments in your browser." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/subtitle-file-converter.html" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button data-theme-toggle type="button" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+          <a href="/" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition-colors">
+            All Tools
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 max-w-4xl mx-auto px-4 py-8 sm:px-6 w-full space-y-6">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Subtitle File Converter</h1>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Convert and sync subtitle files across SRT, VTT, ASS, CSV, and JSON formats.</p>
+      </div>
+
+      
+          <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-6">
+            <div id="subtitle-drop-zone" class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-6 text-center cursor-pointer hover:border-blue-500 transition-colors">
+              <input type="file" id="subtitle-file-input" accept=".srt,.vtt,.ass,.txt" class="hidden" />
+              <p class="font-medium text-slate-700 dark:text-slate-300">Drop subtitle file or paste text below</p>
+              <span id="cues-count" class="text-xs text-slate-500">0 cues parsed</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Input Subtitles</label>
+                <textarea id="raw-text-input" rows="10" placeholder="1
+00:00:01,000 --> 00:00:04,000
+Hello world" class="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 font-mono text-xs"></textarea>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Converted Output</label>
+                <textarea id="output-text" readonly rows="10" placeholder="Converted subtitles will appear here..." class="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 font-mono text-xs"></textarea>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Target Format</label>
+                <select id="target-format" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm">
+                  <option value="vtt">WebVTT (.vtt)</option>
+                  <option value="srt">SubRip (.srt)</option>
+                  <option value="ass">Advanced SubStation (.ass)</option>
+                  <option value="csv">Spreadsheet CSV (.csv)</option>
+                  <option value="json">Structured JSON (.json)</option>
+                  <option value="txt">Plain Text (.txt)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Time Shift (± Seconds)</label>
+                <input type="number" id="offset-seconds" step="0.5" value="0" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm" />
+              </div>
+              <div class="flex items-end">
+                <button type="button" id="convert-btn" disabled class="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold text-sm cursor-pointer">Convert Subtitles</button>
+              </div>
+            </div>
+            <div class="flex justify-end gap-3">
+              <button type="button" id="copy-btn" disabled class="py-2 px-4 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-50 cursor-pointer">Copy Text</button>
+              <button type="button" id="download-btn" disabled class="py-2 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold disabled:opacity-50 cursor-pointer">Download File</button>
+            </div>
+          </div>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500">
+      100% In-Browser Offline Utility &bull; Zero Server Tracking
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/subtitle-file-converter.ts"></script>
+  </body>
+</html>

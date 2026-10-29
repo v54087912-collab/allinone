@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MultiCrop Studio – Bulk Asset &amp; Image Cropper (Free &amp; In-Browser)</title>
+    <meta
+      name="description"
+      content="Extract multiple individual assets and sprite frames from images with pixel precision, uniform grid cropping, AI object detection, background transparency, and ZIP export."
+    />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/multicrop.html" />
+
+    <!-- OpenGraph / Social Cards -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MultiCrop Studio – Bulk Asset &amp; Image Cropper" />
+    <meta
+      property="og:description"
+      content="Define multiple crops per image, extract sprite sheets, auto-detect objects, and batch export high-resolution assets to a ZIP archive without server uploads."
+    />
+    <meta property="og:url" content="https://quickpic-studio.pages.dev/multicrop.html" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google AdSense Script Placeholder -->
+    <!-- REPLACE THIS COMMENT WITH YOUR GOOGLE ADSENSE CODE:
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    -->
+
+    <!-- Schema.org FAQPage JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I save multiple crops from a single image?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Simply click and drag on the image canvas using the Select/Crop tool to create your first crop region. Click 'Add Another Crop' or use keyboard shortcuts (Cmd/Ctrl+D to duplicate, or drag another box) to define multiple crop areas. Each crop is tracked individually in the Asset Gallery sidebar."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I download all configured crops together as a ZIP file?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! Click the 'Export' button in the top navigation bar. You can choose PNG, JPEG, or WebP format, adjust quality, and export all cropped assets at once into an organized .zip archive."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does MultiCrop support uniform sprite sheets and grid slicing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Switch to the 'Grid' tool in the sidebar to configure rows, columns, margins, and gaps. You can slice uniform sprite sheets or RPG tilemaps into individual assets instantly."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are my images uploaded to any server or cloud?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. MultiCrop Studio operates 100% inside your web browser using HTML5 Canvas and WebAssembly. Your photos and graphics never leave your local device."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I remove white or solid backgrounds from my crops?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! Click the 'White BG Removal' option in the top bar to automatically make solid backdrops transparent before exporting your assets."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- Instant Theme Resolution (Prevents FOUC / White Flash) -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('toolora_theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = saved ? saved === 'dark' : prefersDark;
+          if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="min-h-screen flex flex-col font-sans antialiased transition-colors duration-200">
+    
+    <!-- Shared Header -->
+    <header class="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 dark:border-slate-800 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+
+        <nav class="hidden xl:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <a href="/index.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Home</a>
+          <a href="/multicrop.html" class="px-2.5 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold bg-blue-50/50 dark:bg-blue-950/30">MultiCrop</a>
+          <a href="/remove-background.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Remove BG</a>
+          <a href="/compress-image.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Compress</a>
+          <a href="/convert-image.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Convert</a>
+          <a href="/image-to-pdf.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Image to PDF</a>
+          <a href="/pdf-to-image.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">PDF to Image</a>
+          <a href="/split-pdf.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Split PDF</a>
+          <a href="/crop-pdf.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Crop PDF</a>
+          <a href="/about.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">About</a>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            100% Client-Side
+          </span>
+
+          <button
+            type="button"
+            data-theme-toggle
+            aria-label="Toggle dark mode"
+            class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+            <svg data-theme-icon-moon class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+          </button>
+
+          <button
+            type="button"
+            id="mobile-nav-toggle"
+            aria-label="Open mobile navigation menu"
+            aria-expanded="false"
+            class="xl:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+        <!-- Mobile Navigation Drawer (Scrollable & Responsive) -->
+        <!-- Mobile Navigation Drawer (Scrollable & Responsive) -->
+    <div id="mobile-nav-menu" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-end">
+      <div class="w-80 max-w-[85vw] bg-white dark:bg-slate-900 h-full shadow-2xl flex flex-col overflow-hidden">
+        <!-- Drawer Header (Fixed) -->
+        <div class="flex items-center justify-between p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 shrink-0">
+          <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+            <img src="/logo-light.jpg" alt="Toolora" class="h-8 w-auto rounded-lg object-contain shadow-xs logo-light dark:hidden" />
+            <img src="/logo-dark.jpg" alt="Toolora" class="h-8 w-auto rounded-lg object-contain shadow-xs logo-dark hidden dark:block" />
+            <span class="font-bold text-lg tracking-tight text-slate-900 dark:text-white">Toolora</span>
+          </a>
+          <button id="mobile-nav-close" aria-label="Close menu" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 text-2xl leading-none cursor-pointer">&times;</button>
+        </div>
+
+        <!-- Drawer Body (Scrollable touch list) -->
+        <div class="flex-1 overflow-y-auto overscroll-contain p-4 sm:p-5 space-y-4 touch-pan-y" style="-webkit-overflow-scrolling: touch;">
+          <nav class="flex flex-col space-y-1 text-sm font-medium text-slate-700 dark:text-slate-200">
+            <a href="/index.html" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Home</a>
+
+            <div class="pt-2 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Image Tools</div>
+            <a href="/multicrop.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">MultiCrop Studio</a>
+            <a href="/remove-background.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Remove Background</a>
+            <a href="/compress-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image Compressor</a>
+            <a href="/convert-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image Converter</a>
+            <a href="/color-picker.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Color Picker</a>
+            <a href="/merge-images.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Merge Images</a>
+            <a href="/passport-photo.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Passport Photo</a>
+            <a href="/metadata-viewer.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">EXIF Metadata</a>
+            <a href="/blur-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Blur &amp; Censor</a>
+            <a href="/watermark-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image Watermark</a>
+            <a href="/split-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Split Image</a>
+            <a href="/collage-maker.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Photo Collage</a>
+            <a href="/pixel-art.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Pixel Art</a>
+
+            <div class="pt-3 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">PDF &amp; Document Tools</div>
+            <a href="/pdf-to-word.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF to Word</a>
+            <a href="/word-to-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Word to PDF</a>
+            <a href="/protect-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Protect PDF</a>
+            <a href="/number-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Number PDF</a>
+            <a href="/rotate-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Rotate PDF</a>
+            <a href="/watermark-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF Watermark</a>            <a href="/pdf-metadata.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF Metadata</a>
+            <a href="/image-to-text.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image to Text (OCR)</a>
+            <a href="/image-to-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image to PDF</a>
+            <a href="/pdf-to-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF to Image</a>
+            <a href="/split-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Split PDF</a>
+            <a href="/crop-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Crop PDF</a>
+
+            <div class="pt-3 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Information</div>
+            <a href="/about.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">About &amp; Guide</a>
+            <a href="/contact.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Contact</a>
+            <a href="/privacy-policy.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Privacy Policy</a>
+            <a href="/terms.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Terms of Service</a>
+          </nav>
+        </div>
+
+        <!-- Drawer Footer (Fixed) -->
+        <div class="p-4 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500 shrink-0 bg-slate-50/50 dark:bg-slate-900/50">
+          Toolora &bull; 100% In-Browser Privacy
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+      
+      <!-- GOOGLE ADSENSE SLOT: Top Leaderboard Banner -->
+      <section class="max-w-7xl mx-auto px-4 pt-4 sm:pt-6" aria-label="Advertisement Banner">
+        <div class="adsense-slot-container w-full min-h-[90px] border border-dashed border-slate-300 dark:border-slate-800 bg-slate-100/60 dark:bg-slate-900/40 p-2 text-center rounded-2xl">
+          <span class="ad-badge">Advertisement</span>
+          <div class="text-xs text-slate-400 py-3">
+            Responsive Top Ad Slot (728&times;90 / Leaderboard)
+            <div class="text-[11px] text-slate-500 mt-0.5">Insert your &lt;ins class="adsbygoogle" ...&gt; snippet here</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tool Header -->
+      <section class="max-w-5xl mx-auto px-4 pt-8 pb-6 text-center">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          MultiCrop Studio – Bulk Asset &amp; Image Cropper
+        </h1>
+        <p class="mt-2 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">
+          Define multiple crop areas per image, slice uniform sprite sheets, auto-detect objects, erase backgrounds, and export all assets in a single organized ZIP package. 100% private in your browser.
+        </p>
+      </section>
+
+      <!-- Tool Workspace Container (Where React App Renders) -->
+      <section class="max-w-7xl mx-auto px-4 pb-12" aria-label="MultiCrop Studio Workspace">
+        <div class="w-full bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden p-2 sm:p-4">
+          <div id="root"></div>
+        </div>
+      </section>
+
+      <!-- GOOGLE ADSENSE SLOT: Middle In-Article Banner -->
+      <section class="max-w-5xl mx-auto px-4 py-4" aria-label="Advertisement Banner">
+        <div class="adsense-slot-container w-full min-h-[90px] border border-dashed border-slate-300 dark:border-slate-800 bg-slate-100/60 dark:bg-slate-900/40 p-3 text-center rounded-2xl">
+          <span class="ad-badge">Advertisement</span>
+          <div class="text-xs text-slate-400 py-3">
+            In-Article Native Ad Slot (728&times;90)
+            <div class="text-[11px] text-slate-500 mt-0.5">Insert your &lt;ins class="adsbygoogle" ...&gt; snippet here</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEO Guide & Feature Documentation -->
+      <article class="max-w-5xl mx-auto px-4 py-8 space-y-10" aria-label="MultiCrop Guide and Documentation">
+        <!-- Feature Highlights -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-lg">
+              ✂️
+            </div>
+            <h2 class="text-base font-bold text-slate-900 dark:text-white">Multiple Crops per Image</h2>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Don't crop one image at a time. Define 5, 20, or 100 separate crop rectangles on the same canvas. Move, duplicate, resize, and rename them with pixel precision.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="w-10 h-10 rounded-xl bg-violet-100 dark:bg-violet-950/60 text-violet-600 dark:text-violet-400 flex items-center justify-center font-bold text-lg">
+              🎮
+            </div>
+            <h2 class="text-base font-bold text-slate-900 dark:text-white">Sprite Sheets &amp; Grid Cropper</h2>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Slice uniform 2D sprite sheets, tilemaps, or RPG icon packs. Configure rows, columns, gaps, and margins to extract every frame automatically.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold text-lg">
+              📦
+            </div>
+            <h2 class="text-base font-bold text-slate-900 dark:text-white">Batch Export to ZIP</h2>
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Download individual crops immediately or package everything into a single ZIP file with custom naming formats (sequential, coordinates, original prefix).
+            </p>
+          </div>
+        </div>
+
+        <!-- How it Works Step-by-Step -->
+        <div class="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+          <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+            How to Crop Multiple Assets from One Image
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="space-y-2">
+              <div class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Step 1</div>
+              <h3 class="font-semibold text-slate-900 dark:text-white text-sm">Upload or Drop Image</h3>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Drag and drop any high-resolution JPG, PNG, WEBP, or SVG image, or select a demo RPG sprite sheet to experiment.
+              </p>
+            </div>
+            <div class="space-y-2">
+              <div class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Step 2</div>
+              <h3 class="font-semibold text-slate-900 dark:text-white text-sm">Draw &amp; Add Crops</h3>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Click and drag on the canvas to draw crop boundaries, or use the Grid tool to auto-generate rows and columns of equal sizes.
+              </p>
+            </div>
+            <div class="space-y-2">
+              <div class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Step 3</div>
+              <h3 class="font-semibold text-slate-900 dark:text-white text-sm">Fine-Tune &amp; Manage</h3>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Use the Asset sidebar to rename, reorder, preview, or remove any crop definition. Toggle background removal if needed.
+              </p>
+            </div>
+            <div class="space-y-2">
+              <div class="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">Step 4</div>
+              <h3 class="font-semibold text-slate-900 dark:text-white text-sm">Export All or ZIP</h3>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Click Export to download your assets in PNG, WebP, or JPEG formats at full resolution packaged neatly in a ZIP archive.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="space-y-4">
+          <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+            Frequently Asked Questions
+          </h2>
+
+          <details class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+            <summary class="font-semibold text-slate-900 dark:text-white text-sm cursor-pointer flex justify-between items-center">
+              <span>Can I define more than one crop on the same image?</span>
+              <span class="text-blue-600 group-open:rotate-180 transition-transform">&darr;</span>
+            </summary>
+            <p class="mt-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Yes, absolutely! MultiCrop is purpose-built to let you create unlimited crop rectangles on a single photo or graphic sheet. Each crop can have its own dimensions, aspect ratio, and custom filename.
+            </p>
+          </details>
+
+          <details class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+            <summary class="font-semibold text-slate-900 dark:text-white text-sm cursor-pointer flex justify-between items-center">
+              <span>Is my image data kept private?</span>
+              <span class="text-blue-600 group-open:rotate-180 transition-transform">&darr;</span>
+            </summary>
+            <p class="mt-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              100% private. All processing takes place directly in your web browser via HTML5 Canvas. Your images are never sent to a cloud server or external API.
+            </p>
+          </details>
+
+          <details class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+            <summary class="font-semibold text-slate-900 dark:text-white text-sm cursor-pointer flex justify-between items-center">
+              <span>Can I switch to Fullscreen mode for more workspace?</span>
+              <span class="text-blue-600 group-open:rotate-180 transition-transform">&darr;</span>
+            </summary>
+            <p class="mt-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Yes! Look for the Fullscreen icon (Maximize) in the top right of the MultiCrop studio navigation bar. Clicking it toggles a distraction-free full-screen studio view.
+            </p>
+          </details>
+
+          <details class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+            <summary class="font-semibold text-slate-900 dark:text-white text-sm cursor-pointer flex justify-between items-center">
+              <span>What formats can I export my crops in?</span>
+              <span class="text-blue-600 group-open:rotate-180 transition-transform">&darr;</span>
+            </summary>
+            <p class="mt-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              You can export cropped assets as transparent PNG, lossy or lossless WebP, or high-quality JPEG. You can download individual crops or package all crops into a single ZIP archive.
+            </p>
+          </details>
+
+          <details class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+            <summary class="font-semibold text-slate-900 dark:text-white text-sm cursor-pointer flex justify-between items-center">
+              <span>Does this tool work on mobile devices?</span>
+              <span class="text-blue-600 group-open:rotate-180 transition-transform">&darr;</span>
+            </summary>
+            <p class="mt-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Yes! Toolora MultiCrop Studio includes touch gestures, pan, zoom, and a slide-out mobile asset drawer for phones and tablets.
+            </p>
+          </details>
+        </div>
+      </article>
+    </main>
+
+    <!-- Shared Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 pt-12 pb-8 text-sm text-slate-600 dark:text-slate-400">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+          <div class="space-y-3">
+            <div class="flex items-center gap-2 font-bold text-lg text-slate-900 dark:text-white">
+              <img src="/logo-light.jpg" alt="Toolora" class="w-7 h-7 rounded-lg object-contain shadow-xs logo-light dark:hidden" />
+              <img src="/logo-dark.jpg" alt="Toolora" class="w-7 h-7 rounded-lg object-contain shadow-xs logo-dark hidden dark:block" />
+              <span>Toolora</span>
+            </div>
+            <p class="text-xs leading-relaxed">
+              100% private, free client-side image utility suite. Zero file uploads, zero watermarks, and unlimited processing.
+            </p>
+          </div>
+          <div>
+            <h3 class="font-semibold text-slate-900 dark:text-white mb-3 text-xs uppercase tracking-wider">Free Image Tools</h3>
+            <ul class="space-y-2 text-xs">
+              <li><a href="/multicrop.html" class="text-blue-600 dark:text-blue-400 font-semibold">MultiCrop Studio</a></li>
+              <li><a href="/remove-background.html" class="hover:text-blue-600 dark:hover:text-blue-400">Remove Background</a></li>
+              <li><a href="/compress-image.html" class="hover:text-blue-600 dark:hover:text-blue-400">Image Compressor</a></li>
+              <li><a href="/convert-image.html" class="hover:text-blue-600 dark:hover:text-blue-400">Image Converter</a></li>
+              <li><a href="/color-picker.html" class="hover:text-blue-600 dark:hover:text-blue-400">Color Picker</a></li>
+              <li><a href="/merge-images.html" class="hover:text-blue-600 dark:hover:text-blue-400">Merge Images</a></li>
+              <li><a href="/passport-photo.html" class="hover:text-blue-600 dark:hover:text-blue-400">Passport Photo</a></li>
+              <li><a href="/metadata-viewer.html" class="hover:text-blue-600 dark:hover:text-blue-400">EXIF Viewer</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold text-slate-900 dark:text-white mb-3 text-xs uppercase tracking-wider">Resources</h3>
+            <ul class="space-y-2 text-xs">
+              <li><a href="/about.html" class="hover:text-blue-600 dark:hover:text-blue-400">How In-Browser WASM Works</a></li>
+              <li><a href="/about.html#deploy-guide" class="hover:text-blue-600 dark:hover:text-blue-400">Free Cloudflare / Netlify Guide</a></li>
+              <li><a href="https://t.me/+gQawrH0MFs00M2Y1" target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 dark:hover:text-blue-400">Report a Bug / Feedback</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold text-slate-900 dark:text-white mb-3 text-xs uppercase tracking-wider">Legal &amp; Trust</h3>
+            <ul class="space-y-2 text-xs">
+              <li><a href="/privacy-policy.html" class="hover:text-blue-600 dark:hover:text-blue-400">Privacy Policy</a></li>
+              <li><a href="/terms.html" class="hover:text-blue-600 dark:hover:text-blue-400">Terms of Service</a></li>
+              <li><a href="/contact.html" class="hover:text-blue-600 dark:hover:text-blue-400">Contact Us</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+          <div>&copy; 2026 Toolora. All processing performed locally on your device.</div>
+          <div class="flex items-center gap-4">
+            <a href="/privacy-policy.html" class="hover:underline">Privacy</a>
+            <span>&bull;</span>
+            <a href="/terms.html" class="hover:underline">Terms</a>
+            <span>&bull;</span>
+            <a href="/sitemap.xml" class="hover:underline">Sitemap</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Cookie Consent Floating Banner -->
+    <div
+      id="cookie-consent-banner"
+      class="hidden fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-50 p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl backdrop-blur-md"
+    >
+      <div class="flex items-start gap-3">
+        <div class="text-xl">🍪</div>
+        <div class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+          <strong class="text-slate-900 dark:text-white block text-sm mb-0.5">Cookie &amp; Privacy Notice</strong>
+          We use local storage and privacy-compliant cookies to save your theme preferences and support AdSense advertising. Your images are processed 100% locally and never uploaded. Read our <a href="/privacy-policy.html" class="text-blue-600 underline">Privacy Policy</a>.
+        </div>
+      </div>
+      <div class="mt-4 flex items-center justify-end gap-2 text-xs">
+        <button type="button" id="cookie-decline" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-medium cursor-pointer">
+          Essential Only
+        </button>
+        <button type="button" id="cookie-accept-all" class="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold cursor-pointer shadow-sm">
+          Accept All
+        </button>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="/src/main.tsx"></script>
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+  </body>
+</html>

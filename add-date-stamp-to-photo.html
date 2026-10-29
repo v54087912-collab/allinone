@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Date Stamp to Photo - Retro 90s & Y2K Digital Camera Stamp</title>
+    <meta name="description" content="Add vintage 90s orange LED or Y2K digital date stamps to your photos in any format, color, and position directly in your browser." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/add-date-stamp-to-photo.html" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button data-theme-toggle type="button" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+          <a href="/" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition-colors">
+            All Tools
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 max-w-5xl mx-auto px-4 py-8 sm:px-6 w-full space-y-6">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Add Date Stamp to Photo</h1>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Imprint authentic nostalgic 90s film and Y2K digicam LED date stamps on your images.</p>
+      </div>
+
+      <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-6">
+        <div id="date-drop-zone" class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-10 text-center cursor-pointer hover:border-blue-500 transition-colors">
+          <input type="file" id="date-file-input" accept="image/*" class="hidden" />
+          <div class="text-4xl mb-3">📅</div>
+          <p class="font-semibold text-slate-800 dark:text-slate-200">Select or drop a photo to timestamp</p>
+          <p class="text-xs text-slate-500 mt-1">Instant high-resolution rendering 100% offline</p>
+        </div>
+
+        <div id="date-editor" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-1 space-y-4">
+            <div class="flex items-center gap-2 pb-3 border-b border-slate-200 dark:border-slate-800">
+              <button type="button" id="preset-90s-btn" class="flex-1 py-1.5 px-2 rounded-lg bg-orange-50 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400 font-semibold text-2xs cursor-pointer hover:bg-orange-100">90s Retro ('98)</button>
+              <button type="button" id="preset-y2k-btn" class="flex-1 py-1.5 px-2 rounded-lg bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 font-semibold text-2xs cursor-pointer hover:bg-amber-100">Y2K Era ('01)</button>
+              <button type="button" id="preset-today-btn" class="flex-1 py-1.5 px-2 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 font-semibold text-2xs cursor-pointer hover:bg-blue-100">Today</button>
+            </div>
+
+            <div>
+              <label class="block text-2xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Date</label>
+              <input type="date" id="stamp-date-input" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold" />
+            </div>
+
+            <div>
+              <label class="block text-2xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Format</label>
+              <select id="stamp-format-select" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold">
+                <option value="short-y-m-d" selected>'YY MM DD ('98 10 28)</option>
+                <option value="short-y-m-d-time">'YY MM DD HH:mm ('98 10 28 14:30)</option>
+                <option value="yyyy-mm-dd">YYYY-MM-DD (1998-10-28)</option>
+                <option value="dd.mm.yyyy">DD.MM.YYYY (28.10.1998)</option>
+                <option value="mm/dd/yyyy">MM/DD/YYYY (10/28/1998)</option>
+                <option value="y2k">'01 12 31 (Y2K New Year)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-2xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Custom Text Override</label>
+              <input type="text" id="custom-stamp-text" placeholder="e.g. '95 04 20 or TOKYO '99" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-2xs font-semibold text-slate-400 uppercase tracking-wider mb-1">LED Color</label>
+                <select id="stamp-color-select" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold">
+                  <option value="orange" selected>Retro Orange</option>
+                  <option value="amber">Vintage Amber</option>
+                  <option value="red">Neon Red</option>
+                  <option value="green">Cyber Green</option>
+                  <option value="white">Clean White</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-2xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Position</label>
+                <select id="stamp-pos-select" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold">
+                  <option value="bottom-right" selected>Bottom Right</option>
+                  <option value="bottom-left">Bottom Left</option>
+                  <option value="top-right">Top Right</option>
+                  <option value="top-left">Top Left</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="space-y-3 pt-2">
+              <div>
+                <div class="flex justify-between text-2xs font-semibold text-slate-400 mb-1">
+                  <span>Stamp Size</span>
+                </div>
+                <input type="range" id="stamp-size-slider" min="15" max="60" value="32" class="w-full accent-blue-600" />
+              </div>
+              <div>
+                <div class="flex justify-between text-2xs font-semibold text-slate-400 mb-1">
+                  <span>LED Glow / Bloom</span>
+                </div>
+                <input type="range" id="stamp-glow-slider" min="0" max="15" value="6" class="w-full accent-blue-600" />
+              </div>
+              <div>
+                <div class="flex justify-between text-2xs font-semibold text-slate-400 mb-1">
+                  <span>Opacity</span>
+                </div>
+                <input type="range" id="stamp-opacity-slider" min="30" max="100" value="95" class="w-full accent-blue-600" />
+              </div>
+            </div>
+
+            <button type="button" id="download-date-btn" class="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs cursor-pointer shadow-xs transition-colors">
+              Download Timestamped Photo
+            </button>
+          </div>
+
+          <div class="lg:col-span-2 flex items-center justify-center bg-slate-900/5 dark:bg-slate-950/60 p-4 rounded-2xl border border-slate-200/50 dark:border-slate-800/50 overflow-hidden">
+            <canvas id="date-canvas" class="max-w-full rounded-xl shadow-md"></canvas>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500">
+      100% In-Browser Offline Utility &bull; Zero Server Uploads
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/add-date-stamp-to-photo.ts"></script>
+  </body>
+</html>

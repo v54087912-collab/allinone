@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meeting Time Converter - Compare Global Timezones & Schedule Calls</title>
+    <meta name="description" content="Find the best meeting time across multiple global timezones with working hours visualization and 1-click clipboard summary." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/meeting-time-converter.html" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button data-theme-toggle type="button" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+          <a href="/" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition-colors">
+            All 130 Tools
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <!-- Title & Intro -->
+      <div class="mb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-50 text-cyan-700 dark:bg-cyan-950/60 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800 mb-3">
+          <span>🌍 World Clock &amp; Team Scheduler</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Meeting Time Converter</h1>
+        <p class="mt-2 text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-xl">
+          Coordinate international team calls across time zones. Slide the 24-hour bar to find sweet spots where everyone is awake.
+        </p>
+      </div>
+
+      <!-- Time Slider Control Panel -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 mb-8 shadow-xs">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+          <div>
+            <span class="text-xs uppercase font-bold text-slate-400">Anchor Reference Time</span>
+            <div id="slider-hour-label" class="text-2xl font-black text-blue-600 dark:text-blue-400 mt-0.5">
+              London: 2:00 PM
+            </div>
+          </div>
+          <div id="golden-hours-badge" class="text-xs font-semibold px-3 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 self-start sm:self-auto">
+            Checking hours...
+          </div>
+        </div>
+
+        <!-- 24-Hour Interactive Slider -->
+        <div class="space-y-2">
+          <input
+            type="range"
+            id="meeting-hour-slider"
+            min="0"
+            max="23"
+            value="14"
+            class="w-full h-3 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+          />
+          <div class="flex justify-between text-[10px] font-mono text-slate-400 px-1">
+            <span>12 AM</span>
+            <span>4 AM</span>
+            <span>8 AM</span>
+            <span>12 PM</span>
+            <span>4 PM</span>
+            <span>8 PM</span>
+            <span>11 PM</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add City Bar & Copy Actions -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div class="flex items-center gap-2">
+          <select
+            id="add-city-select"
+            class="px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none"
+          >
+            <option value="sf">🇺🇸 San Francisco (PT)</option>
+            <option value="denver">🇺🇸 Denver (MT)</option>
+            <option value="chicago">🇺🇸 Chicago (CT)</option>
+            <option value="ny">🇺🇸 New York (ET)</option>
+            <option value="london">🇬🇧 London (GMT)</option>
+            <option value="paris">🇪🇺 Paris / Berlin (CET)</option>
+            <option value="dubai">🇦🇪 Dubai (GST)</option>
+            <option value="delhi">🇮🇳 New Delhi (IST)</option>
+            <option value="singapore">🇸🇬 Singapore (SGT)</option>
+            <option value="tokyo">🇯🇵 Tokyo (JST)</option>
+            <option value="sydney">🇦🇺 Sydney (AEST)</option>
+            <option value="auckland">🇳🇿 Auckland (NZST)</option>
+          </select>
+          <button
+            type="button"
+            id="add-city-btn"
+            class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs rounded-xl shadow-xs transition-colors shrink-0"
+          >
+            + Add City
+          </button>
+        </div>
+
+        <button
+          type="button"
+          id="copy-meeting-summary-btn"
+          class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs rounded-xl shadow-xs transition-colors flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
+        >
+          📋 Copy Summary
+        </button>
+      </div>
+
+      <!-- Cities Comparison List -->
+      <div id="meeting-cities-container" class="space-y-3 mb-8">
+        <!-- Rendered dynamically -->
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500">
+      100% In-Browser Offline Utility &bull; Zero Server Tracking
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/meeting-time-converter.ts"></script>
+  </body>
+</html>

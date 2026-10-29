@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digicam Filter - 2000s Y2K CCD Digital Camera Effect</title>
+    <meta name="description" content="Transform photos into early 2000s Y2K digital compact camera pictures with CCD bloom, digital ISO noise, flash contrast, and vintage timestamp." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/digicam-filter.html" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button data-theme-toggle type="button" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+          <a href="/" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition-colors">
+            All Tools
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 max-w-5xl mx-auto px-4 py-8 sm:px-6 w-full space-y-6">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Digicam Filter</h1>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Get the trending early 2000s Y2K CCD compact camera aesthetic with dreamy highlight bloom and direct flash tones.</p>
+      </div>
+
+      <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-6">
+        <div id="digi-drop-zone" class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-10 text-center cursor-pointer hover:border-blue-500 transition-colors">
+          <input type="file" id="digi-file-input" accept="image/*" class="hidden" />
+          <div class="text-4xl mb-3">📷</div>
+          <p class="font-semibold text-slate-800 dark:text-slate-200">Select or drop a photo to apply 2000s Digicam filter</p>
+          <p class="text-xs text-slate-500 mt-1">Instant offline conversion with high fidelity</p>
+        </div>
+
+        <div id="digi-editor" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-1 space-y-4">
+            <div>
+              <label class="block text-2xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Digicam Model Preset</label>
+              <select id="digi-preset-select" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold">
+                <option value="canon" selected>Canon PowerShot (Warm CCD Glow)</option>
+                <option value="sony">Sony Cyber-shot DSC (Punchy Vivid Contrast)</option>
+                <option value="coolpix">Nikon Coolpix Y2K (Crisp Sharpened Pixels)</option>
+                <option value="flash">Party Direct Flash (Crushed Blacks & Pop)</option>
+              </select>
+            </div>
+
+            <div class="space-y-3 pt-2">
+              <div>
+                <div class="flex justify-between text-2xs font-semibold text-slate-400 mb-1">
+                  <span>Highlight Bloom & Flare</span>
+                </div>
+                <input type="range" id="digi-bloom-slider" min="0" max="100" value="40" class="w-full accent-blue-600" />
+              </div>
+
+              <div>
+                <div class="flex justify-between text-2xs font-semibold text-slate-400 mb-1">
+                  <span>Saturation Boost</span>
+                </div>
+                <input type="range" id="digi-sat-slider" min="0" max="100" value="30" class="w-full accent-blue-600" />
+              </div>
+
+              <div>
+                <div class="flex justify-between text-2xs font-semibold text-slate-400 mb-1">
+                  <span>Digital Sharpness Halo</span>
+                </div>
+                <input type="range" id="digi-sharp-slider" min="0" max="100" value="35" class="w-full accent-blue-600" />
+              </div>
+
+              <div>
+                <div class="flex justify-between text-2xs font-semibold text-slate-400 mb-1">
+                  <span>CCD Sensor Noise</span>
+                </div>
+                <input type="range" id="digi-noise-slider" min="0" max="100" value="20" class="w-full accent-blue-600" />
+              </div>
+
+              <div class="pt-2">
+                <label class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer">
+                  <input type="checkbox" id="digi-timestamp-check" checked class="rounded-md accent-blue-600 w-4 h-4" />
+                  <span>Overlay Y2K Digital Date Stamp ('04 08 15)</span>
+                </label>
+              </div>
+            </div>
+
+            <button type="button" id="download-digi-btn" class="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs cursor-pointer shadow-xs transition-colors">
+              Download Digicam Photo
+            </button>
+          </div>
+
+          <div class="lg:col-span-2 flex items-center justify-center bg-slate-900/5 dark:bg-slate-950/60 p-4 rounded-2xl border border-slate-200/50 dark:border-slate-800/50 overflow-hidden">
+            <canvas id="digi-canvas" class="max-w-full rounded-xl shadow-md"></canvas>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500">
+      100% In-Browser Offline Utility &bull; Zero Server Uploads
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/digicam-filter.ts"></script>
+  </body>
+</html>

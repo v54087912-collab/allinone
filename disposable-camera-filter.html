@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Disposable Camera Filter - 35mm Film Grain & Light Leak Simulator</title>
+    <meta name="description" content="Turn your modern photos into authentic 90s disposable camera snapshots with film grain, chromatic light leaks, and warm flash aesthetic." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/disposable-camera-filter.html" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button data-theme-toggle type="button" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+          <a href="/" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition-colors">
+            All Tools
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 max-w-5xl mx-auto px-4 py-8 sm:px-6 w-full space-y-6">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Disposable Camera Filter</h1>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Recreate the iconic 90s Fujifilm and Kodak disposable 35mm film aesthetic with real grain and light leaks.</p>
+      </div>
+
+      <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-6">
+        <div id="disp-drop-zone" class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-10 text-center cursor-pointer hover:border-blue-500 transition-colors">
+          <input type="file" id="disp-file-input" accept="image/*" class="hidden" />
+          <div class="text-4xl mb-3">📸</div>
+          <p class="font-semibold text-slate-800 dark:text-slate-200">Select or drop a photo to apply 35mm film filter</p>
+          <p class="text-xs text-slate-500 mt-1">100% private in-browser image rendering</p>
+        </div>
+
+        <div id="disp-editor" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-1 space-y-4">
+            <div>
+              <label class="block text-2xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Film Preset</label>
+              <select id="disp-preset-select" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold">
+                <option value="fuji" selected>Fuji QuickSnap 400 (Punchy Green/Cyan)</option>
+                <option value="kodak">Kodak FunSaver 800 (Warm Amber Gold)</option>
+                <option value="lomo">Lomography 400 (High Saturation & Vignette)</option>
+                <option value="expired">Expired Film 1999 (Moody Faded Grain)</option>
+              </select>
+            </div>
+
+            <div class="space-y-3 pt-2">
+              <div>
+                <label class="block text-2xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Light Leak Position</label>
+                <select id="disp-leak-pos" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold">
+                  <option value="right" selected>Right Edge Flare</option>
+                  <option value="left">Left Edge Flare</option>
+                  <option value="top">Top Sunburst Leak</option>
+                </select>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-2xs font-semibold text-slate-400 mb-1">
+                  <span>Film Grain Density</span>
+                </div>
+                <input type="range" id="disp-grain-slider" min="0" max="100" value="35" class="w-full accent-blue-600" />
+              </div>
+
+              <div>
+                <div class="flex justify-between text-2xs font-semibold text-slate-400 mb-1">
+                  <span>Light Leak Intensity</span>
+                </div>
+                <input type="range" id="disp-leak-slider" min="0" max="100" value="40" class="w-full accent-blue-600" />
+              </div>
+
+              <div>
+                <div class="flex justify-between text-2xs font-semibold text-slate-400 mb-1">
+                  <span>Vintage Warmth</span>
+                </div>
+                <input type="range" id="disp-warmth-slider" min="-50" max="80" value="25" class="w-full accent-blue-600" />
+              </div>
+
+              <div>
+                <div class="flex justify-between text-2xs font-semibold text-slate-400 mb-1">
+                  <span>Plastic Lens Vignette</span>
+                </div>
+                <input type="range" id="disp-vignette-slider" min="0" max="100" value="45" class="w-full accent-blue-600" />
+              </div>
+            </div>
+
+            <div class="pt-2 flex flex-col gap-2">
+              <button type="button" id="compare-toggle-btn" class="w-full py-2 px-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs text-slate-600 dark:text-slate-300 cursor-pointer transition-colors">
+                Hold to Compare Original
+              </button>
+              <button type="button" id="download-disp-btn" class="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs cursor-pointer shadow-xs transition-colors">
+                Download Vintage Photo
+              </button>
+            </div>
+          </div>
+
+          <div class="lg:col-span-2 flex items-center justify-center bg-slate-900/5 dark:bg-slate-950/60 p-4 rounded-2xl border border-slate-200/50 dark:border-slate-800/50 overflow-hidden">
+            <canvas id="disp-canvas" class="max-w-full rounded-xl shadow-md"></canvas>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500">
+      100% In-Browser Offline Utility &bull; Zero Server Uploads
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/disposable-camera-filter.ts"></script>
+  </body>
+</html>

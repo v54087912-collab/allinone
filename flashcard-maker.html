@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flashcard Maker - Study Cards & Spaced Repetition</title>
+    <meta name="description" content="Create, flip, and practice custom study flashcards offline in your browser with JSON export." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/flashcard-maker.html" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button data-theme-toggle type="button" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+          <a href="/" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition-colors">
+            All Tools
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 max-w-4xl mx-auto px-4 py-8 sm:px-6 w-full space-y-6">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Flashcard Maker</h1>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Memorize definitions, formulas, and vocabulary with interactive flip cards.</p>
+      </div>
+
+      
+          <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-6 max-w-2xl mx-auto">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <input type="text" id="card-front" placeholder="Question / Front Side" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs" />
+              <input type="text" id="card-back" placeholder="Answer / Back Side" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs" />
+            </div>
+            <button type="button" id="add-card-btn" class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs cursor-pointer">+ Add Flashcard</button>
+            
+            <div id="flashcard" class="p-8 rounded-2xl bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-slate-300 dark:border-slate-700 min-h-[220px] flex flex-col justify-between items-center text-center cursor-pointer hover:border-blue-500 transition-all select-none">
+              <span id="card-side-badge" class="px-2 py-0.5 rounded text-xs font-bold bg-blue-100 text-blue-800">QUESTION (FRONT)</span>
+              <div id="card-text" class="text-lg sm:text-xl font-medium text-slate-800 dark:text-slate-100 my-4">Loading card...</div>
+              <span class="text-[11px] text-slate-400 italic">Click anywhere on card to flip</span>
+            </div>
+
+            <div class="flex justify-between items-center">
+              <button type="button" id="prev-btn" class="py-2 px-4 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold cursor-pointer">Previous</button>
+              <span id="card-counter" class="text-xs font-bold text-slate-500">Card 1 of 3</span>
+              <button type="button" id="next-btn" class="py-2 px-4 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold cursor-pointer">Next</button>
+            </div>
+            <div class="flex justify-end gap-3 pt-2">
+              <button type="button" id="shuffle-btn" class="py-1.5 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-medium cursor-pointer">Shuffle Deck</button>
+              <button type="button" id="export-btn" class="py-1.5 px-3 rounded-lg bg-slate-800 text-white text-xs font-medium cursor-pointer">Export JSON</button>
+            </div>
+          </div>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500">
+      100% In-Browser Offline Utility &bull; Zero Server Tracking
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/flashcard-maker.ts"></script>
+  </body>
+</html>

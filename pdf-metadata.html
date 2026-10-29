@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF Metadata Viewer &amp; Editor – Free In-Browser Tool | Toolora</title>
+    <meta
+      name="description"
+      content="View, edit, and sanitize PDF metadata properties online for free. Strip tracking information, author names, and creation history with 100% client-side privacy."
+    />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/pdf-metadata.html" />
+
+    <!-- OpenGraph / Social Cards -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="PDF Metadata Viewer &amp; Editor – Toolora" />
+    <meta
+      property="og:description"
+      content="Inspect, modify, or strip PDF metadata for maximum document privacy 100% in-browser."
+    />
+    <meta property="og:url" content="https://quickpic-studio.pages.dev/pdf-metadata.html" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Instant Theme Resolution (Prevents FOUC) -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('toolora_theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = saved ? saved === 'dark' : prefersDark;
+          if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="min-h-screen flex flex-col font-sans antialiased transition-colors duration-200 bg-slate-50 dark:bg-[#0b0f17] text-slate-800 dark:text-slate-200">
+    
+    <!-- Shared Header -->
+    <header class="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 dark:border-slate-800 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden xl:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <a href="/index.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Home</a>
+          <a href="/pdf-to-word.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">PDF to Word</a>
+          <a href="/word-to-pdf.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Word to PDF</a>
+          <a href="/protect-pdf.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Protect PDF</a>
+          <a href="/number-pdf.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Number PDF</a>
+          <a href="/rotate-pdf.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Rotate PDF</a>
+          <a href="/watermark-pdf.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">PDF Watermark</a>          <a href="/pdf-metadata.html" class="px-2.5 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold bg-blue-50/50 dark:bg-blue-950/30">PDF Metadata</a>
+          <a href="/about.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">About</a>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            100% Client-Side
+          </span>
+
+          <button
+            type="button"
+            data-theme-toggle
+            aria-label="Toggle dark mode"
+            class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+
+          <button
+            type="button"
+            id="mobile-nav-toggle"
+            aria-label="Open mobile navigation menu"
+            aria-expanded="false"
+            class="xl:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+        <!-- Mobile Navigation Drawer (Scrollable & Responsive) -->
+        <!-- Mobile Navigation Drawer (Scrollable & Responsive) -->
+    <div id="mobile-nav-menu" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-end">
+      <div class="w-80 max-w-[85vw] bg-white dark:bg-slate-900 h-full shadow-2xl flex flex-col overflow-hidden">
+        <!-- Drawer Header (Fixed) -->
+        <div class="flex items-center justify-between p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 shrink-0">
+          <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+            <img src="/logo-light.jpg" alt="Toolora" class="h-8 w-auto rounded-lg object-contain shadow-xs logo-light dark:hidden" />
+            <img src="/logo-dark.jpg" alt="Toolora" class="h-8 w-auto rounded-lg object-contain shadow-xs logo-dark hidden dark:block" />
+            <span class="font-bold text-lg tracking-tight text-slate-900 dark:text-white">Toolora</span>
+          </a>
+          <button id="mobile-nav-close" aria-label="Close menu" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 text-2xl leading-none cursor-pointer">&times;</button>
+        </div>
+
+        <!-- Drawer Body (Scrollable touch list) -->
+        <div class="flex-1 overflow-y-auto overscroll-contain p-4 sm:p-5 space-y-4 touch-pan-y" style="-webkit-overflow-scrolling: touch;">
+          <nav class="flex flex-col space-y-1 text-sm font-medium text-slate-700 dark:text-slate-200">
+            <a href="/index.html" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Home</a>
+
+            <div class="pt-2 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Image Tools</div>
+            <a href="/multicrop.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">MultiCrop Studio</a>
+            <a href="/remove-background.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Remove Background</a>
+            <a href="/compress-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image Compressor</a>
+            <a href="/convert-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image Converter</a>
+            <a href="/color-picker.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Color Picker</a>
+            <a href="/merge-images.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Merge Images</a>
+            <a href="/passport-photo.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Passport Photo</a>
+            <a href="/metadata-viewer.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">EXIF Metadata</a>
+            <a href="/blur-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Blur &amp; Censor</a>
+            <a href="/watermark-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image Watermark</a>
+            <a href="/split-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Split Image</a>
+            <a href="/collage-maker.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Photo Collage</a>
+            <a href="/pixel-art.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Pixel Art</a>
+
+            <div class="pt-3 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">PDF &amp; Document Tools</div>
+            <a href="/pdf-to-word.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF to Word</a>
+            <a href="/word-to-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Word to PDF</a>
+            <a href="/protect-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Protect PDF</a>
+            <a href="/number-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Number PDF</a>
+            <a href="/rotate-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Rotate PDF</a>
+            <a href="/watermark-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF Watermark</a>            <a href="/pdf-metadata.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF Metadata</a>
+            <a href="/image-to-text.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image to Text (OCR)</a>
+            <a href="/image-to-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image to PDF</a>
+            <a href="/pdf-to-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF to Image</a>
+            <a href="/split-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Split PDF</a>
+            <a href="/crop-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Crop PDF</a>
+
+            <div class="pt-3 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Information</div>
+            <a href="/about.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">About &amp; Guide</a>
+            <a href="/contact.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Contact</a>
+            <a href="/privacy-policy.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Privacy Policy</a>
+            <a href="/terms.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Terms of Service</a>
+          </nav>
+        </div>
+
+        <!-- Drawer Footer (Fixed) -->
+        <div class="p-4 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500 shrink-0 bg-slate-50/50 dark:bg-slate-900/50">
+          Toolora &bull; 100% In-Browser Privacy
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow">
+      <section class="max-w-4xl mx-auto px-4 pt-8 pb-6 text-center">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          PDF Metadata Viewer &amp; Editor
+        </h1>
+        <p class="mt-2 text-slate-600 dark:text-slate-400 max-w-xl mx-auto text-sm sm:text-base">
+          Read, edit, or strip hidden metadata properties from PDF files. Remove tracking tags, author names, and editing software stamps before sharing.
+        </p>
+      </section>
+
+      <section class="max-w-4xl mx-auto px-4 pb-12">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
+          
+          <!-- Dropzone -->
+          <div
+            id="meta-dropzone"
+            class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-8 sm:p-12 text-center hover:border-blue-500 hover:bg-blue-50/50 dark:hover:bg-blue-950/20 transition-all cursor-pointer group"
+          >
+            <div class="w-16 h-16 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform shadow-inner">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-1">
+              Select or Drop PDF to Inspect Metadata
+            </h3>
+            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-4">
+              Extract title, author, software tags, and timestamps &bull; 100% In-Browser Privacy
+            </p>
+            <button
+              type="button"
+              class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-md shadow-blue-500/20 transition-all cursor-pointer"
+            >
+              Choose PDF File
+            </button>
+            <input id="meta-file-input" type="file" accept="application/pdf,.pdf" class="hidden" />
+          </div>
+
+          <!-- Workspace -->
+          <div id="meta-workspace" class="hidden space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                <span class="font-semibold text-xs sm:text-sm text-slate-700 dark:text-slate-300">Metadata Loaded</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <button type="button" id="meta-copy-json-btn" class="text-xs text-blue-600 dark:text-blue-400 hover:underline cursor-pointer">
+                  Copy JSON
+                </button>
+                <button type="button" id="meta-reset-btn" class="text-xs text-rose-500 hover:underline cursor-pointer">
+                  Change File
+                </button>
+              </div>
+            </div>
+
+            <!-- Editable Fields -->
+            <div class="space-y-4">
+              <h2 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider text-[11px] text-slate-500">
+                Document Properties (Editable)
+              </h2>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label for="meta-title" class="block font-medium text-xs text-slate-700 dark:text-slate-300 mb-1">Title</label>
+                  <input
+                    type="text"
+                    id="meta-title"
+                    class="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label for="meta-author" class="block font-medium text-xs text-slate-700 dark:text-slate-300 mb-1">Author / Creator</label>
+                  <input
+                    type="text"
+                    id="meta-author"
+                    class="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label for="meta-subject" class="block font-medium text-xs text-slate-700 dark:text-slate-300 mb-1">Subject</label>
+                  <input
+                    type="text"
+                    id="meta-subject"
+                    class="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label for="meta-keywords" class="block font-medium text-xs text-slate-700 dark:text-slate-300 mb-1">Keywords (Comma separated)</label>
+                  <input
+                    type="text"
+                    id="meta-keywords"
+                    placeholder="invoice, business, report"
+                    class="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Read-only file stats & stamps -->
+            <div class="space-y-3 pt-2">
+              <h2 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider text-[11px] text-slate-500">
+                System &amp; Generator Info (Read-Only)
+              </h2>
+
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div class="p-3 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-800">
+                  <span class="block text-[11px] text-slate-500">Pages</span>
+                  <span id="meta-pages" class="font-mono text-xs font-bold text-slate-800 dark:text-slate-200">-</span>
+                </div>
+                <div class="p-3 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-800">
+                  <span class="block text-[11px] text-slate-500">File Size</span>
+                  <span id="meta-filesize" class="font-mono text-xs font-bold text-slate-800 dark:text-slate-200">-</span>
+                </div>
+                <div class="p-3 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-800">
+                  <span class="block text-[11px] text-slate-500">Creator Application</span>
+                  <span id="meta-creator" class="font-mono text-xs font-bold text-slate-800 dark:text-slate-200 truncate block">-</span>
+                </div>
+                <div class="p-3 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-800">
+                  <span class="block text-[11px] text-slate-500">PDF Producer Engine</span>
+                  <span id="meta-producer" class="font-mono text-xs font-bold text-slate-800 dark:text-slate-200 truncate block">-</span>
+                </div>
+                <div class="p-3 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-800">
+                  <span class="block text-[11px] text-slate-500">Creation Date</span>
+                  <span id="meta-created" class="font-mono text-xs font-bold text-slate-800 dark:text-slate-200 truncate block">-</span>
+                </div>
+                <div class="p-3 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-800">
+                  <span class="block text-[11px] text-slate-500">Modification Date</span>
+                  <span id="meta-modified" class="font-mono text-xs font-bold text-slate-800 dark:text-slate-200 truncate block">-</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="pt-4 flex flex-col sm:flex-row items-center justify-end gap-3 border-t border-slate-200 dark:border-slate-800">
+              <button
+                type="button"
+                id="meta-strip-btn"
+                class="w-full sm:w-auto px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-all cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+                <span>Strip All Metadata &amp; Download</span>
+              </button>
+
+              <button
+                type="button"
+                id="meta-save-btn"
+                class="w-full sm:w-auto px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/20 transition-all cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                </svg>
+                <span>Save &amp; Download Updated PDF</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 text-center text-xs text-slate-500">
+      <div class="max-w-7xl mx-auto px-4 space-y-2">
+        <p>&copy; 2026 Toolora. All processing occurs 100% inside your browser. No files are uploaded to any server.</p>
+        <div class="flex justify-center gap-4 text-slate-600 dark:text-slate-400">
+          <a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a>
+          <a href="/terms.html" class="hover:underline">Terms of Service</a>
+          <a href="/contact.html" class="hover:underline">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/tools/pdf-metadata.ts"></script>
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+  </body>
+</html>

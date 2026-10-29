@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>URL Encoder & Decoder with Query Parser – Toolora</title>
+    <meta name="description" content="Encode and decode URLs, query strings, and URI components with query parameter breakdown table." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/url-encoder.html" />
+
+    <!-- OpenGraph / Social Cards -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="URL Encoder & Decoder with Query Parser – Toolora" />
+    <meta property="og:description" content="Encode and decode URLs, query strings, and URI components with query parameter breakdown table." />
+    <meta property="og:url" content="https://quickpic-studio.pages.dev/url-encoder.html" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Instant Theme Resolution (Prevents FOUC) -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('toolora_theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = saved ? saved === 'dark' : prefersDark;
+          if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="min-h-screen flex flex-col font-sans antialiased transition-colors duration-200 bg-slate-50 dark:bg-[#0b0f17] text-slate-800 dark:text-slate-200">
+    
+    <!-- Shared Header -->
+    <header class="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 dark:border-slate-800 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden xl:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <a href="/index.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Home</a>
+          <a href="/password-generator.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Password Gen</a>
+          <a href="/word-counter.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Word Counter</a>
+          <a href="/case-converter.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Case Converter</a>
+          <a href="/calculator.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Calculator</a>
+          <a href="/unit-converter.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Unit Converter</a>
+          <a href="/multicrop.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">MultiCrop</a>
+          <a href="/about.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">About</a>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            100% Client-Side
+          </span>
+
+          <button
+            type="button"
+            data-theme-toggle
+            aria-label="Toggle dark mode"
+            class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+
+          <button
+            type="button"
+            id="mobile-nav-toggle"
+            aria-label="Open mobile navigation menu"
+            aria-expanded="false"
+            class="xl:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-nav-menu" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-end">
+      <div class="w-80 max-w-[85vw] bg-white dark:bg-slate-900 h-full shadow-2xl flex flex-col overflow-hidden">
+        <div class="flex items-center justify-between p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 shrink-0">
+          <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+            <img src="/logo-light.jpg" alt="Toolora" class="h-8 w-auto rounded-lg object-contain shadow-xs logo-light dark:hidden" />
+            <img src="/logo-dark.jpg" alt="Toolora" class="h-8 w-auto rounded-lg object-contain shadow-xs logo-dark hidden dark:block" />
+            <span class="font-bold text-lg tracking-tight text-slate-900 dark:text-white">Toolora</span>
+          </a>
+          <button id="mobile-nav-close" aria-label="Close menu" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 text-2xl leading-none cursor-pointer">&times;</button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto overscroll-contain p-4 sm:p-5 space-y-4 touch-pan-y" style="-webkit-overflow-scrolling: touch;">
+          <nav class="flex flex-col space-y-1 text-sm font-medium text-slate-700 dark:text-slate-200">
+            <a href="/index.html" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold">Home</a>
+
+            <div class="pt-2 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Text &amp; Content Tools</div>
+            <a href="/word-counter.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Word Counter</a>
+            <a href="/character-counter.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Character Counter</a>
+            <a href="/case-converter.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Case Converter</a>
+            <a href="/text-diff.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Text Diff Checker</a>
+            <a href="/text-reverser.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Text Reverser</a>
+            <a href="/lorem-ipsum.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Lorem Ipsum Generator</a>
+
+            <div class="pt-3 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Calculators &amp; Time</div>
+            <a href="/calculator.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Calculator</a>
+            <a href="/age-calculator.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Age Calculator</a>
+            <a href="/percentage-calculator.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Percentage Calculator</a>
+            <a href="/unit-converter.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Unit Converter</a>
+            <a href="/stopwatch.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Stopwatch</a>
+            <a href="/countdown-timer.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Countdown Timer</a>
+            <a href="/timezone-converter.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Timezone Converter</a>
+
+            <div class="pt-3 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Developer Utilities</div>
+            <a href="/password-generator.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Password Generator</a>
+            <a href="/uuid-generator.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">UUID Generator</a>
+            <a href="/timestamp-converter.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Timestamp Converter</a>
+            <a href="/url-encoder.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">URL Encoder / Decoder</a>
+            <a href="/base64-converter.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Base64 Converter</a>
+
+            <div class="pt-3 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Image &amp; PDF Tools</div>
+            <a href="/multicrop.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">MultiCrop Studio</a>
+            <a href="/remove-background.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Remove Background</a>
+            <a href="/compress-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Compress Image</a>
+            <a href="/image-to-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image to PDF</a>
+            <a href="/pdf-to-word.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF to Word</a>
+          </nav>
+        </div>
+
+        <div class="p-4 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500 shrink-0 bg-slate-50/50 dark:bg-slate-900/50">
+          Toolora &bull; 100% In-Browser Privacy
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow">
+      
+      <!-- GOOGLE ADSENSE SLOT: Top Leaderboard -->
+      <section class="max-w-5xl mx-auto px-4 pt-4 sm:pt-6" aria-label="Advertisement Banner">
+        <div class="adsense-slot-container w-full min-h-[90px] border border-dashed border-slate-300 dark:border-slate-800 bg-slate-100/60 dark:bg-slate-900/40 p-2 text-center rounded-xl">
+          <span class="ad-badge">Advertisement</span>
+          <div class="text-xs text-slate-400 py-3">
+            Responsive Leaderboard Ad Unit (728&times;90 / Auto)
+          </div>
+        </div>
+      </section>
+
+      <!-- Hero Header -->
+      <section class="max-w-5xl mx-auto px-4 sm:px-6 pt-8 pb-6 text-center">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-800 mb-3 shadow-xs">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+          100% Free &bull; Zero Server Uploads &bull; Private
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          URL Encoder / Decoder
+        </h1>
+        <p class="mt-2 text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+          Encode and decode URI strings, query components, and inspect URL parameters in a structured table.
+        </p>
+      </section>
+
+      <!-- Tool Workspace -->
+      <section class="max-w-5xl mx-auto px-4 sm:px-6 pb-12">
+        
+<div class="space-y-6">
+  <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl p-6 space-y-4">
+    <div class="flex items-center justify-between">
+      <label for="url-input" class="text-xs font-bold uppercase tracking-wider text-slate-500">Input URL or Text</label>
+      <div class="flex flex-wrap items-center gap-2">
+        <button type="button" id="url-encode-btn" class="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors cursor-pointer">Encode URI</button>
+        <button type="button" id="url-decode-btn" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-colors cursor-pointer">Decode URI</button>
+        <button type="button" id="url-parse-btn" class="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-xs font-semibold transition-colors cursor-pointer">Parse Query</button>
+      </div>
+    </div>
+    <textarea id="url-input" rows="5" class="w-full p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-mono text-sm leading-relaxed focus:outline-none" placeholder="https://example.com/search?q=hello%20world&category=tools"></textarea>
+  </div>
+
+  <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl p-6 space-y-4">
+    <div class="flex items-center justify-between">
+      <label for="url-output" class="text-xs font-bold uppercase tracking-wider text-slate-500">Output</label>
+      <button type="button" id="url-copy-btn" class="px-4 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors cursor-pointer">Copy</button>
+    </div>
+    <textarea id="url-output" rows="5" readonly class="w-full p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-mono text-sm leading-relaxed focus:outline-none"></textarea>
+  </div>
+
+  <div id="url-parse-table" class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-md p-6 hidden">
+    <!-- Populated by url-encoder.ts -->
+  </div>
+</div>
+
+      </section>
+
+      <!-- GOOGLE ADSENSE SLOT: Middle Rectangle -->
+      <section class="max-w-5xl mx-auto px-4 py-6" aria-label="Advertisement Banner">
+        <div class="adsense-slot-container w-full min-h-[120px] border border-dashed border-slate-300 dark:border-slate-800 bg-slate-100/60 dark:bg-slate-900/40 p-4 text-center rounded-xl">
+          <span class="ad-badge">Advertisement</span>
+          <div class="text-xs text-slate-400 py-3">
+            In-Content Banner Ad Unit (Responsive Display)
+          </div>
+        </div>
+      </section>
+
+      <!-- Features & Privacy Guarantee -->
+      <section class="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+            <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold mb-3">
+              🔒
+            </div>
+            <h3 class="font-bold text-slate-900 dark:text-white text-base mb-1">100% Client-Side Privacy</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              All computation happens right in your browser's JavaScript engine. No data is ever sent to any remote server.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold mb-3">
+              ⚡
+            </div>
+            <h3 class="font-bold text-slate-900 dark:text-white text-base mb-1">Instant Results</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Zero network latency. Calculations and formatting are executed instantly with high cryptographic and mathematical precision.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+            <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold mb-3">
+              🌐
+            </div>
+            <h3 class="font-bold text-slate-900 dark:text-white text-base mb-1">Works Offline</h3>
+            <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Once loaded, this tool can function completely offline with no active internet connection required.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section class="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white text-center mb-6">Frequently Asked Questions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+            <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+              <h3 class="font-bold text-slate-900 dark:text-white text-base mb-2">What does URI encoding do?</h3>
+              <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">It replaces unsafe ASCII characters with a % followed by two hexadecimal digits (e.g. space becomes %20).</p>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+              <h3 class="font-bold text-slate-900 dark:text-white text-base mb-2">Can it parse complex query strings?</h3>
+              <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">Yes, the Query Parser decomposes URLs into origin, pathname, and all search parameters.</p>
+            </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900/60 py-10 text-slate-600 dark:text-slate-400 text-sm mt-auto">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-2">
+            <a href="/index.html" class="flex items-center gap-2 font-bold text-slate-900 dark:text-white hover:text-blue-600">
+              <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+              <span>Toolora</span>
+            </a>
+            <span class="text-xs">&bull; In-Browser Privacy Tools</span>
+          </div>
+          <div class="flex flex-wrap items-center gap-4 text-xs">
+            <a href="/about.html" class="hover:underline">About</a>
+            <a href="/contact.html" class="hover:underline">Contact</a>
+            <a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a>
+            <a href="/terms.html" class="hover:underline">Terms</a>
+            <a href="/sitemap.xml" class="hover:underline">Sitemap</a>
+          </div>
+        </div>
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-800 text-center text-xs text-slate-400">
+          &copy; 2026 Toolora. All processing performed locally on your device.
+        </div>
+      </div>
+    </footer>
+
+    <!-- Cookie Consent Floating Banner -->
+    <div
+      id="cookie-consent-banner"
+      class="hidden fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-50 p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl backdrop-blur-md"
+    >
+      <div class="flex items-start gap-3">
+        <div class="text-xl">🍪</div>
+        <div class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+          <strong class="text-slate-900 dark:text-white block text-sm mb-0.5">Cookie &amp; Privacy Notice</strong>
+          We use local storage and privacy-compliant cookies to save your theme preferences and support AdSense advertising. Your data is processed 100% locally and never uploaded. Read our <a href="/privacy-policy.html" class="text-blue-600 underline">Privacy Policy</a>.
+        </div>
+      </div>
+      <div class="mt-4 flex items-center justify-end gap-2 text-xs">
+        <button
+          type="button"
+          id="cookie-decline"
+          class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium cursor-pointer"
+        >
+          Essential Only
+        </button>
+        <button
+          type="button"
+          id="cookie-accept-all"
+          class="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold cursor-pointer shadow-sm"
+        >
+          Accept All
+        </button>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/url-encoder.ts"></script>
+  </body>
+</html>

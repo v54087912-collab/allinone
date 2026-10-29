@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checklist Maker - Free Interactive Online Checklist Generator</title>
+    <meta name="description" content="Generate checklists with bulk paste, pre-made travel and grocery templates, strike-through completion, and printable Markdown export." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/checklist-maker.html" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md print:hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button data-theme-toggle type="button" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+          <a href="/" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition-colors">
+            All 130 Tools
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <!-- Title & Intro -->
+      <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-sky-50 text-sky-700 dark:bg-sky-950/60 dark:text-sky-300 border border-sky-200 dark:border-sky-800 mb-2">
+            <span>📋 Bulk &amp; Template Checklist Maker</span>
+          </div>
+          <h1 class="text-3xl font-extrabold tracking-tight">Checklist Maker</h1>
+        </div>
+
+        <!-- Template Selector -->
+        <div class="flex items-center gap-2 print:hidden">
+          <select id="checklist-template-select" class="px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none">
+            <option value="travel">✈️ Travel Packing List</option>
+            <option value="grocery">🛒 Grocery Shopping</option>
+            <option value="daily_launch">🚀 Daily Launch Ritual</option>
+            <option value="event">🎉 Event Planning</option>
+          </select>
+          <button type="button" id="checklist-load-template-btn" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded-xl transition-colors">
+            Load
+          </button>
+        </div>
+      </div>
+
+      <!-- Progress Banner -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 mb-6 shadow-xs">
+        <div class="flex items-center justify-between text-xs font-bold mb-2">
+          <span id="checklist-total-count" class="text-slate-500">0 items</span>
+          <span id="checklist-completed-count" class="text-sky-600">0 completed (0%)</span>
+        </div>
+        <div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+          <div id="checklist-progress-bar" class="bg-sky-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Quick Single Add & Bulk Paste Accordion -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 mb-6 shadow-xs print:hidden space-y-3">
+        <form id="checklist-single-form" class="flex gap-2">
+          <input
+            type="text"
+            id="checklist-single-input"
+            placeholder="Add new checklist item..."
+            required
+            class="flex-1 px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-sky-500"
+          />
+          <button
+            type="submit"
+            class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs rounded-xl shadow-xs transition-colors shrink-0"
+          >
+            + Add
+          </button>
+        </form>
+
+        <details class="text-xs pt-1">
+          <summary class="text-slate-500 font-medium cursor-pointer select-none hover:text-slate-700">
+            📝 Or bulk paste multiple lines
+          </summary>
+          <div class="mt-2 space-y-2">
+            <textarea
+              id="checklist-bulk-textarea"
+              rows="3"
+              placeholder="Paste list here (one item per line)..."
+              class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-mono text-xs focus:outline-none resize-none"
+            ></textarea>
+            <button
+              type="button"
+              id="checklist-bulk-add-btn"
+              class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs rounded-lg transition-colors"
+            >
+              Add All Lines
+            </button>
+          </div>
+        </details>
+      </div>
+
+      <!-- Controls: Copy MD, Clear Done, Reset, Print -->
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4 print:hidden text-xs">
+        <div class="flex items-center gap-2">
+          <button type="button" id="checklist-copy-md-btn" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            📋 Copy Markdown
+          </button>
+          <button type="button" id="checklist-print-btn" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            🖨️ Print
+          </button>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" id="checklist-reset-btn" class="px-3 py-1.5 rounded-lg text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">
+            Uncheck All
+          </button>
+          <button type="button" id="checklist-clear-completed-btn" class="px-3 py-1.5 rounded-lg bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400 hover:bg-red-100 transition-colors font-medium">
+            Clear Completed
+          </button>
+        </div>
+      </div>
+
+      <!-- Items List -->
+      <div id="checklist-items-container" class="space-y-2 mb-8">
+        <!-- Rendered dynamically -->
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500 print:hidden">
+      100% In-Browser Offline Utility &bull; Zero Server Tracking
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/checklist-maker.ts"></script>
+  </body>
+</html>

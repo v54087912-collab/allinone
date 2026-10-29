@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Free Background Remover – Erase Backgrounds In-Browser (100% Private)</title>
+    <meta
+      name="description"
+      content="Remove backgrounds from images instantly in your browser using local AI WASM. Download transparent PNGs or replace with white, custom colors, or studio gradients."
+    />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/remove-background.html" />
+
+    <!-- OpenGraph / Social Cards -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Free Background Remover – Erase Backgrounds In-Browser" />
+    <meta
+      property="og:description"
+      content="Remove backgrounds from images instantly in your browser using local AI WASM. Download transparent PNGs or add solid colors."
+    />
+    <meta property="og:url" content="https://quickpic-studio.pages.dev/remove-background.html" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google AdSense Script Placeholder -->
+    <!-- REPLACE THIS COMMENT WITH YOUR GOOGLE ADSENSE CODE:
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    -->
+
+    <!-- Schema.org FAQPage JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does the background remover work without uploading my pictures?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Toolora runs a modern machine-learning segmentation model directly inside your browser using WebAssembly (WASM). Your computer or smartphone executes the model locally, so zero pixel data is transmitted across the internet."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I replace the background with a pure white color for Amazon or eBay listings?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! Click the 'Solid Color' tab and pick the clean white swatch (#FFFFFF). Your cutout will be composited on an Amazon-compliant pure white backdrop and exported at full resolution."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is this tool completely free with no watermarks?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Toolora does not watermark your images, limit download resolutions, or require an email signup or paid subscription."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What image file types are supported?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You can upload JPG, PNG, WEBP, and BMP images up to 50MB. Output files can be saved as transparent PNG or high-resolution JPEG."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- Instant Theme Resolution (Prevents FOUC / White Flash) -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('toolora_theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = saved ? saved === 'dark' : prefersDark;
+          if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="min-h-screen flex flex-col font-sans antialiased transition-colors duration-200">
+    
+    <!-- Shared Header -->
+    <header class="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 dark:border-slate-800 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+
+        <nav class="hidden xl:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <a href="/index.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Home</a>
+          <a href="/multicrop.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">MultiCrop</a>
+          <a href="/remove-background.html" class="px-2.5 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold bg-blue-50/50 dark:bg-blue-950/30">Remove BG</a>
+          <a href="/compress-image.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Compress</a>
+          <a href="/convert-image.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Convert</a>
+          <a href="/image-to-pdf.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Image to PDF</a>
+          <a href="/pdf-to-image.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">PDF to Image</a>
+          <a href="/split-pdf.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Split PDF</a>
+          <a href="/crop-pdf.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Crop PDF</a>
+          <a href="/about.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">About</a>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            100% Client-Side
+          </span>
+
+          <button
+            type="button"
+            data-theme-toggle
+            aria-label="Toggle dark mode"
+            class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+            <svg data-theme-icon-moon class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+          </button>
+
+          <button
+            type="button"
+            id="mobile-nav-toggle"
+            aria-label="Open mobile navigation menu"
+            aria-expanded="false"
+            class="xl:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+        <!-- Mobile Navigation Drawer (Scrollable & Responsive) -->
+        <!-- Mobile Navigation Drawer (Scrollable & Responsive) -->
+    <div id="mobile-nav-menu" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-end">
+      <div class="w-80 max-w-[85vw] bg-white dark:bg-slate-900 h-full shadow-2xl flex flex-col overflow-hidden">
+        <!-- Drawer Header (Fixed) -->
+        <div class="flex items-center justify-between p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 shrink-0">
+          <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+            <img src="/logo-light.jpg" alt="Toolora" class="h-8 w-auto rounded-lg object-contain shadow-xs logo-light dark:hidden" />
+            <img src="/logo-dark.jpg" alt="Toolora" class="h-8 w-auto rounded-lg object-contain shadow-xs logo-dark hidden dark:block" />
+            <span class="font-bold text-lg tracking-tight text-slate-900 dark:text-white">Toolora</span>
+          </a>
+          <button id="mobile-nav-close" aria-label="Close menu" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 text-2xl leading-none cursor-pointer">&times;</button>
+        </div>
+
+        <!-- Drawer Body (Scrollable touch list) -->
+        <div class="flex-1 overflow-y-auto overscroll-contain p-4 sm:p-5 space-y-4 touch-pan-y" style="-webkit-overflow-scrolling: touch;">
+          <nav class="flex flex-col space-y-1 text-sm font-medium text-slate-700 dark:text-slate-200">
+            <a href="/index.html" class="px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Home</a>
+
+            <div class="pt-2 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Image Tools</div>
+            <a href="/multicrop.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">MultiCrop Studio</a>
+            <a href="/remove-background.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Remove Background</a>
+            <a href="/compress-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image Compressor</a>
+            <a href="/convert-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image Converter</a>
+            <a href="/color-picker.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Color Picker</a>
+            <a href="/merge-images.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Merge Images</a>
+            <a href="/passport-photo.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Passport Photo</a>
+            <a href="/metadata-viewer.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">EXIF Metadata</a>
+            <a href="/blur-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Blur &amp; Censor</a>
+            <a href="/watermark-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image Watermark</a>
+            <a href="/split-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Split Image</a>
+            <a href="/collage-maker.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Photo Collage</a>
+            <a href="/pixel-art.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Pixel Art</a>
+
+            <div class="pt-3 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">PDF &amp; Document Tools</div>
+            <a href="/pdf-to-word.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF to Word</a>
+            <a href="/word-to-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Word to PDF</a>
+            <a href="/protect-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Protect PDF</a>
+            <a href="/number-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Number PDF</a>
+            <a href="/rotate-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Rotate PDF</a>
+            <a href="/watermark-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF Watermark</a>            <a href="/pdf-metadata.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF Metadata</a>
+            <a href="/image-to-text.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image to Text (OCR)</a>
+            <a href="/image-to-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Image to PDF</a>
+            <a href="/pdf-to-image.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF to Image</a>
+            <a href="/split-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Split PDF</a>
+            <a href="/crop-pdf.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Crop PDF</a>
+
+            <div class="pt-3 pb-1 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Information</div>
+            <a href="/about.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">About &amp; Guide</a>
+            <a href="/contact.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Contact</a>
+            <a href="/privacy-policy.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Privacy Policy</a>
+            <a href="/terms.html" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Terms of Service</a>
+          </nav>
+        </div>
+
+        <!-- Drawer Footer (Fixed) -->
+        <div class="p-4 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500 shrink-0 bg-slate-50/50 dark:bg-slate-900/50">
+          Toolora &bull; 100% In-Browser Privacy
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+      
+      <!-- GOOGLE ADSENSE SLOT: Top Leaderboard Banner -->
+      <section class="max-w-5xl mx-auto px-4 pt-4 sm:pt-6" aria-label="Advertisement Banner">
+        <!-- Google AdSense - Top Leaderboard Banner (Replace with your ca-pub script) -->
+        <div class="adsense-slot-container w-full min-h-[90px] border border-dashed border-slate-300 dark:border-slate-800 bg-slate-100/60 dark:bg-slate-900/40 p-2 text-center">
+          <span class="ad-badge">Advertisement</span>
+          <div class="text-xs text-slate-400 py-3">
+            Responsive Top Ad Slot (728&times;90 / Leaderboard)
+            <div class="text-[11px] text-slate-500 mt-0.5">Insert your &lt;ins class="adsbygoogle" ...&gt; snippet here</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tool Header -->
+      <section class="max-w-5xl mx-auto px-4 pt-8 pb-6 text-center">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          In-Browser Background Remover
+        </h1>
+        <p class="mt-2 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">
+          Erase photo backgrounds in seconds with local AI WASM. Export a transparent PNG or replace with crisp e-commerce white, pastel colors, or studio backdrops.
+        </p>
+      </section>
+
+      <!-- Tool Workspace -->
+      <section class="max-w-5xl mx-auto px-4 pb-12" aria-label="Background Removal Workspace">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden p-4 sm:p-8">
+          
+          <!-- Dropzone & Empty State -->
+          <div id="bg-empty-state" class="py-8">
+            <div
+              id="bg-dropzone"
+              class="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-400 rounded-2xl p-10 text-center cursor-pointer transition-colors bg-slate-50/50 dark:bg-slate-800/20"
+            >
+              <input type="file" id="bg-file-input" accept="image/*" class="hidden" />
+              <div class="w-16 h-16 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                </svg>
+              </div>
+              <h2 class="text-lg font-bold text-slate-800 dark:text-slate-200">
+                Drag &amp; drop a photo here, or <span class="text-indigo-600 dark:text-indigo-400 underline">browse your device</span>
+              </h2>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                Supports Portraits, Products, Signatures &amp; Objects &bull; 100% In-Browser &bull; Zero Server Uploads
+              </p>
+            </div>
+
+            <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
+              <button
+                type="button"
+                id="bg-demo-btn"
+                class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold cursor-pointer transition-colors shadow-xs"
+              >
+                ⚡ Try with Demo Product Photo
+              </button>
+            </div>
+          </div>
+
+          <!-- Active Editor State -->
+          <div id="bg-editor-state" class="hidden space-y-6">
+            
+            <!-- Queue and Processing Status Area -->
+            <div id="bg-queue-container" class="space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Image Queue &bull; Processed One at a Time</span>
+                  <span id="bg-queue-stats" class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300">0 in queue</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <button
+                    type="button"
+                    id="bg-download-all-zip"
+                    disabled
+                    class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer disabled:opacity-40 disabled:no-underline"
+                  >
+                    Download All Cutouts (.zip)
+                  </button>
+                  <button
+                    type="button"
+                    onclick="document.getElementById('bg-file-input').click()"
+                    class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
+                  >
+                    + Add More Photos
+                  </button>
+                  <button
+                    type="button"
+                    id="bg-clear-queue-btn"
+                    class="text-xs text-rose-500 hover:underline cursor-pointer"
+                  >
+                    Clear All
+                  </button>
+                </div>
+              </div>
+              <div id="bg-queue-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"></div>
+            </div>
+
+            <!-- Background Options Toolbar -->
+            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 space-y-4">
+              
+              <div class="flex flex-wrap items-center justify-between gap-4">
+                <!-- Mode Tabs -->
+                <div class="flex items-center gap-1.5">
+                  <button type="button" data-bg-mode="transparent" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-600 text-white cursor-pointer transition-colors">
+                    Transparent PNG
+                  </button>
+                  <button type="button" data-bg-mode="color" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer transition-colors">
+                    Solid Color
+                  </button>
+                  <button type="button" data-bg-mode="gradient" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer transition-colors">
+                    Studio Gradient
+                  </button>
+                </div>
+
+                <!-- Downscale & View Mode -->
+                <div class="flex flex-wrap items-center gap-3 text-xs">
+                  <div class="flex items-center gap-1.5">
+                    <label for="bg-downscale-select" class="text-slate-500">Downscale:</label>
+                    <select id="bg-downscale-select" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 rounded-lg px-2 py-1 text-xs font-medium">
+                      <option value="1500" selected>Standard (Max 1500px - Fast &amp; Stable)</option>
+                      <option value="2048">High Detail (Max 2048px)</option>
+                      <option value="1024">Compact / Mobile (Max 1024px)</option>
+                      <option value="0">Original Resolution (No Downscale)</option>
+                    </select>
+                  </div>
+
+                  <div class="flex items-center gap-1.5">
+                    <label for="bg-view-mode" class="text-slate-500">Preview Mode:</label>
+                    <select id="bg-view-mode" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 rounded-lg px-2 py-1 text-xs font-medium">
+                      <option value="result">Clean Cutout</option>
+                      <option value="split">Before / After Split</option>
+                      <option value="original">Original Photo</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Color Palette Swatches -->
+              <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-slate-200/60 dark:border-slate-700/60">
+                <span class="text-xs font-semibold text-slate-500">Backdrop:</span>
+                
+                <!-- White (Amazon) -->
+                <button type="button" data-bg-color="#ffffff" title="Pure White (Amazon Standard)" class="w-6 h-6 rounded-full border border-slate-300 bg-white shadow-xs cursor-pointer hover:scale-110 transition-transform"></button>
+                <!-- Black -->
+                <button type="button" data-bg-color="#000000" title="Studio Black" class="w-6 h-6 rounded-full border border-slate-700 bg-black shadow-xs cursor-pointer hover:scale-110 transition-transform"></button>
+                <!-- Slate Grey -->
+                <button type="button" data-bg-color="#f1f5f9" title="Soft Studio Grey" class="w-6 h-6 rounded-full border border-slate-300 bg-slate-100 shadow-xs cursor-pointer hover:scale-110 transition-transform"></button>
+                <!-- Soft Blue -->
+                <button type="button" data-bg-color="#e0f2fe" title="Sky Blue" class="w-6 h-6 rounded-full border border-sky-300 bg-sky-100 shadow-xs cursor-pointer hover:scale-110 transition-transform"></button>
+                <!-- Warm Amber -->
+                <button type="button" data-bg-color="#fef3c7" title="Warm Amber" class="w-6 h-6 rounded-full border border-amber-300 bg-amber-100 shadow-xs cursor-pointer hover:scale-110 transition-transform"></button>
+                <!-- Mint Green -->
+                <button type="button" data-bg-color="#d1fae5" title="Mint Green" class="w-6 h-6 rounded-full border border-emerald-300 bg-emerald-100 shadow-xs cursor-pointer hover:scale-110 transition-transform"></button>
+
+                <!-- Custom Hex Picker -->
+                <div class="flex items-center gap-1.5 ml-2">
+                  <input type="color" id="bg-custom-color" value="#ffffff" class="w-7 h-7 rounded border-0 p-0 cursor-pointer bg-transparent" />
+                  <span class="text-xs text-slate-500">Custom Color</span>
+                </div>
+
+                <!-- Gradient presets -->
+                <div class="flex items-center gap-2 sm:ml-auto">
+                  <span class="text-xs text-slate-500">Gradients:</span>
+                  <button type="button" data-bg-gradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)" class="w-6 h-6 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 shadow-xs cursor-pointer hover:scale-110 transition-transform"></button>
+                  <button type="button" data-bg-gradient="linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%)" class="w-6 h-6 rounded-full bg-gradient-to-tr from-rose-400 to-pink-500 shadow-xs cursor-pointer hover:scale-110 transition-transform"></button>
+                  <button type="button" data-bg-gradient="linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)" class="w-6 h-6 rounded-full bg-gradient-to-tr from-blue-900 to-blue-700 shadow-xs cursor-pointer hover:scale-110 transition-transform"></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Canvas Workspace -->
+            <div class="relative bg-checkered rounded-2xl overflow-hidden flex items-center justify-center min-h-[260px] sm:min-h-[420px] p-2 sm:p-4 shadow-inner border border-slate-200 dark:border-slate-800">
+              <canvas id="bg-preview-canvas" class="max-w-full max-h-[520px] object-contain rounded shadow-2xl transition-all"></canvas>
+            </div>
+
+            <!-- Actions Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+              <button
+                type="button"
+                onclick="document.getElementById('bg-file-input').click()"
+                class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-medium cursor-pointer transition-colors"
+              >
+                Upload Another Image
+              </button>
+
+              <button
+                type="button"
+                id="bg-download-btn"
+                disabled
+                class="px-8 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-bold text-sm shadow-lg shadow-indigo-500/25 cursor-pointer transition-all transform hover:-translate-y-0.5"
+              >
+                Download Cutout Image &rarr;
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- GOOGLE ADSENSE SLOT: Middle Rectangle Banner -->
+      <section class="max-w-5xl mx-auto px-4 py-6" aria-label="Advertisement Banner">
+        <!-- Google AdSense - In-Content / Middle Rectangle (Replace with your ca-pub script) -->
+        <div class="adsense-slot-container w-full min-h-[120px] border border-dashed border-slate-300 dark:border-slate-800 bg-slate-100/60 dark:bg-slate-900/40 p-4 text-center">
+          <span class="ad-badge">Advertisement</span>
+          <div class="text-xs text-slate-400 py-3">
+            Middle Content Ad Unit (Responsive Display / Native)
+            <div class="text-[11px] text-slate-500 mt-0.5">Insert your &lt;ins class="adsbygoogle" ...&gt; snippet here</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Comprehensive SEO Guide (300+ Words) -->
+      <article class="max-w-4xl mx-auto px-4 py-12 prose dark:prose-invert">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+          How to Remove Backgrounds from Images Online
+        </h2>
+        <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+          Isolating a subject from its background is essential for e-commerce product catalogs, professional LinkedIn portraits, marketing banners, and creative graphic design. Traditionally, this required complex lasso selections or expensive cloud subscription services. With Toolora, you can remove backgrounds automatically in your web browser with <strong>zero server uploads</strong>.
+        </p>
+
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mt-6 mb-3">
+          Step-by-Step Instructions
+        </h3>
+        <ol class="list-decimal list-inside space-y-2 text-sm sm:text-base text-slate-600 dark:text-slate-300 mb-6">
+          <li><strong>Upload your image:</strong> Drag and drop your photo into the editor. The app accepts JPEG, PNG, and WebP formats.</li>
+          <li><strong>Automatic AI segmentation:</strong> The client-side neural engine scans the subject (person, product, car, or pet) and separates it from the backdrop.</li>
+          <li><strong>Select your backdrop:</strong> Keep it <em>Transparent PNG</em> for logos and design overlays, or choose <em>Pure White (#FFFFFF)</em> for Amazon and eBay product compliance. You can also pick any pastel color or studio gradient.</li>
+          <li><strong>Inspect with Before/After:</strong> Use the <em>Before/After Split</em> preview to ensure fine hair and edge details are cleanly preserved.</li>
+          <li><strong>Download:</strong> Click <em>Download Cutout Image</em> to save your high-resolution asset immediately.</li>
+        </ol>
+
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mt-6 mb-3">
+          Why Client-Side Background Removal is Superior
+        </h3>
+        <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+          Most online background erasers upload your private photographs to remote cloud servers. This exposes personal identity portraits and unreleased commercial product photography to potential interception or unauthorized AI training. Toolora runs WebAssembly locally inside your browser sandbox:
+        </p>
+        <ul class="list-disc list-inside space-y-2 text-sm sm:text-base text-slate-600 dark:text-slate-300 mb-6">
+          <li><strong>100% Confidential:</strong> Your pictures never touch our servers or any cloud database.</li>
+          <li><strong>Offline Capable:</strong> Works without continuous internet once loaded in your browser cache.</li>
+          <li><strong>Unlimited Free Usage:</strong> No paywalls after 3 downloads, no resolution downscaling, and no branding watermarks.</li>
+        </ul>
+
+        <!-- Cross-Tool Recommendations -->
+        <div class="my-8 grid grid-cols-1 sm:grid-cols-2 gap-4 not-prose">
+          <div class="p-5 rounded-2xl border border-blue-200 dark:border-blue-900/60 bg-blue-50/50 dark:bg-blue-950/30">
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1">Now crop your subject to 1:1 or 4:5</h4>
+            <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">Frame your isolated cutout for Instagram, Amazon, or passport specifications.</p>
+            <a href="/bulk-image-crop.html" class="inline-flex items-center gap-1 text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline">
+              Go to Bulk Crop Tool &rarr;
+            </a>
+          </div>
+          <div class="p-5 rounded-2xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/50 dark:bg-emerald-950/30">
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1">Now compress your PNG file</h4>
+            <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">Transparent PNGs can be large. Compress under 100KB without quality loss.</p>
+            <a href="/compress-image.html" class="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline">
+              Go to Image Compressor &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- 4-5 Question Accordion FAQ -->
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mt-8 mb-4">
+          Background Removal FAQs
+        </h3>
+        <div class="space-y-4 not-prose">
+          <details class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+            <summary class="font-semibold text-slate-900 dark:text-white text-sm cursor-pointer flex justify-between items-center">
+              <span>What kinds of images work best for background removal?</span>
+              <span class="text-indigo-600 group-open:rotate-180 transition-transform">&darr;</span>
+            </summary>
+            <p class="mt-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Images with a clear subject (people, animals, cars, packaged products, furniture) against a reasonably distinct background produce the cleanest results. Good lighting and contrast help the segmentation model identify subtle edges and strands of hair.
+            </p>
+          </details>
+
+          <details class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+            <summary class="font-semibold text-slate-900 dark:text-white text-sm cursor-pointer flex justify-between items-center">
+              <span>Can I use this for Amazon e-commerce product photos?</span>
+              <span class="text-indigo-600 group-open:rotate-180 transition-transform">&darr;</span>
+            </summary>
+            <p class="mt-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Yes! Amazon strictly requires main product images to have a pure white (#FFFFFF) background. By choosing the pure white color swatch in our editor, your product image will meet Amazon, eBay, and Google Shopping requirements.
+            </p>
+          </details>
+
+          <details class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+            <summary class="font-semibold text-slate-900 dark:text-white text-sm cursor-pointer flex justify-between items-center">
+              <span>Will my downloaded image be lower resolution?</span>
+              <span class="text-indigo-600 group-open:rotate-180 transition-transform">&darr;</span>
+            </summary>
+            <p class="mt-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              No. Unlike other free web services that downscale your 4K or 12-megapixel photo to 0.2 megapixels unless you pay, Toolora preserves your full original canvas dimensions when generating the final PNG or JPEG.
+            </p>
+          </details>
+
+          <details class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+            <summary class="font-semibold text-slate-900 dark:text-white text-sm cursor-pointer flex justify-between items-center">
+              <span>Does this tool work on mobile phones?</span>
+              <span class="text-indigo-600 group-open:rotate-180 transition-transform">&darr;</span>
+            </summary>
+            <p class="mt-2 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Yes! Toolora is fully responsive and optimized for modern iOS and Android mobile browsers including Safari, Chrome, and Firefox.
+            </p>
+          </details>
+        </div>
+      </article>
+    </main>
+
+    <!-- Shared Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 pt-12 pb-8 text-sm text-slate-600 dark:text-slate-400">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+          <div class="space-y-3">
+            <div class="flex items-center gap-2 font-bold text-lg text-slate-900 dark:text-white">
+              <img src="/logo-light.jpg" alt="Toolora" class="w-7 h-7 rounded-lg object-contain shadow-xs logo-light dark:hidden" />
+              <img src="/logo-dark.jpg" alt="Toolora" class="w-7 h-7 rounded-lg object-contain shadow-xs logo-dark hidden dark:block" />
+              <span>Toolora</span>
+            </div>
+            <p class="text-xs leading-relaxed">
+              100% private, free client-side image utility suite. Zero file uploads, zero watermarks, and unlimited processing.
+            </p>
+          </div>
+          <div>
+            <h3 class="font-semibold text-slate-900 dark:text-white mb-3 text-xs uppercase tracking-wider">Free Image Tools</h3>
+            <ul class="space-y-2 text-xs">
+              <li><a href="/multicrop.html" class="hover:text-blue-600 dark:hover:text-blue-400">MultiCrop Studio</a></li>
+              <li><a href="/remove-background.html" class="text-blue-600 dark:text-blue-400 font-semibold">Remove Background</a></li>
+              <li><a href="/compress-image.html" class="hover:text-blue-600 dark:hover:text-blue-400">Image Compressor</a></li>
+              <li><a href="/convert-image.html" class="hover:text-blue-600 dark:hover:text-blue-400">Image Converter</a></li>
+              <li><a href="/color-picker.html" class="hover:text-blue-600 dark:hover:text-blue-400">Color Picker</a></li>
+              <li><a href="/merge-images.html" class="hover:text-blue-600 dark:hover:text-blue-400">Merge Images</a></li>
+              <li><a href="/passport-photo.html" class="hover:text-blue-600 dark:hover:text-blue-400">Passport Photo</a></li>
+              <li><a href="/metadata-viewer.html" class="hover:text-blue-600 dark:hover:text-blue-400">EXIF Viewer</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold text-slate-900 dark:text-white mb-3 text-xs uppercase tracking-wider">Resources</h3>
+            <ul class="space-y-2 text-xs">
+              <li><a href="/about.html" class="hover:text-blue-600 dark:hover:text-blue-400">How In-Browser WASM Works</a></li>
+              <li><a href="/about.html#deploy-guide" class="hover:text-blue-600 dark:hover:text-blue-400">Free Cloudflare / Netlify Guide</a></li>
+              <li><a href="https://t.me/+gQawrH0MFs00M2Y1" target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 dark:hover:text-blue-400">Report a Bug / Feedback</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-semibold text-slate-900 dark:text-white mb-3 text-xs uppercase tracking-wider">Legal &amp; Trust</h3>
+            <ul class="space-y-2 text-xs">
+              <li><a href="/privacy-policy.html" class="hover:text-blue-600 dark:hover:text-blue-400">Privacy Policy</a></li>
+              <li><a href="/terms.html" class="hover:text-blue-600 dark:hover:text-blue-400">Terms of Service</a></li>
+              <li><a href="/contact.html" class="hover:text-blue-600 dark:hover:text-blue-400">Contact Us</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+          <div>&copy; 2026 Toolora. All processing performed locally on your device.</div>
+          <div class="flex items-center gap-4">
+            <a href="/privacy-policy.html" class="hover:underline">Privacy</a>
+            <span>&bull;</span>
+            <a href="/terms.html" class="hover:underline">Terms</a>
+            <span>&bull;</span>
+            <a href="/sitemap.xml" class="hover:underline">Sitemap</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Cookie Consent Floating Banner -->
+    <div
+      id="cookie-consent-banner"
+      class="hidden fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-50 p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl backdrop-blur-md"
+    >
+      <div class="flex items-start gap-3">
+        <div class="text-xl">🍪</div>
+        <div class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+          <strong class="text-slate-900 dark:text-white block text-sm mb-0.5">Cookie &amp; Privacy Notice</strong>
+          We use local storage and privacy-compliant cookies to save your theme preferences and support AdSense advertising. Your images are processed 100% locally and never uploaded. Read our <a href="/privacy-policy.html" class="text-blue-600 underline">Privacy Policy</a>.
+        </div>
+      </div>
+      <div class="mt-4 flex items-center justify-end gap-2 text-xs">
+        <button type="button" id="cookie-decline" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-medium cursor-pointer">
+          Essential Only
+        </button>
+        <button type="button" id="cookie-accept-all" class="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold cursor-pointer shadow-sm">
+          Accept All
+        </button>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="/src/tools/background-remover.ts"></script>
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+  </body>
+</html>

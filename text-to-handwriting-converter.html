@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text to Handwriting Converter - Convert Text to Realistic Handwriting PDF</title>
+    <meta name="description" content="Convert essays and notes into realistic handwriting with ruled, blank, or legal paper, ink colors, and custom font uploads. Download as PDF or PNG." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/text-to-handwriting-converter.html" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button data-theme-toggle type="button" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+          <a href="/" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition-colors">
+            All Tools
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 max-w-4xl mx-auto px-4 py-8 sm:px-6 w-full space-y-6">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Text to Handwriting Converter</h1>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Turn digital text into realistic handwritten pages with custom fonts, ink colors, and paper styles.</p>
+      </div>
+
+      
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider">Enter Text</label>
+                <textarea id="handwriting-text" rows="8" placeholder="Type or paste your text to convert into handwriting..." class="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs">Handwriting is an art that reflects individuality and care.
+
+Whether writing lecture notes, formal letters, or journal entries, this tool converts your typed thoughts into natural handwritten sheets with realistic ink variations and notebook margins.</textarea>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1">Handwriting Font</label>
+                <select id="font-select" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold">
+                  <option value="Antony Lark" selected>Antony Lark (Natural Cursive)</option>
+                  <option value="Bev Handwriting">Bev (Neat Script)</option>
+                  <option value="Braden Hill Script">Braden Hill (Casual Flow)</option>
+                  <option value="Caroline Mutiboko">Caroline Mutiboko (Elegant Cursive)</option>
+                  <option value="Dave Mergens">Dave Mergens (Notebook Print)</option>
+                  <option value="David Reid Casual">David Reid (Quick Pen)</option>
+                  <option value="Kunjar Script">Kunjar Script (Calligraphic)</option>
+                </select>
+              </div>
+
+              <div class="p-3 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40 text-center">
+                <label class="block text-xs font-semibold text-blue-600 dark:text-blue-400 cursor-pointer">
+                  <span>📁 Upload Custom Font (.ttf / .otf / .woff)</span>
+                  <input type="file" id="custom-font-input" accept=".ttf,.otf,.woff,.woff2" class="hidden" />
+                </label>
+                <span id="custom-font-name" class="hidden text-[11px] text-emerald-600 dark:text-emerald-400 font-mono mt-1 block"></span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-500 mb-1">Paper Type</label>
+                  <select id="paper-select" class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold">
+                    <option value="ruled">Ruled Notebook</option>
+                    <option value="blank">Blank White</option>
+                    <option value="legal">Yellow Legal Pad</option>
+                    <option value="parchment">Vintage Parchment</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-500 mb-1">Ink Color</label>
+                  <input type="color" id="ink-color" value="#1d4ed8" class="w-full h-10 p-1 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 cursor-pointer" />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-500 mb-1">Font Size (px)</label>
+                  <input type="range" id="font-size" min="16" max="36" value="24" class="w-full accent-blue-600" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-500 mb-1">Line Spacing</label>
+                  <input type="range" id="line-spacing" min="28" max="55" value="40" class="w-full accent-blue-600" />
+                </div>
+              </div>
+
+              <div class="space-y-2 pt-2">
+                <button type="button" id="download-pdf-btn" class="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs cursor-pointer shadow-xs">Download as PDF Document</button>
+                <button type="button" id="download-png-btn" class="w-full py-2.5 px-4 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-semibold text-xs hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer">Download PNG Image</button>
+              </div>
+            </div>
+
+            <div class="lg:col-span-2 p-4 rounded-2xl bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 flex justify-center items-center overflow-auto shadow-inner min-h-[500px]">
+              <canvas id="paper-canvas" class="max-w-full rounded-lg shadow-xl"></canvas>
+            </div>
+          </div>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500">
+      100% In-Browser Offline Utility &bull; Zero Server Tracking
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/text-to-handwriting-converter.ts"></script>
+  </body>
+</html>

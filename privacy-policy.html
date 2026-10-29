@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy Policy – Toolora</title>
+    <meta
+      name="description"
+      content="Privacy Policy for Toolora. 100% in-browser processing disclosure, Google AdSense cookie notice, and GDPR/CCPA compliance."
+    />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/privacy-policy.html" />
+
+    <!-- Google AdSense Script Placeholder -->
+    <!-- REPLACE THIS COMMENT WITH YOUR GOOGLE ADSENSE CODE:
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    -->
+    <!-- Instant Theme Resolution (Prevents FOUC / White Flash) -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('toolora_theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = saved ? saved === 'dark' : prefersDark;
+          if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="min-h-screen flex flex-col font-sans antialiased transition-colors duration-200">
+    
+    <!-- Header -->
+    <header class="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 dark:border-slate-800 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+
+        <nav class="hidden xl:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <a href="/index.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Home</a>
+          <a href="/multicrop.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">MultiCrop</a>
+          <a href="/remove-background.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Remove BG</a>
+          <a href="/compress-image.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Compress</a>
+          <a href="/convert-image.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Convert</a>
+          <a href="/image-to-pdf.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Image to PDF</a>
+          <a href="/pdf-to-image.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">PDF to Image</a>
+          <a href="/split-pdf.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Split PDF</a>
+          <a href="/crop-pdf.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Crop PDF</a>
+          <a href="/about.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">About</a>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <button
+            type="button"
+            data-theme-toggle
+            aria-label="Toggle dark mode"
+            class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="flex-grow">
+      <article class="max-w-4xl mx-auto px-4 py-12 prose dark:prose-invert">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mb-2">
+          Privacy Policy
+        </h1>
+        <p class="text-xs text-slate-500 mb-8">Effective Date: October 25, 2026</p>
+
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white mt-6 mb-3">1. Complete Client-Side Image Privacy Guarantee</h2>
+        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+          At Toolora, your privacy is paramount. Unlike conventional web applications, <strong>we do not upload, transmit, store, or view your image files on any web server</strong>. All operations—including bulk image cropping, AI background removal, and file compression—occur strictly on your personal device using HTML5 Canvas, the JavaScript File API, and local WebAssembly (WASM) execution.
+        </p>
+
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white mt-6 mb-3">2. Google AdSense &amp; Advertising Cookies</h2>
+        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+          We use Google AdSense and third-party advertising partners to serve advertisements when you visit our website. These companies may use cookies, web beacons, and device identifiers to collect non-personally identifiable information about your visits to this and other websites in order to provide targeted advertisements about goods and services of interest to you.
+        </p>
+        <ul class="list-disc list-inside text-sm text-slate-600 dark:text-slate-300 space-y-2 mb-4">
+          <li>Google's use of advertising cookies enables it and its partners to serve ads to users based on their visit to our site and/or other sites on the Internet.</li>
+          <li>Users may opt out of personalized advertising by visiting <a href="https://adssettings.google.com/" target="_blank" rel="noopener" class="text-blue-600 underline">Google Ads Settings</a>.</li>
+          <li>Alternatively, you can opt out of a third-party vendor's use of cookies for personalized advertising by visiting <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener" class="text-blue-600 underline">www.aboutads.info</a>.</li>
+        </ul>
+
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white mt-6 mb-3">3. Local Storage &amp; Cookies</h2>
+        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+          Toolora uses your browser's <code class="font-mono text-xs">localStorage</code> to remember non-sensitive configuration settings:
+        </p>
+        <ul class="list-disc list-inside text-sm text-slate-600 dark:text-slate-300 space-y-1 mb-4">
+          <li><strong>toolora_theme:</strong> Stores your light or dark mode selection.</li>
+          <li><strong>quickpic_cookie_consent:</strong> Records whether you accepted or customized cookie notifications.</li>
+        </ul>
+
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white mt-6 mb-3">4. GDPR &amp; CCPA Compliance</h2>
+        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+          Because we never collect, harvest, or sell personal identifiers or image files, users under the European Union General Data Protection Regulation (GDPR) and California Consumer Privacy Act (CCPA) benefit from built-in privacy by design.
+        </p>
+
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white mt-6 mb-3">5. Updates &amp; Contact</h2>
+        <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+          If you have questions regarding this Privacy Policy, please reach out through our <a href="/contact.html" class="text-blue-600 underline">Contact Page</a>.
+        </p>
+      </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 text-xs text-slate-500 text-center">
+      <div class="max-w-7xl mx-auto px-4">
+        &copy; 2026 Toolora &bull; <a href="/index.html" class="hover:underline">Home</a> &bull; <a href="/terms.html" class="hover:underline">Terms of Service</a>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+  </body>
+</html>

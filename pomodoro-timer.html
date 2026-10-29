@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pomodoro Timer - Free Online Focus & Study Timer</title>
+    <meta name="description" content="Customizable Pomodoro timer for deep work sessions, study, and breaks. Features circular progress ring, audio chime, and round tracking." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/pomodoro-timer.html" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button data-theme-toggle type="button" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+          <a href="/" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition-colors">
+            All 130 Tools
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex flex-col items-center">
+      <!-- Title & Intro -->
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-200 dark:border-rose-800 mb-3">
+          <span>🍅 Focus &amp; Productivity Technique</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Pomodoro Timer</h1>
+        <p class="mt-2 text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-md mx-auto">
+          25-minute focus sprints followed by short rest intervals. Stay energized and prevent burnout.
+        </p>
+      </div>
+
+      <!-- Mode Switcher -->
+      <div class="flex items-center gap-2 p-1.5 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl mb-8 text-xs sm:text-sm shadow-xs">
+        <button type="button" id="mode-focus-btn" class="px-5 py-2 rounded-xl transition-all font-semibold">Focus</button>
+        <button type="button" id="mode-short-btn" class="px-5 py-2 rounded-xl transition-all font-semibold">Short Break</button>
+        <button type="button" id="mode-long-btn" class="px-5 py-2 rounded-xl transition-all font-semibold">Long Break</button>
+      </div>
+
+      <!-- Circular Timer Container -->
+      <div class="relative w-72 h-72 sm:w-80 sm:h-80 flex items-center justify-center mb-8">
+        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 320 320">
+          <!-- Background track -->
+          <circle
+            cx="160"
+            cy="160"
+            r="140"
+            class="stroke-slate-200 dark:stroke-slate-800 fill-none"
+            stroke-width="12"
+          ></circle>
+          <!-- Animated progress track -->
+          <circle
+            id="pomodoro-progress-circle"
+            cx="160"
+            cy="160"
+            r="140"
+            class="stroke-rose-600 dark:stroke-rose-500 fill-none transition-all duration-300"
+            stroke-width="12"
+            stroke-linecap="round"
+          ></circle>
+        </svg>
+
+        <!-- Centered timer text -->
+        <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+          <span id="pomodoro-timer-label" class="text-xs uppercase tracking-widest font-bold text-slate-400 mb-1">Focus Session</span>
+          <span id="pomodoro-timer-display" class="text-5xl sm:text-6xl font-black font-mono tracking-tighter text-slate-900 dark:text-white">25:00</span>
+          <span id="pomodoro-round-display" class="text-xs font-semibold text-rose-600 dark:text-rose-400 mt-2 bg-rose-50 dark:bg-rose-950/60 px-2.5 py-0.5 rounded-full">Round 1 of 4</span>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="flex items-center gap-4 mb-10">
+        <button
+          type="button"
+          id="pomodoro-reset-btn"
+          title="Reset timer"
+          class="p-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 rounded-2xl hover:bg-slate-100 shadow-xs transition-colors cursor-pointer"
+        >
+          🔄
+        </button>
+        <button
+          type="button"
+          id="pomodoro-start-pause-btn"
+          class="w-36 py-3.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-base rounded-2xl shadow-md transition-all transform hover:-translate-y-0.5 cursor-pointer text-center"
+        >
+          Start
+        </button>
+        <button
+          type="button"
+          id="pomodoro-skip-btn"
+          title="Skip session"
+          class="p-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 rounded-2xl hover:bg-slate-100 shadow-xs transition-colors cursor-pointer"
+        >
+          ⏭️
+        </button>
+      </div>
+
+      <!-- Daily Focus Summary Stats -->
+      <div class="w-full grid grid-cols-2 gap-4 mb-8">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 text-center shadow-xs">
+          <span class="text-xs text-slate-400">Sessions Completed Today</span>
+          <div id="pomodoro-today-sessions" class="text-2xl font-black text-rose-600 mt-1">0</div>
+        </div>
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 text-center shadow-xs">
+          <span class="text-xs text-slate-400">Total Focus Time Today</span>
+          <div id="pomodoro-today-minutes" class="text-2xl font-black text-blue-600 mt-1">0 mins</div>
+        </div>
+      </div>
+
+      <!-- Settings Accordion -->
+      <details class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs">
+        <summary class="font-bold text-sm text-slate-800 dark:text-slate-200 cursor-pointer select-none">
+          ⚙️ Customize Pomodoro Durations
+        </summary>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 text-xs">
+          <div>
+            <label for="setting-focus-time" class="block font-medium text-slate-500 mb-1">Focus (minutes)</label>
+            <input type="number" id="setting-focus-time" min="1" max="120" value="25" class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none" />
+          </div>
+          <div>
+            <label for="setting-short-break" class="block font-medium text-slate-500 mb-1">Short Break (minutes)</label>
+            <input type="number" id="setting-short-break" min="1" max="60" value="5" class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none" />
+          </div>
+          <div>
+            <label for="setting-long-break" class="block font-medium text-slate-500 mb-1">Long Break (minutes)</label>
+            <input type="number" id="setting-long-break" min="1" max="60" value="15" class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none" />
+          </div>
+        </div>
+        <div class="mt-4 flex items-center justify-between text-xs">
+          <label for="setting-sound-toggle" class="font-medium text-slate-600 dark:text-slate-300">Play Audio Chime on Session End</label>
+          <input type="checkbox" id="setting-sound-toggle" checked class="w-4 h-4 text-rose-600 rounded" />
+        </div>
+      </details>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500">
+      100% In-Browser Offline Utility &bull; Zero Server Tracking
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/pomodoro-timer.ts"></script>
+  </body>
+</html>

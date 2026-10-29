@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scientific Calculator Online – Free, Clean & In-Browser | Toolora</title>
+    <meta name="description" content="Full scientific calculator with trigonometric, logarithmic, exponential, root, and factorial functions, radians/degrees modes, and memory tape." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/scientific-calculator.html" />
+
+    <!-- OpenGraph / Social Cards -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Scientific Calculator Online – Free, Clean & In-Browser | Toolora" />
+    <meta property="og:description" content="Full scientific calculator with trigonometric, logarithmic, exponential, root, and factorial functions, radians/degrees modes, and memory tape." />
+    <meta property="og:url" content="https://quickpic-studio.pages.dev/scientific-calculator.html" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Instant Theme Resolution (Prevents FOUC) -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('toolora_theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = saved ? saved === 'dark' : prefersDark;
+          if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 dark:border-slate-800 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden xl:flex items-center space-x-6 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <a href="/index.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">All Tools</a>
+          <a href="/index.html?cat=text" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Text Tools</a>
+          <a href="/index.html?cat=dev" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Dev Tools</a>
+          <a href="/index.html?cat=design" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Design &amp; CSS</a>
+          <a href="/about.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About</a>
+        </nav>
+
+        <!-- Right Header Actions -->
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            data-theme-toggle
+            aria-label="Toggle light/dark theme"
+            class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer shadow-2xs"
+          >
+            <span data-theme-icon-moon class="hidden text-base leading-none">&bull;</span>
+            <svg data-theme-icon-sun class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="mb-8 text-center max-w-3xl mx-auto">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900 mb-3">
+          <span>Advanced Math</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Scientific Calculator</h1>
+        <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">Trigonometric, logarithmic, power, root, and factorial scientific math in your browser.</p>
+      </div>
+
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
+        <!-- Calculator Pad -->
+        <div class="lg:col-span-2 p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+          <!-- Display Screen -->
+          <div class="p-4 rounded-2xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800/80 text-right space-y-1 font-mono">
+            <div id="calc-display-history" class="text-xs text-slate-400 min-h-[1.25rem] truncate"></div>
+            <div id="calc-display-main" class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight break-all">0</div>
+          </div>
+
+          <!-- Function Grid -->
+          <div class="grid grid-cols-5 gap-2 text-xs font-semibold">
+            <button type="button" id="btn-rad-deg" class="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 font-bold hover:bg-blue-100 dark:hover:bg-blue-900/40 cursor-pointer">RAD</button>
+            <button type="button" data-calc-btn="MC" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 cursor-pointer">MC</button>
+            <button type="button" data-calc-btn="MR" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 cursor-pointer">MR</button>
+            <button type="button" data-calc-btn="M+" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 cursor-pointer">M+</button>
+            <button type="button" data-calc-btn="M-" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 cursor-pointer">M-</button>
+
+            <button type="button" data-calc-btn="sin" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 cursor-pointer">sin</button>
+            <button type="button" data-calc-btn="cos" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 cursor-pointer">cos</button>
+            <button type="button" data-calc-btn="tan" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 cursor-pointer">tan</button>
+            <button type="button" data-calc-btn="pi" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 cursor-pointer">π</button>
+            <button type="button" data-calc-btn="e" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 cursor-pointer">e</button>
+
+            <button type="button" data-calc-btn="asin" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 cursor-pointer">sin⁻¹</button>
+            <button type="button" data-calc-btn="acos" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 cursor-pointer">cos⁻¹</button>
+            <button type="button" data-calc-btn="atan" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 cursor-pointer">tan⁻¹</button>
+            <button type="button" data-calc-btn="sqrt" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 cursor-pointer">√</button>
+            <button type="button" data-calc-btn="^" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 cursor-pointer">xʸ</button>
+
+            <button type="button" data-calc-btn="ln" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 cursor-pointer">ln</button>
+            <button type="button" data-calc-btn="log" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 cursor-pointer">log₁₀</button>
+            <button type="button" data-calc-btn="(" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 cursor-pointer">(</button>
+            <button type="button" data-calc-btn=")" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 cursor-pointer">)</button>
+            <button type="button" data-calc-btn="DEL" class="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-900/40 cursor-pointer font-bold">DEL</button>
+
+            <!-- Numbers & Operators -->
+            <button type="button" data-calc-btn="7" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-base text-slate-900 dark:text-white cursor-pointer">7</button>
+            <button type="button" data-calc-btn="8" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-base text-slate-900 dark:text-white cursor-pointer">8</button>
+            <button type="button" data-calc-btn="9" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-base text-slate-900 dark:text-white cursor-pointer">9</button>
+            <button type="button" data-calc-btn="/" class="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 text-base font-bold cursor-pointer">&divide;</button>
+            <button type="button" data-calc-btn="AC" class="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 hover:bg-rose-100 text-base font-bold cursor-pointer">AC</button>
+
+            <button type="button" data-calc-btn="4" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-base text-slate-900 dark:text-white cursor-pointer">4</button>
+            <button type="button" data-calc-btn="5" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-base text-slate-900 dark:text-white cursor-pointer">5</button>
+            <button type="button" data-calc-btn="6" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-base text-slate-900 dark:text-white cursor-pointer">6</button>
+            <button type="button" data-calc-btn="*" class="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 text-base font-bold cursor-pointer">&times;</button>
+            <button type="button" data-calc-btn="1" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-base text-slate-900 dark:text-white cursor-pointer">1</button>
+
+            <button type="button" data-calc-btn="2" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-base text-slate-900 dark:text-white cursor-pointer">2</button>
+            <button type="button" data-calc-btn="3" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-base text-slate-900 dark:text-white cursor-pointer">3</button>
+            <button type="button" data-calc-btn="-" class="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 text-base font-bold cursor-pointer">&minus;</button>
+            <button type="button" data-calc-btn="0" class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-base text-slate-900 dark:text-white cursor-pointer">0</button>
+            <button type="button" data-calc-btn="." class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-base text-slate-900 dark:text-white cursor-pointer">.</button>
+
+            <button type="button" data-calc-btn="+" class="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 text-base font-bold cursor-pointer">+</button>
+            <button type="button" data-calc-btn="=" class="col-span-4 p-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg shadow-sm cursor-pointer">=</button>
+          </div>
+        </div>
+
+        <!-- History Sidebar -->
+        <div class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-3">
+          <div>
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2 mb-2">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Calculation History</h3>
+              <button type="button" id="btn-clear-history" class="text-rose-500 hover:underline text-xs cursor-pointer">Clear</button>
+            </div>
+            <ul id="calc-history-list" class="space-y-1 overflow-y-auto max-h-72"></ul>
+          </div>
+          <p class="text-[11px] text-slate-400">Click any history calculation to reuse its result.</p>
+        </div>
+      </div>
+    
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900 py-8 text-center text-xs text-slate-500">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p>&copy; 2026 Toolora. 100% In-Browser Private Utilities.</p>
+        <div class="flex items-center gap-4">
+          <a href="/privacy-policy.html" class="hover:underline">Privacy</a>
+          <a href="/terms.html" class="hover:underline">Terms</a>
+          <a href="/contact.html" class="hover:underline">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/scientific-calculator.ts"></script>
+  </body>
+</html>

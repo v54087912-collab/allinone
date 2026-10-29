@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notes App - Free In-Browser Notepad & Markdown Scratchpad</title>
+    <meta name="description" content="Quick offline notepad with multi-note management, search, word and character counters, and Markdown/TXT export. 100% private in-browser storage." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/notes-app.html" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button data-theme-toggle type="button" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+          <a href="/" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition-colors">
+            All 130 Tools
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex flex-col">
+      <!-- Title -->
+      <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-teal-50 text-teal-700 dark:bg-teal-950/60 dark:text-teal-300 border border-teal-200 dark:border-teal-800 mb-1.5">
+            <span>📝 Scratchpad &bull; Auto-Saved Locally</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Notes App</h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" id="note-export-md-btn" class="px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold rounded-xl hover:border-blue-400 transition-colors">
+            Export .MD
+          </button>
+          <button type="button" id="note-export-txt-btn" class="px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold rounded-xl hover:border-blue-400 transition-colors">
+            Export .TXT
+          </button>
+          <button type="button" id="note-export-all-btn" class="px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold rounded-xl hover:border-blue-400 transition-colors">
+            Backup All JSON
+          </button>
+        </div>
+      </div>
+
+      <!-- App Layout: Sidebar + Editor -->
+      <div class="flex-1 grid grid-cols-1 md:grid-cols-12 gap-6 min-h-[500px]">
+        <!-- Sidebar: Note list (4 cols) -->
+        <div class="md:col-span-4 flex flex-col bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs">
+          <div class="flex items-center gap-2 mb-3">
+            <input
+              type="text"
+              id="note-search-input"
+              placeholder="Search notes..."
+              class="flex-1 px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            />
+            <button
+              type="button"
+              id="note-new-btn"
+              title="Create note"
+              class="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs shrink-0 cursor-pointer transition-colors"
+            >
+              + New
+            </button>
+          </div>
+          <!-- Notes List Scrollable -->
+          <div id="notes-sidebar-list" class="flex-1 overflow-y-auto space-y-2 pr-1 max-h-[520px]">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Main Editor (8 cols) -->
+        <div class="md:col-span-8 flex flex-col bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs">
+          <!-- Top Editor Bar -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800 mb-4">
+            <input
+              type="text"
+              id="note-title-input"
+              placeholder="Note Title..."
+              class="flex-1 font-bold text-lg sm:text-xl text-slate-900 dark:text-white bg-transparent focus:outline-none"
+            />
+            <div class="flex items-center gap-2">
+              <select
+                id="note-category-select"
+                class="px-2.5 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none"
+              >
+                <option value="General">General</option>
+                <option value="Work">Work</option>
+                <option value="Ideas">Ideas</option>
+                <option value="Meeting">Meeting</option>
+                <option value="Personal">Personal</option>
+              </select>
+              <button
+                type="button"
+                id="note-pin-btn"
+                class="px-2.5 py-1.5 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                📍 Pin
+              </button>
+              <button
+                type="button"
+                id="note-delete-btn"
+                title="Delete note"
+                class="p-1.5 text-slate-400 hover:text-red-500 rounded-lg transition-colors cursor-pointer"
+              >
+                🗑️
+              </button>
+            </div>
+          </div>
+
+          <!-- Note Content Area -->
+          <textarea
+            id="note-content-area"
+            placeholder="Type your notes here... (Markdown formatted)"
+            class="flex-1 w-full p-2 bg-transparent text-sm sm:text-base leading-relaxed text-slate-800 dark:text-slate-200 focus:outline-none resize-none font-sans min-h-[360px]"
+          ></textarea>
+
+          <!-- Status Bar -->
+          <div class="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-400">
+            <div class="flex items-center gap-3">
+              <span id="note-word-count">0 words</span>
+              <span>&bull;</span>
+              <span id="note-char-count">0 chars</span>
+            </div>
+            <span id="note-last-saved">Saved</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500">
+      100% In-Browser Offline Utility &bull; Zero Server Tracking
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/notes-app.ts"></script>
+  </body>
+</html>

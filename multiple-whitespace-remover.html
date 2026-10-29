@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multiple Whitespace Remover - Clean Redundant Spaces & Line Breaks</title>
+    <meta name="description" content="Collapse multiple spaces, trim blank lines, strip tabs, and unwrap line breaks with live character savings." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/multiple-whitespace-remover.html" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button data-theme-toggle type="button" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+          <a href="/" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition-colors">
+            All Tools
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 max-w-4xl mx-auto px-4 py-8 sm:px-6 w-full space-y-6">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Multiple Whitespace Remover</h1>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Clean up messy text by removing duplicate spaces, empty lines, and tabs.</p>
+      </div>
+
+      
+          <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1">Input Dirty Text</label>
+                <textarea id="raw-text-input" rows="10" placeholder="Paste text with multiple spaces, unwanted line breaks, or tabs here..." class="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 font-mono text-xs"></textarea>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 mb-1">Cleaned Output</label>
+                <textarea id="cleaned-output" readonly rows="10" placeholder="Cleaned text appears here..." class="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 font-mono text-xs"></textarea>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-medium text-slate-700 dark:text-slate-300">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="opt-collapse-spaces" checked class="rounded accent-blue-600" /> Collapse Spaces
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="opt-trim-lines" checked class="rounded accent-blue-600" /> Trim Lines
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="opt-remove-blank" checked class="rounded accent-blue-600" /> Remove Blank Lines
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="opt-strip-tabs" checked class="rounded accent-blue-600" /> Convert Tabs to Space
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer col-span-2">
+                <input type="checkbox" id="opt-unwrap-lines" class="rounded accent-blue-600" /> Unwrap All Lines (Single Line)
+              </label>
+            </div>
+
+            <div class="flex justify-between items-center pt-2">
+              <span id="diff-badge" class="text-xs font-mono font-semibold text-blue-600 dark:text-blue-400">0 characters removed</span>
+              <div class="flex gap-3">
+                <button type="button" id="clear-btn" class="py-2 px-4 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-red-500 cursor-pointer">Clear</button>
+                <button type="button" id="copy-cleaned-btn" class="py-2 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold cursor-pointer shadow-xs">Copy Cleaned Text</button>
+              </div>
+            </div>
+          </div>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500">
+      100% In-Browser Offline Utility &bull; Zero Server Tracking
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/multiple-whitespace-remover.ts"></script>
+  </body>
+</html>

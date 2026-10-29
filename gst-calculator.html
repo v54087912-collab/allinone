@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GST Calculator Online – Inclusive & Exclusive GST Rates | Toolora</title>
+    <meta name="description" content="Compute Goods & Services Tax (GST) with inclusive/exclusive modes, CGST, SGST, IGST split, and standard tax brackets (3%, 5%, 12%, 18%, 28%)." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/gst-calculator.html" />
+
+    <!-- OpenGraph / Social Cards -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="GST Calculator Online – Inclusive & Exclusive GST Rates | Toolora" />
+    <meta property="og:description" content="Compute Goods & Services Tax (GST) with inclusive/exclusive modes, CGST, SGST, IGST split, and standard tax brackets (3%, 5%, 12%, 18%, 28%)." />
+    <meta property="og:url" content="https://quickpic-studio.pages.dev/gst-calculator.html" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Instant Theme Resolution (Prevents FOUC) -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('toolora_theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = saved ? saved === 'dark' : prefersDark;
+          if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 dark:border-slate-800 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden xl:flex items-center space-x-6 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <a href="/index.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">All Tools</a>
+          <a href="/index.html?cat=text" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Text Tools</a>
+          <a href="/index.html?cat=dev" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Dev Tools</a>
+          <a href="/index.html?cat=design" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Design &amp; CSS</a>
+          <a href="/about.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About</a>
+        </nav>
+
+        <!-- Right Header Actions -->
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            data-theme-toggle
+            aria-label="Toggle light/dark theme"
+            class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer shadow-2xs"
+          >
+            <span data-theme-icon-moon class="hidden text-base leading-none">&bull;</span>
+            <svg data-theme-icon-sun class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="mb-8 text-center max-w-3xl mx-auto">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900 mb-3">
+          <span>Tax & Finance</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">GST Calculator</h1>
+        <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">Calculate GST inclusive and exclusive amounts with CGST, SGST, and IGST tax splits.</p>
+      </div>
+
+      
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-4xl mx-auto mb-8">
+        <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <div class="grid grid-cols-2 gap-3 p-1 rounded-2xl bg-slate-100 dark:bg-slate-800">
+            <label class="flex items-center justify-center py-2 px-3 rounded-xl cursor-pointer font-semibold text-xs text-slate-700 dark:text-slate-300 has-checked:bg-white dark:has-checked:bg-slate-700 has-checked:text-blue-600 dark:has-checked:text-blue-400 has-checked:shadow-xs transition-all">
+              <input type="radio" name="gst-mode" id="mode-exclusive" checked class="hidden" />
+              <span>GST Exclusive (Add GST)</span>
+            </label>
+            <label class="flex items-center justify-center py-2 px-3 rounded-xl cursor-pointer font-semibold text-xs text-slate-700 dark:text-slate-300 has-checked:bg-white dark:has-checked:bg-slate-700 has-checked:text-blue-600 dark:has-checked:text-blue-400 has-checked:shadow-xs transition-all">
+              <input type="radio" name="gst-mode" id="mode-inclusive" class="hidden" />
+              <span>GST Inclusive (Extract)</span>
+            </label>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Amount ($)</label>
+            <input type="number" id="input-amount" value="1000" min="0" step="any" class="w-full px-4 py-2.5 text-base font-bold rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white" />
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="text-xs font-bold uppercase tracking-wider text-slate-500">GST Rate (%)</label>
+              <div class="space-x-1">
+                <button type="button" data-rate-chip="5" class="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-blue-50 hover:text-blue-600 cursor-pointer">5%</button>
+                <button type="button" data-rate-chip="12" class="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-blue-50 hover:text-blue-600 cursor-pointer">12%</button>
+                <button type="button" data-rate-chip="18" class="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-blue-50 hover:text-blue-600 cursor-pointer">18%</button>
+                <button type="button" data-rate-chip="28" class="px-2 py-0.5 rounded text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-blue-50 hover:text-blue-600 cursor-pointer">28%</button>
+              </div>
+            </div>
+            <input type="number" id="input-rate" value="18" min="0" step="any" class="w-full px-4 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white" />
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+              <div>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Net / Base Price</span>
+                <span id="res-net" class="text-2xl font-bold text-slate-900 dark:text-white">bash.00</span>
+              </div>
+              <div class="text-right">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">GST Tax</span>
+                <span id="res-gst" class="text-2xl font-bold text-rose-600 dark:text-rose-400">bash.00</span>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 space-y-2">
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-500">CGST (Central Tax - 50%):</span>
+                <span id="res-cgst" class="font-mono font-semibold text-slate-800 dark:text-slate-200">bash.00</span>
+              </div>
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-500">SGST (State Tax - 50%):</span>
+                <span id="res-sgst" class="font-mono font-semibold text-slate-800 dark:text-slate-200">bash.00</span>
+              </div>
+              <div class="flex justify-between text-xs">
+                <span class="text-slate-500">IGST (Integrated Tax - 100%):</span>
+                <span id="res-igst" class="font-mono font-semibold text-slate-800 dark:text-slate-200">bash.00</span>
+              </div>
+            </div>
+
+            <div class="pt-2 flex justify-between items-center">
+              <span class="text-sm font-bold text-slate-700 dark:text-slate-300">Total Gross Price:</span>
+              <span id="res-total" class="text-3xl font-extrabold text-blue-600 dark:text-blue-400">bash.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900 py-8 text-center text-xs text-slate-500">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p>&copy; 2026 Toolora. 100% In-Browser Private Utilities.</p>
+        <div class="flex items-center gap-4">
+          <a href="/privacy-policy.html" class="hover:underline">Privacy</a>
+          <a href="/terms.html" class="hover:underline">Terms</a>
+          <a href="/contact.html" class="hover:underline">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/gst-calculator.ts"></script>
+  </body>
+</html>

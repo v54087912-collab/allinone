@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image to Base64 Converter - Encode Photos to Data URI String</title>
+    <meta name="description" content="Convert images to Base64 data URIs instantly in your browser. Generate HTML img tags, CSS background-image rules, and compare file sizes." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/image-to-base64-converter.html" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button data-theme-toggle type="button" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+          <a href="/" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition-colors">
+            All Tools
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 max-w-5xl mx-auto px-4 py-8 sm:px-6 w-full space-y-6">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Image to Base64 Converter</h1>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Convert image files into Base64 data URIs for embedding in HTML, CSS, or JSON without external hosting.</p>
+      </div>
+
+      <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-6">
+        <div id="b64-drop-zone" class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-10 text-center cursor-pointer hover:border-blue-500 transition-colors">
+          <input type="file" id="b64-file-input" accept="image/*" class="hidden" />
+          <div class="text-4xl mb-3">📦</div>
+          <p class="font-semibold text-slate-800 dark:text-slate-200">Select or drop an image to encode to Base64</p>
+          <p class="text-xs text-slate-500 mt-1">Instant offline conversion with size analytics</p>
+        </div>
+
+        <div id="b64-results" class="hidden space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800">
+            <div class="flex items-center justify-center p-2 bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+              <img id="b64-preview-img" class="max-h-24 object-contain rounded" alt="Thumbnail" />
+            </div>
+
+            <div class="flex flex-col justify-center">
+              <span class="text-2xs font-semibold text-slate-400 uppercase tracking-wider">Raw File Size</span>
+              <span id="b64-orig-size" class="text-lg font-bold font-mono">0 KB</span>
+            </div>
+
+            <div class="flex flex-col justify-center">
+              <span class="text-2xs font-semibold text-slate-400 uppercase tracking-wider">Base64 Encoded Size</span>
+              <span id="b64-enc-size" class="text-lg font-bold font-mono text-blue-600 dark:text-blue-400">0 KB</span>
+            </div>
+
+            <div class="flex flex-col justify-center">
+              <span class="text-2xs font-semibold text-slate-400 uppercase tracking-wider">Storage Overhead</span>
+              <span id="b64-overhead" class="text-lg font-bold font-mono text-amber-500">+33%</span>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <label class="text-2xs font-semibold text-slate-400 uppercase tracking-wider">Output Snippet Format</label>
+                <select id="b64-output-format" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold">
+                  <option value="data-uri" selected>Full Data URI (data:image/...)</option>
+                  <option value="html">HTML &lt;img&gt; Element</option>
+                  <option value="css">CSS background-image</option>
+                  <option value="raw">Raw Base64 String Only</option>
+                </select>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button type="button" id="copy-b64-btn" class="py-2 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs cursor-pointer shadow-xs transition-colors">
+                  Copy to Clipboard
+                </button>
+                <button type="button" id="download-b64-txt" class="py-2 px-3.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold cursor-pointer">
+                  Download .TXT
+                </button>
+              </div>
+            </div>
+
+            <textarea id="b64-output-text" readonly rows="8" class="w-full p-4 rounded-xl font-mono text-xs border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/80 text-slate-800 dark:text-slate-200 break-all focus:outline-hidden"></textarea>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500">
+      100% In-Browser Offline Utility &bull; Zero Server Uploads
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/image-to-base64-converter.ts"></script>
+  </body>
+</html>

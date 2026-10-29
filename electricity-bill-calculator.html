@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Electricity Bill Calculator Online – Household Appliance Power Cost | Toolora</title>
+    <meta name="description" content="Calculate appliance kilowatt-hour (kWh) power consumption, daily and monthly electricity bill costs with custom utility tariff rates." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/electricity-bill-calculator.html" />
+
+    <!-- OpenGraph / Social Cards -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Electricity Bill Calculator Online – Household Appliance Power Cost | Toolora" />
+    <meta property="og:description" content="Calculate appliance kilowatt-hour (kWh) power consumption, daily and monthly electricity bill costs with custom utility tariff rates." />
+    <meta property="og:url" content="https://quickpic-studio.pages.dev/electricity-bill-calculator.html" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Instant Theme Resolution (Prevents FOUC) -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('toolora_theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = saved ? saved === 'dark' : prefersDark;
+          if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 dark:border-slate-800 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden xl:flex items-center space-x-6 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <a href="/index.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">All Tools</a>
+          <a href="/index.html?cat=text" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Text Tools</a>
+          <a href="/index.html?cat=dev" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Dev Tools</a>
+          <a href="/index.html?cat=design" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Design &amp; CSS</a>
+          <a href="/about.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About</a>
+        </nav>
+
+        <!-- Right Header Actions -->
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            data-theme-toggle
+            aria-label="Toggle light/dark theme"
+            class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer shadow-2xs"
+          >
+            <span data-theme-icon-moon class="hidden text-base leading-none">&bull;</span>
+            <svg data-theme-icon-sun class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="mb-8 text-center max-w-3xl mx-auto">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900 mb-3">
+          <span>Energy & Utility</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Electricity Bill Calculator</h1>
+        <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">Estimate household power consumption in kWh and calculate daily, monthly, and annual utility bills.</p>
+      </div>
+
+      
+      <div class="max-w-4xl mx-auto space-y-6 mb-8">
+        <div class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Electricity Tariff ($ per kWh)</label>
+            <input type="number" id="input-tariff" value="0.15" min="0.01" step="0.01" class="px-3 py-1.5 text-sm font-bold rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white" />
+          </div>
+          <button type="button" id="btn-add-appliance" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs cursor-pointer">+ Add Appliance</button>
+        </div>
+
+        <div class="rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden bg-white dark:bg-slate-900 shadow-sm">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 text-slate-500 font-semibold">
+                  <th class="py-2.5 px-3">Appliance Name</th>
+                  <th class="py-2.5 px-3">Wattage (W)</th>
+                  <th class="py-2.5 px-3">Hours / Day</th>
+                  <th class="py-2.5 px-3">Qty</th>
+                  <th class="py-2.5 px-3 text-right"></th>
+                </tr>
+              </thead>
+              <tbody id="appliances-list"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="p-5 rounded-3xl bg-blue-600 text-white shadow-xl text-center space-y-1">
+            <span class="text-[11px] font-bold uppercase tracking-wider opacity-80 block">Monthly Cost</span>
+            <div id="res-monthly-cost" class="text-3xl font-extrabold">bash.00</div>
+            <span id="res-monthly-kwh" class="text-xs opacity-90 block">0 kWh/mo</span>
+          </div>
+          <div class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-center space-y-1">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Daily Cost</span>
+            <div id="res-daily-cost" class="text-2xl font-bold text-slate-900 dark:text-white">bash.00</div>
+            <span id="res-daily-kwh" class="text-xs text-slate-500 block">0 kWh/day</span>
+          </div>
+          <div class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-center space-y-1">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">Annual Cost</span>
+            <div id="res-yearly-cost" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400">bash.00</div>
+            <span class="text-xs text-slate-500 block">Est. 365 Days</span>
+          </div>
+        </div>
+      </div>
+    
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900 py-8 text-center text-xs text-slate-500">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p>&copy; 2026 Toolora. 100% In-Browser Private Utilities.</p>
+        <div class="flex items-center gap-4">
+          <a href="/privacy-policy.html" class="hover:underline">Privacy</a>
+          <a href="/terms.html" class="hover:underline">Terms</a>
+          <a href="/contact.html" class="hover:underline">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/electricity-bill-calculator.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File Checksum Calculator Online – MD5, SHA-256, SHA-512, CRC32 | Toolora</title>
+    <meta name="description" content="Compute and verify MD5, SHA-1, SHA-256, SHA-512, and CRC32 cryptographic checksums for any file directly in your browser." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/file-checksum.html" />
+
+    <!-- OpenGraph / Social Cards -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="File Checksum Calculator Online – MD5, SHA-256, SHA-512, CRC32 | Toolora" />
+    <meta property="og:description" content="Compute and verify MD5, SHA-1, SHA-256, SHA-512, and CRC32 cryptographic checksums for any file directly in your browser." />
+    <meta property="og:url" content="https://quickpic-studio.pages.dev/file-checksum.html" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Instant Theme Resolution (Prevents FOUC) -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('toolora_theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = saved ? saved === 'dark' : prefersDark;
+          if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 dark:border-slate-800 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden xl:flex items-center space-x-6 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <a href="/index.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">All Tools</a>
+          <a href="/index.html?cat=text" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Text Tools</a>
+          <a href="/index.html?cat=dev" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Dev Tools</a>
+          <a href="/index.html?cat=design" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Design &amp; CSS</a>
+          <a href="/about.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About</a>
+        </nav>
+
+        <!-- Right Header Actions -->
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            data-theme-toggle
+            aria-label="Toggle light/dark theme"
+            class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer shadow-2xs"
+          >
+            <span data-theme-icon-moon class="hidden text-base leading-none">&bull;</span>
+            <svg data-theme-icon-sun class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="mb-8 text-center max-w-3xl mx-auto">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900 mb-3">
+          <span>Security & Crypto</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">File Checksum Calculator</h1>
+        <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">Calculate MD5, SHA-1, SHA-256, SHA-512, and CRC32 hashes for any file client-side.</p>
+      </div>
+
+      
+      <div id="drop-zone" class="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 rounded-3xl p-8 text-center transition-all bg-slate-50 dark:bg-slate-900/50 cursor-pointer mb-6">
+        <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto mb-3">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+        </div>
+        <p class="text-base font-semibold text-slate-900 dark:text-white mb-1">Drop any file here or click to compute checksums</p>
+        <p class="text-xs text-slate-500">Calculated securely in your browser using Web Crypto API. No files uploaded.</p>
+        <input type="file" id="file-input" class="hidden" />
+      </div>
+
+      <div id="results-container" class="hidden space-y-6">
+        <div class="p-4 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-wrap items-center justify-between gap-3">
+          <span id="file-meta-badge" class="text-xs font-mono font-semibold text-slate-700 dark:text-slate-300"></span>
+          <button type="button" id="btn-copy-all" class="px-4 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs cursor-pointer">Copy All Hashes</button>
+        </div>
+
+        <div class="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-500">Verify Against Expected Checksum</label>
+          <input type="text" id="expected-hash-input" placeholder="Paste expected MD5, SHA-256, or SHA-512 checksum here to verify..." class="w-full px-4 py-2.5 text-xs font-mono rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40 text-slate-900 dark:text-white" />
+          <div id="hash-match-result" class="hidden"></div>
+        </div>
+
+        <div class="rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden bg-white dark:bg-slate-900 shadow-sm divide-y divide-slate-100 dark:divide-slate-800">
+          <!-- SHA-256 -->
+          <div class="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="truncate">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 block mb-1">SHA-256</span>
+              <span id="val-sha256" class="font-mono text-xs text-slate-800 dark:text-slate-200 break-all select-all"></span>
+            </div>
+            <button type="button" data-target="val-sha256" class="btn-copy-hash px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer shrink-0">Copy</button>
+          </div>
+
+          <!-- SHA-512 -->
+          <div class="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="truncate">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 block mb-1">SHA-512</span>
+              <span id="val-sha512" class="font-mono text-xs text-slate-800 dark:text-slate-200 break-all select-all"></span>
+            </div>
+            <button type="button" data-target="val-sha512" class="btn-copy-hash px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer shrink-0">Copy</button>
+          </div>
+
+          <!-- MD5 -->
+          <div class="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="truncate">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400 block mb-1">MD5</span>
+              <span id="val-md5" class="font-mono text-xs text-slate-800 dark:text-slate-200 break-all select-all"></span>
+            </div>
+            <button type="button" data-target="val-md5" class="btn-copy-hash px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer shrink-0">Copy</button>
+          </div>
+
+          <!-- SHA-1 -->
+          <div class="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="truncate">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400 block mb-1">SHA-1</span>
+              <span id="val-sha1" class="font-mono text-xs text-slate-800 dark:text-slate-200 break-all select-all"></span>
+            </div>
+            <button type="button" data-target="val-sha1" class="btn-copy-hash px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer shrink-0">Copy</button>
+          </div>
+
+          <!-- CRC-32 -->
+          <div class="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="truncate">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 block mb-1">CRC-32</span>
+              <span id="val-crc32" class="font-mono text-xs text-slate-800 dark:text-slate-200 break-all select-all"></span>
+            </div>
+            <button type="button" data-target="val-crc32" class="btn-copy-hash px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer shrink-0">Copy</button>
+          </div>
+        </div>
+      </div>
+    
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900 py-8 text-center text-xs text-slate-500">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p>&copy; 2026 Toolora. 100% In-Browser Private Utilities.</p>
+        <div class="flex items-center gap-4">
+          <a href="/privacy-policy.html" class="hover:underline">Privacy</a>
+          <a href="/terms.html" class="hover:underline">Terms</a>
+          <a href="/contact.html" class="hover:underline">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/file-checksum.ts"></script>
+  </body>
+</html>

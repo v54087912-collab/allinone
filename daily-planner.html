@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily Planner - Free Printable Online Daily Schedule</title>
+    <meta name="description" content="Time-block your day with hourly scheduling, top priorities, meal planning, water tracking, and printable PDF export. 100% private offline daily planner." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/daily-planner.html" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md print:hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button data-theme-toggle type="button" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+          <a href="/" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition-colors">
+            All 130 Tools
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <!-- Title & Intro -->
+      <div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 mb-2">
+            <span>📅 Time-Blocking &amp; Daily Organizer</span>
+          </div>
+          <h1 class="text-3xl font-extrabold tracking-tight">Daily Planner</h1>
+          <p id="planner-date-heading" class="text-sm font-medium text-slate-500 dark:text-slate-400 mt-1">
+            Loading date...
+          </p>
+        </div>
+
+        <!-- Date Controls & Print -->
+        <div class="flex flex-wrap items-center gap-2 print:hidden">
+          <div class="flex items-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-1 shadow-xs">
+            <button type="button" id="planner-prev-day-btn" title="Previous day" class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-300 font-bold text-sm cursor-pointer">&larr;</button>
+            <input type="date" id="planner-date-picker" class="px-2 py-1 bg-transparent text-xs font-semibold focus:outline-none" />
+            <button type="button" id="planner-next-day-btn" title="Next day" class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-300 font-bold text-sm cursor-pointer">&rarr;</button>
+          </div>
+          <button type="button" id="planner-today-btn" class="px-3 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-xs font-semibold rounded-xl transition-colors">
+            Today
+          </button>
+          <button type="button" id="planner-print-btn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors flex items-center gap-1.5">
+            🖨️ Print
+          </button>
+          <button type="button" id="planner-clear-btn" title="Reset Day" class="p-2 border border-slate-200 dark:border-slate-800 hover:bg-red-50 text-slate-400 hover:text-red-500 text-xs rounded-xl transition-colors">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Planner Grid: 2 Columns on desktop -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left Column: Hourly Schedule (7 cols) -->
+        <div class="lg:col-span-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs">
+          <h2 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-4 flex items-center gap-2">
+            ⏰ Hourly Time Blocks
+          </h2>
+          <div id="schedule-blocks-container" class="space-y-1">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Right Column: Priorities, Water, Meals, Notes (5 cols) -->
+        <div class="lg:col-span-5 space-y-6">
+          <!-- Top 3 Priorities -->
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs">
+            <h2 class="text-sm font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400 mb-3 flex items-center gap-2">
+              🎯 Top 3 Priorities Today
+            </h2>
+            <div class="space-y-2.5">
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 flex items-center justify-center text-xs font-bold shrink-0">1</span>
+                <input type="text" id="priority-1" placeholder="Most critical priority..." class="flex-1 px-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-rose-500" />
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 flex items-center justify-center text-xs font-bold shrink-0">2</span>
+                <input type="text" id="priority-2" placeholder="Second key focus..." class="flex-1 px-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-amber-500" />
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300 flex items-center justify-center text-xs font-bold shrink-0">3</span>
+                <input type="text" id="priority-3" placeholder="Third objective..." class="flex-1 px-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Water Tracker -->
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs">
+            <div class="flex items-center justify-between mb-3">
+              <h2 class="text-sm font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
+                💧 Water Tracker
+              </h2>
+              <span id="water-count-text" class="text-xs font-medium text-slate-500">0 of 8 glasses</span>
+            </div>
+            <div id="water-tracker-container" class="flex items-center justify-between gap-1.5">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- Meal Planner -->
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs">
+            <h2 class="text-sm font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-3 flex items-center gap-2">
+              🥗 Meal Planner
+            </h2>
+            <div class="space-y-2 text-xs">
+              <div>
+                <label for="meal-breakfast" class="block font-medium text-slate-400 mb-0.5">Breakfast</label>
+                <input type="text" id="meal-breakfast" placeholder="e.g. Oatmeal & berries" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
+              </div>
+              <div>
+                <label for="meal-lunch" class="block font-medium text-slate-400 mb-0.5">Lunch</label>
+                <input type="text" id="meal-lunch" placeholder="e.g. Grilled chicken salad" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
+              </div>
+              <div>
+                <label for="meal-dinner" class="block font-medium text-slate-400 mb-0.5">Dinner</label>
+                <input type="text" id="meal-dinner" placeholder="e.g. Salmon and steamed greens" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
+              </div>
+              <div>
+                <label for="meal-snacks" class="block font-medium text-slate-400 mb-0.5">Snacks / Hydration</label>
+                <input type="text" id="meal-snacks" placeholder="e.g. Almonds, green tea" class="w-full px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-emerald-500" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Notes / Brain Dump -->
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs">
+            <h2 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 flex items-center gap-2">
+              📝 Notes &amp; Brain Dump
+            </h2>
+            <textarea
+              id="planner-notes"
+              rows="4"
+              placeholder="Ideas, reminders, or reflections for today..."
+              class="w-full p-3 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500 print:hidden">
+      100% In-Browser Offline Utility &bull; Zero Server Tracking
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/daily-planner.ts"></script>
+  </body>
+</html>

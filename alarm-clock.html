@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alarm Clock - Free Online Digital Alarm Clock with Sound</title>
+    <meta name="description" content="Set multiple recurring alarms with customizable snooze, day of week repeat, loud audio chimes, and live digital clock. 100% private offline utility." />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/alarm-clock.html" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button data-theme-toggle type="button" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle theme">
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+          <a href="/" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 hover:bg-blue-100 transition-colors">
+            All 130 Tools
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <!-- Title & Live Clock Hero -->
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800 mb-3">
+          <span>⏰ Digital Clock &amp; Multi-Alarm System</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-6">Alarm Clock</h1>
+
+        <!-- Large Digital Clock Display -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-md inline-block max-w-md w-full mx-auto">
+          <div class="flex items-baseline justify-center gap-2">
+            <span id="clock-time" class="text-5xl sm:text-6xl font-black font-mono tracking-tighter text-slate-900 dark:text-white">--:--:--</span>
+            <span id="clock-ampm" class="text-xl sm:text-2xl font-bold font-mono text-amber-600 dark:text-amber-400">AM</span>
+          </div>
+          <p id="clock-date" class="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 mt-2">Loading current date...</p>
+        </div>
+      </div>
+
+      <!-- Add New Alarm Card -->
+      <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 mb-8 shadow-xs">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            + Schedule New Alarm
+          </h2>
+          <button type="button" id="test-alarm-sound-btn" class="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 cursor-pointer">
+            🔊 Test Audio
+          </button>
+        </div>
+
+        <form id="alarm-form" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label for="alarm-time-input" class="block text-xs font-semibold text-slate-500 mb-1">Alarm Time (24h or AM/PM)</label>
+              <input
+                type="time"
+                id="alarm-time-input"
+                required
+                class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500"
+              />
+            </div>
+            <div>
+              <label for="alarm-label-input" class="block text-xs font-semibold text-slate-500 mb-1">Label / Title</label>
+              <input
+                type="text"
+                id="alarm-label-input"
+                placeholder="e.g. Wake up, Meeting, Medication..."
+                class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              />
+            </div>
+            <div>
+              <label for="alarm-snooze-select" class="block text-xs font-semibold text-slate-500 mb-1">Snooze Duration</label>
+              <select
+                id="alarm-snooze-select"
+                class="w-full px-3 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              >
+                <option value="5">5 minutes</option>
+                <option value="10">10 minutes</option>
+                <option value="15">15 minutes</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Repeat Days -->
+          <div>
+            <span class="block text-xs font-semibold text-slate-500 mb-1.5">Repeat Days (Leave unchecked for every day)</span>
+            <div class="flex flex-wrap gap-2 text-xs">
+              <label class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 cursor-pointer">
+                <input type="checkbox" value="1" class="alarm-day-checkbox text-amber-600 rounded" /> Mon
+              </label>
+              <label class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 cursor-pointer">
+                <input type="checkbox" value="2" class="alarm-day-checkbox text-amber-600 rounded" /> Tue
+              </label>
+              <label class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 cursor-pointer">
+                <input type="checkbox" value="3" class="alarm-day-checkbox text-amber-600 rounded" /> Wed
+              </label>
+              <label class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 cursor-pointer">
+                <input type="checkbox" value="4" class="alarm-day-checkbox text-amber-600 rounded" /> Thu
+              </label>
+              <label class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 cursor-pointer">
+                <input type="checkbox" value="5" class="alarm-day-checkbox text-amber-600 rounded" /> Fri
+              </label>
+              <label class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 cursor-pointer">
+                <input type="checkbox" value="6" class="alarm-day-checkbox text-amber-600 rounded" /> Sat
+              </label>
+              <label class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 cursor-pointer">
+                <input type="checkbox" value="0" class="alarm-day-checkbox text-amber-600 rounded" /> Sun
+              </label>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <button
+              type="submit"
+              class="w-full py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm rounded-xl shadow-xs transition-colors"
+            >
+              Set Alarm
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Active Alarms List -->
+      <div class="mb-8">
+        <h2 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-3">Your Alarms</h2>
+        <div id="alarms-list-container" class="space-y-3">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </main>
+
+    <!-- Ringing Modal Alert -->
+    <div id="alarm-ringing-modal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4">
+      <div class="bg-white dark:bg-slate-900 border-2 border-red-500 rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl animate-bounce">
+        <div class="text-5xl mb-3">🔔</div>
+        <h2 id="alarm-ringing-time" class="text-4xl font-black font-mono text-slate-900 dark:text-white mb-1">07:00 AM</h2>
+        <p id="alarm-ringing-label" class="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-6">Wake Up & Morning Routine</p>
+        <div class="flex items-center justify-center gap-3">
+          <button type="button" id="alarm-snooze-btn" class="flex-1 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-bold rounded-2xl transition-colors cursor-pointer text-sm">
+            💤 Snooze
+          </button>
+          <button type="button" id="alarm-dismiss-btn" class="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl shadow-md transition-colors cursor-pointer text-sm">
+            Dismiss
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500">
+      100% In-Browser Offline Utility &bull; Zero Server Tracking
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/alarm-clock.ts"></script>
+  </body>
+</html>

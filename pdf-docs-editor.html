@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/logo-light.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF & Docs Editor – Free In-Browser PDF Annotator & Document Editor | Toolora</title>
+    <meta
+      name="description"
+      content="Edit, annotate, draw, sign, highlight, and manage PDF pages, and write or modify Word DOCX documents completely client-side. 100% private with zero file uploads."
+    />
+    <link rel="canonical" href="https://quickpic-studio.pages.dev/pdf-docs-editor.html" />
+
+    <!-- OpenGraph / Social Cards -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="PDF & Docs Editor – Free In-Browser Annotator & Editor" />
+    <meta
+      property="og:description"
+      content="Edit, annotate, sign, and write PDF and Word documents in your browser with 100% privacy."
+    />
+    <meta property="og:url" content="https://quickpic-studio.pages.dev/pdf-docs-editor.html" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Instant Theme Resolution (Prevents FOUC) -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('toolora_theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = saved ? saved === 'dark' : prefersDark;
+          if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="min-h-screen flex flex-col font-sans antialiased transition-colors duration-200 bg-slate-50 dark:bg-[#0b0f17] text-slate-800 dark:text-slate-200">
+    
+    <!-- Shared Header -->
+    <header class="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 dark:border-slate-800 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden xl:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <a href="/index.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Home</a>
+          <a href="/pdf-docs-viewer.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">PDF & Docs Preview</a>
+          <a href="/pdf-docs-editor.html" class="px-2.5 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold bg-blue-50/50 dark:bg-blue-950/30">PDF & Docs Editor</a>
+          <a href="/pdf-to-word.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">PDF to Word</a>
+          <a href="/word-to-pdf.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Word to PDF</a>
+          <a href="/about.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">About</a>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            100% Client-Side
+          </span>
+
+          <button
+            type="button"
+            data-theme-toggle
+            aria-label="Toggle dark mode"
+            class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg data-theme-icon-moon class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+          </button>
+
+          <button
+            type="button"
+            id="mobile-nav-toggle"
+            aria-label="Open mobile navigation menu"
+            aria-expanded="false"
+            class="xl:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-nav-menu" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-end">
+      <div class="w-80 max-w-[85vw] bg-white dark:bg-slate-900 h-full shadow-2xl flex flex-col overflow-hidden">
+        <div class="flex items-center justify-between p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 shrink-0">
+          <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+            <img src="/logo-light.jpg" alt="Toolora" class="h-8 w-auto rounded-lg object-contain shadow-xs logo-light dark:hidden" />
+            <img src="/logo-dark.jpg" alt="Toolora" class="h-8 w-auto rounded-lg object-contain shadow-xs logo-dark hidden dark:block" />
+            <span class="font-bold text-lg tracking-tight text-slate-900 dark:text-white">Toolora</span>
+          </a>
+          <button id="mobile-nav-close" aria-label="Close menu" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 text-2xl leading-none cursor-pointer">&times;</button>
+        </div>
+        <div class="p-4 space-y-2 overflow-y-auto flex-1">
+          <a href="/index.html" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 font-medium">Home</a>
+          <a href="/pdf-docs-viewer.html" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 font-medium">PDF & Docs Preview</a>
+          <a href="/pdf-docs-editor.html" class="block px-3 py-2 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 font-semibold">PDF & Docs Editor</a>
+          <a href="/pdf-to-word.html" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 font-medium">PDF to Word</a>
+          <a href="/word-to-pdf.html" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 font-medium">Word to PDF</a>
+          <a href="/about.html" class="block px-3 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 font-medium">About</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      
+      <!-- Hero / Header -->
+      <section class="text-center space-y-3">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+          Complete Document Modification Suite
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          PDF & Docs Editor Tool
+        </h1>
+        <p class="text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+          Draw, annotate, sign, highlight, add text, and rearrange PDF pages &bull; Write and format Word DOCX documents with instant in-browser export.
+        </p>
+      </section>
+
+      <!-- Mode Selector Tabs -->
+      <div class="flex items-center justify-center border-b border-slate-200 dark:border-slate-800">
+        <div class="flex gap-4">
+          <button
+            type="button"
+            id="editor-tab-pdf"
+            class="px-6 py-3 font-bold text-sm border-b-2 border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400 cursor-pointer transition-colors flex items-center gap-2"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+            <span>Visual PDF Annotator</span>
+          </button>
+
+          <button
+            type="button"
+            id="editor-tab-doc"
+            class="px-6 py-3 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 cursor-pointer transition-colors flex items-center gap-2"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            <span>Word &amp; Rich Doc Editor</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- SECTION 1: VISUAL PDF ANNOTATOR -->
+      <!-- ========================================== -->
+      <section id="editor-pdf-section" class="space-y-4">
+        
+        <!-- PDF Dropzone -->
+        <div id="editor-pdf-dropzone" class="max-w-3xl mx-auto border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 rounded-3xl p-8 sm:p-12 text-center transition-all bg-white dark:bg-slate-900/60 cursor-pointer shadow-sm hover:shadow-md group">
+          <input type="file" id="editor-pdf-file-input" accept=".pdf" class="hidden" />
+          
+          <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xs">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+          </div>
+
+          <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-1">
+            Drop your PDF to annotate, sign, or manage pages
+          </h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">
+            Supports PDF files of any page count &bull; Freehand pen, highlighters, digital signature, text notes, and shapes
+          </p>
+
+          <div class="flex flex-wrap items-center justify-center gap-3">
+            <button
+              type="button"
+              class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm shadow-sm transition-colors cursor-pointer"
+            >
+              Browse PDF
+            </button>
+            <button
+              type="button"
+              id="editor-new-blank-pdf"
+              class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-sm transition-colors cursor-pointer"
+            >
+              Create Blank PDF
+            </button>
+            <button
+              type="button"
+              id="editor-demo-pdf-btn"
+              class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-sm transition-colors cursor-pointer"
+            >
+              Load Demo Contract
+            </button>
+          </div>
+        </div>
+
+        <!-- PDF Workspace -->
+        <div id="editor-pdf-workspace" class="hidden space-y-4">
+          
+          <!-- PDF Editor Toolbar -->
+          <div class="sticky top-18 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200/80 dark:border-slate-800 rounded-2xl p-2.5 shadow-md flex flex-wrap items-center justify-between gap-3">
+            
+            <!-- Tool Group: Pen, Highlighter, Text, Shapes, Signature -->
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <button
+                type="button"
+                data-editor-tool="select"
+                class="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                title="Pan / Select"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"></path></svg>
+              </button>
+
+              <button
+                type="button"
+                data-editor-tool="pen"
+                class="p-2 rounded-xl bg-blue-600 text-white font-semibold shadow-xs cursor-pointer"
+                title="Freehand Pen"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+              </button>
+
+              <button
+                type="button"
+                data-editor-tool="highlighter"
+                class="p-2 rounded-xl bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer"
+                title="Translucent Highlighter"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path></svg>
+              </button>
+
+              <button
+                type="button"
+                data-editor-tool="text"
+                class="p-2 rounded-xl bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer"
+                title="Type Text Note"
+              >
+                <span class="font-bold text-sm leading-none px-0.5">T</span>
+              </button>
+
+              <button
+                type="button"
+                data-editor-tool="rect"
+                class="p-2 rounded-xl bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer"
+                title="Draw Rectangle"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2"></rect></svg>
+              </button>
+
+              <button
+                type="button"
+                data-editor-tool="circle"
+                class="p-2 rounded-xl bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer"
+                title="Draw Ellipse"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"></circle></svg>
+              </button>
+
+              <button
+                type="button"
+                data-editor-tool="whiteout"
+                class="p-2 rounded-xl bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer"
+                title="Whiteout Redaction"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+              </button>
+
+              <button
+                type="button"
+                id="editor-open-sig-modal"
+                class="px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-800 text-xs font-bold flex items-center gap-1 cursor-pointer"
+                title="Add Digital Signature"
+              >
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                <span>Sign</span>
+              </button>
+
+              <div class="h-6 w-px bg-slate-200 dark:border-slate-800 mx-1"></div>
+
+              <!-- Color & Stroke -->
+              <input
+                type="color"
+                id="editor-color-picker"
+                value="#ef4444"
+                class="w-7 h-7 rounded-lg border border-slate-300 dark:border-slate-700 cursor-pointer p-0.5 bg-transparent"
+                title="Color Picker"
+              />
+
+              <div class="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+                <input
+                  type="range"
+                  id="editor-size-slider"
+                  min="1"
+                  max="20"
+                  value="3"
+                  class="w-16 accent-blue-600 cursor-pointer"
+                  title="Stroke Width"
+                />
+                <span id="editor-size-display" class="w-6 text-center font-bold">3px</span>
+              </div>
+            </div>
+
+            <!-- Page Controls & Management -->
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl">
+                <button
+                  type="button"
+                  id="editor-prev-page"
+                  class="p-1 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 disabled:opacity-40 transition-colors cursor-pointer"
+                  title="Previous Page"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+
+                <div class="text-xs font-semibold px-1 text-slate-700 dark:text-slate-300 flex items-center gap-1">
+                  <span>Page</span>
+                  <input
+                    type="text"
+                    id="editor-page-input"
+                    value="1"
+                    class="w-7 text-center bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded px-1 py-0.5 text-xs font-bold"
+                  />
+                  <span>of <span id="editor-page-total">1</span></span>
+                </div>
+
+                <button
+                  type="button"
+                  id="editor-next-page"
+                  class="p-1 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 disabled:opacity-40 transition-colors cursor-pointer"
+                  title="Next Page"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+              </div>
+
+              <button
+                type="button"
+                id="editor-rotate-page"
+                class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                title="Rotate Current Page 90°"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+              </button>
+
+              <button
+                type="button"
+                id="editor-duplicate-page"
+                class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                title="Duplicate Page"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
+              </button>
+
+              <button
+                type="button"
+                id="editor-add-blank-page"
+                class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                title="Insert Blank Page"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              </button>
+
+              <button
+                type="button"
+                id="editor-delete-page"
+                class="p-2 rounded-xl text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 disabled:opacity-30 transition-colors cursor-pointer"
+                title="Delete Current Page"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+              </button>
+
+              <div class="h-6 w-px bg-slate-200 dark:border-slate-800 mx-1"></div>
+
+              <!-- Undo / Clear -->
+              <button
+                type="button"
+                id="editor-undo-btn"
+                class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                title="Undo annotation"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>
+              </button>
+
+              <button
+                type="button"
+                id="editor-clear-page-btn"
+                class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+                title="Clear all page annotations"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+              </button>
+            </div>
+
+            <!-- Export Buttons -->
+            <div class="flex items-center gap-2">
+              <button
+                type="button"
+                id="editor-preview-viewer-btn"
+                class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-colors cursor-pointer"
+                title="Open in Document Preview"
+              >
+                Preview Mode
+              </button>
+
+              <button
+                type="button"
+                id="editor-export-pdf-btn"
+                class="px-4 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm transition-colors cursor-pointer flex items-center gap-1.5"
+              >
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                <span>Save &amp; Export PDF</span>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Interactive Two-Layer Canvas Stage -->
+          <div class="bg-slate-200/60 dark:bg-slate-950/80 rounded-2xl p-4 sm:p-8 min-h-[75vh] flex flex-col items-center justify-start overflow-auto border border-slate-200 dark:border-slate-800 shadow-inner">
+            <div id="editor-canvas-wrapper" class="relative shadow-2xl rounded-sm max-w-full">
+              <!-- Base Canvas (PDF Page Content) -->
+              <canvas id="editor-pdf-base-canvas" class="block bg-white max-w-full"></canvas>
+              <!-- Drawing Canvas (Interactive Annotations Overlay) -->
+              <canvas id="editor-pdf-draw-canvas" class="absolute top-0 left-0 block cursor-crosshair z-10 max-w-full"></canvas>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION 2: WORD & RICH DOC EDITOR -->
+      <!-- ========================================== -->
+      <section id="editor-doc-section" class="hidden space-y-4">
+        
+        <!-- Doc Dropzone -->
+        <div id="editor-doc-dropzone" class="max-w-3xl mx-auto border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 rounded-3xl p-6 sm:p-8 text-center transition-all bg-white dark:bg-slate-900/60 cursor-pointer shadow-sm hover:shadow-md group">
+          <input type="file" id="editor-doc-file-input" accept=".docx,.txt,.md,.rtf,.html" class="hidden" />
+          
+          <div class="w-12 h-12 mx-auto mb-3 rounded-2xl bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xs">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+          </div>
+
+          <p class="text-sm font-bold text-slate-900 dark:text-white mb-1">
+            Open existing Word (.docx), Markdown, or Text file
+          </p>
+          <div class="flex items-center justify-center gap-2 mt-3">
+            <button
+              type="button"
+              class="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors cursor-pointer"
+            >
+              Upload Doc
+            </button>
+            <button
+              type="button"
+              id="editor-doc-new-blank"
+              class="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-colors cursor-pointer"
+            >
+              New Blank
+            </button>
+            <button
+              type="button"
+              id="editor-doc-demo-btn"
+              class="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-colors cursor-pointer"
+            >
+              Load Demo Text
+            </button>
+          </div>
+        </div>
+
+        <!-- Rich Text Toolbar -->
+        <div class="sticky top-18 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200/80 dark:border-slate-800 rounded-2xl p-2.5 shadow-md flex flex-wrap items-center justify-between gap-3">
+          
+          <div class="flex items-center gap-1 flex-wrap">
+            <!-- Basic formatting -->
+            <button type="button" data-doc-cmd="bold" class="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold text-xs" title="Bold (Ctrl+B)">B</button>
+            <button type="button" data-doc-cmd="italic" class="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 italic font-serif text-xs" title="Italic (Ctrl+I)">I</button>
+            <button type="button" data-doc-cmd="underline" class="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 underline text-xs" title="Underline (Ctrl+U)">U</button>
+            <button type="button" data-doc-cmd="strikeThrough" class="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 line-through text-xs" title="Strikethrough">S</button>
+
+            <div class="h-6 w-px bg-slate-200 dark:border-slate-800 mx-1"></div>
+
+            <!-- Headings -->
+            <button type="button" data-doc-cmd="formatBlock" data-doc-val="h1" class="px-2 py-1 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold text-xs" title="Heading 1">H1</button>
+            <button type="button" data-doc-cmd="formatBlock" data-doc-val="h2" class="px-2 py-1 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold text-xs" title="Heading 2">H2</button>
+            <button type="button" data-doc-cmd="formatBlock" data-doc-val="h3" class="px-2 py-1 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold text-xs" title="Heading 3">H3</button>
+            <button type="button" data-doc-cmd="formatBlock" data-doc-val="p" class="px-2 py-1 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium text-xs" title="Normal Paragraph">¶</button>
+
+            <div class="h-6 w-px bg-slate-200 dark:border-slate-800 mx-1"></div>
+
+            <!-- Lists -->
+            <button type="button" data-doc-cmd="insertUnorderedList" class="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs" title="Bullet List">• List</button>
+            <button type="button" data-doc-cmd="insertOrderedList" class="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs" title="Numbered List">1. List</button>
+            <button type="button" data-doc-cmd="formatBlock" data-doc-val="blockquote" class="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs" title="Quote">“ Quote</button>
+
+            <div class="h-6 w-px bg-slate-200 dark:border-slate-800 mx-1"></div>
+
+            <!-- Alignment -->
+            <button type="button" data-doc-cmd="justifyLeft" class="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs" title="Align Left">Left</button>
+            <button type="button" data-doc-cmd="justifyCenter" class="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs" title="Align Center">Center</button>
+            <button type="button" data-doc-cmd="justifyRight" class="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs" title="Align Right">Right</button>
+
+            <div class="h-6 w-px bg-slate-200 dark:border-slate-800 mx-1"></div>
+
+            <button type="button" data-doc-cmd="undo" class="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs" title="Undo">↩ Undo</button>
+          </div>
+
+          <!-- Document Export Actions -->
+          <div class="flex items-center gap-2">
+            <span id="editor-doc-word-count" class="text-xs font-semibold text-slate-500">0 words</span>
+            <span class="text-slate-300 dark:text-slate-700">&bull;</span>
+            <span id="editor-doc-char-count" class="text-xs font-semibold text-slate-500">0 chars</span>
+
+            <button
+              type="button"
+              id="editor-export-docx-btn"
+              class="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm transition-colors cursor-pointer flex items-center gap-1.5"
+            >
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+              <span>Download .DOCX</span>
+            </button>
+
+            <button
+              type="button"
+              id="editor-export-doc-pdf-btn"
+              class="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs shadow-sm transition-colors cursor-pointer flex items-center gap-1.5"
+            >
+              <span>Export PDF</span>
+            </button>
+
+            <button
+              type="button"
+              id="editor-export-txt-btn"
+              class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              title="Download Plain Text (.txt)"
+            >
+              .TXT
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Paper-like Document Canvas -->
+        <div class="bg-slate-200/60 dark:bg-slate-950/80 rounded-2xl p-4 sm:p-8 min-h-[75vh] flex justify-center border border-slate-200 dark:border-slate-800 shadow-inner">
+          <div class="w-full max-w-3xl bg-white dark:bg-slate-900 p-8 sm:p-14 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 min-h-[700px] flex flex-col">
+            <div
+              id="editor-doc-content"
+              contenteditable="true"
+              class="prose dark:prose-invert max-w-none text-slate-800 dark:text-slate-200 focus:outline-none flex-1 leading-relaxed"
+              placeholder="Type your document content here..."
+            >
+              <h2>Project Proposal &amp; Document Summary</h2>
+              <p>Type, format, and structure your document. All edits are processed in real time and can be exported directly into Microsoft Word (.docx), PDF, or plain text.</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Signature Modal -->
+      <div id="editor-sig-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">Draw Digital Signature</h3>
+            <button type="button" id="editor-close-sig-modal" class="text-slate-500 hover:text-slate-700 text-xl leading-none">&times;</button>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Draw your signature with your mouse, trackpad, or finger below:</p>
+          
+          <div class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl overflow-hidden bg-white">
+            <canvas id="editor-sig-canvas" width="400" height="160" class="w-full h-40 cursor-crosshair block"></canvas>
+          </div>
+
+          <div class="flex items-center justify-between pt-2">
+            <button
+              type="button"
+              id="editor-clear-sig-btn"
+              class="px-4 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-semibold cursor-pointer"
+            >
+              Clear
+            </button>
+            <button
+              type="button"
+              id="editor-apply-sig-btn"
+              class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm cursor-pointer"
+            >
+              Apply Signature
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Educational FAQ -->
+      <article class="max-w-5xl mx-auto py-8 space-y-6 text-slate-700 dark:text-slate-300">
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white">Why Edit Documents with Toolora?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs leading-relaxed">
+          <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h3 class="font-bold text-sm text-slate-900 dark:text-white">🔒 Zero File Uploads</h3>
+            <p>Every stroke, highlight, digital signature, and page reordering happens strictly in memory. Confidential documents are never transmitted across the network.</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h3 class="font-bold text-sm text-slate-900 dark:text-white">📑 Dual PDF &amp; DOCX Support</h3>
+            <p>Annotate scanned forms and contracts as PDFs, or use the rich text editor to write and generate Microsoft Word OpenXML (.docx) files from scratch.</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h3 class="font-bold text-sm text-slate-900 dark:text-white">⚡ Instant High-Res Export</h3>
+            <p>Download your annotated PDFs with crisp vector precision or standard .docx files compatible with Microsoft Office, LibreOffice, and Google Docs.</p>
+          </div>
+        </div>
+      </article>
+
+    </main>
+
+    <!-- Shared Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 text-center text-xs text-slate-500">
+      <div class="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-2 font-bold text-slate-800 dark:text-slate-200">
+          <img src="/logo-light.jpg" alt="Toolora" class="w-6 h-6 rounded-lg object-contain shadow-xs logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="w-6 h-6 rounded-lg object-contain shadow-xs logo-dark hidden dark:block" />
+          <span>Toolora &bull; 100% In-Browser Private Utilities</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a>
+          <a href="/terms.html" class="hover:underline">Terms</a>
+          <a href="/contact.html" class="hover:underline">Contact</a>
+          <a href="https://t.me/+gQawrH0MFs00M2Y1" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 hover:underline font-semibold">Report a Bug / Feedback</a>
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+    <script type="module" src="/src/tools/pdf-docs-editor.ts"></script>
+  </body>
+</html>
