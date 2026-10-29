@@ -18,13 +18,13 @@ def build_page(title, meta_desc, canonical, tool_id, tool_name, tool_subtitle, s
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content="{meta_desc}" />
-    <link rel="canonical" href="https://quickpic-studio.pages.dev/{canonical}" />
+    <link rel="canonical" href="https://toolora0.pages.dev/{canonical}" />
 
     <!-- OpenGraph / Social Cards -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="{title}" />
     <meta property="og:description" content="{meta_desc}" />
-    <meta property="og:url" content="https://quickpic-studio.pages.dev/{canonical}" />
+    <meta property="og:url" content="https://toolora0.pages.dev/{canonical}" />
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Instant Theme Resolution (Prevents FOUC) -->

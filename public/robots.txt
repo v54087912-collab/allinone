@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://quickpic-studio.pages.dev/sitemap.xml
+# Disallow build and private assets from index clutter
+Disallow: /dist/
+Disallow: /node_modules/
+
+# Canonical Sitemap URL for Google Search Console
+Sitemap: https://toolora0.pages.dev/sitemap.xml

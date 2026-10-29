@@ -3,13 +3,37 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// Shared UI behaviors: Theme, Mobile Nav, Cookie Banner, Toasts, Tool Search
+// Shared UI behaviors: Theme, Mobile Nav, Cookie Banner, Toasts, Tool Search, SEO
 export function initSiteShell(): void {
   initTheme();
   initMobileNav();
   initCookieBanner();
   highlightActiveNav();
   initToolSearch();
+  syncSeoMetadata();
+}
+
+/**
+ * Ensures canonical & OpenGraph URLs match active host in production (e.g., custom domains or pages.dev)
+ */
+function syncSeoMetadata(): void {
+  try {
+    if (typeof window === 'undefined' || !window.location) return;
+    const currentUrl = window.location.origin + window.location.pathname;
+    const host = window.location.hostname;
+    if (host && host !== 'localhost' && host !== '127.0.0.1') {
+      const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+      if (canonical) {
+        canonical.href = currentUrl;
+      }
+      const ogUrl = document.querySelector<HTMLMetaElement>('meta[property="og:url"]');
+      if (ogUrl) {
+        ogUrl.content = currentUrl;
+      }
+    }
+  } catch (e) {
+    // Non-critical SEO sync
+  }
 }
 
 /**
