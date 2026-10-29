@@ -1,13 +1,42 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import { defineConfig } from 'vite';
+import { defineConfig, Plugin } from 'vite';
+
+/**
+ * Cloudflare Pages has a strict 25 MiB per-file limit.
+ * onnxruntime-web emits unneeded 26-28MB WASM binaries during bundling.
+ * @imgly/background-removal fetches its WASM & model weights dynamically via CDN / publicPath,
+ * so pruning these bundled WASM files prevents Cloudflare deployment rejections.
+ */
+function cloudflarePagesLimitPlugin(): Plugin {
+  return {
+    name: 'cloudflare-pages-limit-plugin',
+    generateBundle(_options, bundle) {
+      for (const fileName of Object.keys(bundle)) {
+        const item = bundle[fileName];
+        if (item.type === 'asset' && fileName.endsWith('.wasm')) {
+          const byteLength =
+            typeof item.source === 'string'
+              ? Buffer.byteLength(item.source)
+              : item.source?.byteLength || item.source?.length || 0;
+          if (byteLength > 20 * 1024 * 1024) {
+            console.log(
+              `[Cloudflare Limit] Pruning oversized WASM asset (${(byteLength / (1024 * 1024)).toFixed(1)} MiB): ${fileName}`
+            );
+            delete bundle[fileName];
+          }
+        }
+      }
+    },
+  };
+}
 
 export default defineConfig(() => {
   const rootDir = import.meta.dirname;
 
   return {
-    plugins: [react(), tailwindcss()],
+    plugins: [react(), tailwindcss(), cloudflarePagesLimitPlugin()],
     resolve: {
       alias: {
         '@': path.resolve(rootDir, '.'),

@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node -e \"const fs=require('fs'),path=require('path');const dir=path.join(process.cwd(),'dist','assets');if(fs.existsSync(dir)){fs.readdirSync(dir).forEach(f=>{const p=path.join(dir,f);if(fs.statSync(p).size>20*1024*1024){console.log('Removed oversized file:',f);fs.unlinkSync(p);}});}\"",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
