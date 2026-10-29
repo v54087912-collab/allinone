@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/jpeg" href="/logo-light.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation – Toolora In-Browser Utilities Suite</title>
+    <meta
+      name="description"
+      content="Comprehensive documentation, user guides, architectural overview, and privacy guarantees for Toolora's 200+ in-browser image, document, and developer utilities."
+    />
+    <link rel="canonical" href="https://toolora0.pages.dev/docs.html" />
+
+    <!-- OpenGraph / Social Cards -->
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="Toolora" />
+    <meta property="og:title" content="Toolora Documentation & User Guides" />
+    <meta
+      property="og:description"
+      content="Comprehensive guides and architecture documentation for Toolora's 200+ client-side private tools."
+    />
+    <meta property="og:url" content="https://toolora0.pages.dev/docs.html" />
+    <meta property="og:image" content="https://toolora0.pages.dev/banner.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Toolora Documentation & User Guides" />
+    <meta name="twitter:description" content="Comprehensive guides and architecture documentation for Toolora's 200+ client-side private tools." />
+    <meta name="twitter:image" content="https://toolora0.pages.dev/banner.jpg" />
+
+    <!-- Schema.org TechArticle JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Toolora Documentation & Privacy Architecture Guide",
+      "description": "Comprehensive documentation for 200+ in-browser utilities across PDF editing, AI background removal, image manipulation, and developer utilities.",
+      "url": "https://toolora0.pages.dev/docs.html",
+      "author": {
+        "@type": "Organization",
+        "name": "Toolora"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Toolora",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://toolora0.pages.dev/logo-light.jpg"
+        }
+      }
+    }
+    </script>
+
+    <!-- Instant Theme Resolution (Prevents FOUC) -->
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('toolora_theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = saved ? saved === 'dark' : prefersDark;
+          if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="stylesheet" href="/src/index.css" />
+  </head>
+  <body class="min-h-screen flex flex-col font-sans antialiased transition-colors duration-200 bg-slate-50 dark:bg-[#0b0f17] text-slate-800 dark:text-slate-200">
+    
+    <!-- Shared Header -->
+    <header class="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 dark:border-slate-800 dark:bg-slate-900/80 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="/index.html" class="flex items-center gap-2.5 group" title="Toolora Home" aria-label="Toolora Home">
+          <img src="/logo-light.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="h-9 w-auto rounded-xl object-contain shadow-xs group-hover:scale-105 transition-transform logo-dark hidden dark:block" />
+          <span class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Toolora</span>
+        </a>
+
+        <!-- Desktop Navigation -->
+        <nav class="hidden xl:flex items-center gap-1 text-sm font-medium text-slate-600 dark:text-slate-300">
+          <a href="/index.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Home</a>
+          <a href="/pdf-docs-viewer.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">PDF &amp; Docs Preview</a>
+          <a href="/pdf-docs-editor.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">PDF &amp; Docs Editor</a>
+          <a href="/multicrop.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">MultiCrop</a>
+          <a href="/remove-background.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Remove BG</a>
+          <a href="/docs.html" class="px-2.5 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold bg-blue-50/50 dark:bg-blue-950/30">Docs</a>
+          <a href="/about.html" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">About</a>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            v1.0 &bull; 100% In-Browser
+          </span>
+
+          <button
+            type="button"
+            data-theme-toggle
+            aria-label="Toggle dark mode"
+            class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            <svg data-theme-icon-sun class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+            <svg data-theme-icon-moon class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+          </button>
+
+          <button
+            type="button"
+            id="mobile-nav-toggle"
+            aria-label="Open mobile navigation menu"
+            aria-expanded="false"
+            class="xl:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Nav Drawer -->
+    <div id="mobile-nav-menu" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex justify-end">
+      <div class="w-full max-w-xs bg-white dark:bg-slate-900 h-full p-6 shadow-2xl flex flex-col justify-between overflow-y-auto">
+        <div class="space-y-6">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
+            <div class="flex items-center gap-2">
+              <img src="/logo-light.jpg" alt="Toolora" class="w-7 h-7 rounded-lg logo-light dark:hidden" />
+              <img src="/logo-dark.jpg" alt="Toolora" class="w-7 h-7 rounded-lg logo-dark hidden dark:block" />
+              <span class="font-bold text-lg text-slate-900 dark:text-white">Toolora</span>
+            </div>
+            <button type="button" id="mobile-nav-close" class="p-2 text-slate-500 hover:text-slate-900 dark:hover:text-white">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+          </div>
+          <div class="flex flex-col space-y-2 text-sm font-semibold">
+            <a href="/index.html" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Home</a>
+            <a href="/docs.html" class="p-2 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400">Documentation</a>
+            <a href="/pdf-docs-viewer.html" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF &amp; Docs Preview</a>
+            <a href="/pdf-docs-editor.html" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">PDF &amp; Docs Editor</a>
+            <a href="/multicrop.html" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">MultiCrop</a>
+            <a href="/remove-background.html" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Remove BG</a>
+            <a href="/compress-image.html" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Compress Image</a>
+            <a href="/about.html" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">About &amp; Developer</a>
+            <a href="/contact.html" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">Contact &amp; Support</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Docs Layout -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full flex-grow">
+      <div class="flex flex-col lg:flex-row gap-10">
+        
+        <!-- Left Sidebar (Table of Contents & Quick Jump) -->
+        <aside class="lg:w-72 shrink-0">
+          <div class="sticky top-24 space-y-6">
+            
+            <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Documentation</h3>
+              <nav class="space-y-1 text-sm font-medium">
+                <a href="#overview" class="block px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-950/30">1. Overview &amp; Philosophy</a>
+                <a href="#privacy-architecture" class="block px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">2. Privacy Architecture</a>
+                <a href="#pdf-docs-tools" class="block px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">3. PDF &amp; Document Tools</a>
+                <a href="#image-studio" class="block px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">4. Image &amp; Media Studio</a>
+                <a href="#developer-utilities" class="block px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">5. Developer &amp; Code Tools</a>
+                <a href="#text-calculators" class="block px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">6. Text &amp; Calculators</a>
+                <a href="#faq" class="block px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">7. FAQ &amp; Compatibility</a>
+                <a href="#developer-support" class="block px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">8. Developer &amp; Community</a>
+              </nav>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/20 border border-blue-200 dark:border-blue-900/40 text-xs space-y-2">
+              <div class="font-bold text-blue-900 dark:text-blue-300 flex items-center gap-1.5">
+                <span>💬</span> Need Custom Tool?
+              </div>
+              <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                Reach out to the lead developer on Telegram directly for suggestions or collaboration.
+              </p>
+              <a href="https://t.me/R3V_X" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 font-bold hover:underline">
+                Chat with @R3V_X &rarr;
+              </a>
+            </div>
+
+          </div>
+        </aside>
+
+        <!-- Right Main Documentation Article -->
+        <article class="flex-grow max-w-4xl space-y-12">
+          
+          <!-- Section 1: Overview -->
+          <section id="overview" class="space-y-4 pt-2">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300">
+              User Guide &bull; Toolora v1.0
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+              Toolora Documentation
+            </h1>
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+              Welcome to the official documentation for <strong>Toolora</strong> — a suite of over <strong>200 free, high-performance in-browser tools</strong> engineered for creators, students, developers, and professionals.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+              <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+                <span class="text-2xl">🔒</span>
+                <h4 class="font-bold text-sm text-slate-900 dark:text-white">100% Client-Side</h4>
+                <p class="text-xs text-slate-500">Zero file uploads to external servers. Your files stay strictly in device memory.</p>
+              </div>
+              <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+                <span class="text-2xl">⚡</span>
+                <h4 class="font-bold text-sm text-slate-900 dark:text-white">Hardware Accelerated</h4>
+                <p class="text-xs text-slate-500">Powered by WebAssembly, WebGPU, and Canvas for instant near-native execution.</p>
+              </div>
+              <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
+                <span class="text-2xl">♾️</span>
+                <h4 class="font-bold text-sm text-slate-900 dark:text-white">Unlimited &amp; Free</h4>
+                <p class="text-xs text-slate-500">No subscriptions, no artificial size paywalls, and no forced account creation.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 2: Privacy Architecture -->
+          <section id="privacy-architecture" class="space-y-4 border-t border-slate-200 dark:border-slate-800 pt-8">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <span>🛡️</span> 2. Privacy &amp; Security Architecture
+            </h2>
+            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Traditional online utilities upload your sensitive contracts, photos, and financial documents to remote cloud storage for server-side processing. Toolora works differently:
+            </p>
+
+            <div class="p-5 rounded-2xl bg-slate-900 text-slate-200 text-xs font-mono space-y-3 shadow-inner">
+              <div class="text-emerald-400 font-bold">// Toolora Zero-Knowledge Flow:</div>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-1 bg-slate-800 rounded">User Selects File</span>
+                <span>&rarr;</span>
+                <span class="px-2 py-1 bg-blue-900/60 text-blue-300 rounded">Browser HTML5 File API</span>
+                <span>&rarr;</span>
+                <span class="px-2 py-1 bg-purple-900/60 text-purple-300 rounded">Local WebWorker / WASM Core</span>
+                <span>&rarr;</span>
+                <span class="px-2 py-1 bg-emerald-900/60 text-emerald-300 rounded">Direct Browser Download</span>
+              </div>
+              <div class="text-slate-400 text-[11px] pt-1">
+                Zero network egress: Inspect Network tab in DevTools &bull; 0 KB payload transmitted.
+              </div>
+            </div>
+
+            <ul class="space-y-2 text-xs text-slate-600 dark:text-slate-400 list-disc list-inside leading-relaxed">
+              <li><strong>Offline Availability</strong>: Once loaded, tools operate even if your internet connection disconnects.</li>
+              <li><strong>GDPR / HIPAA Compliant by Design</strong>: Because personal data is never transmitted, compliance risks are naturally eliminated.</li>
+              <li><strong>Automatic Memory Cleanup</strong>: Image and document buffers are freed from memory immediately upon completion.</li>
+            </ul>
+          </section>
+
+          <!-- Section 3: PDF & Document Tools -->
+          <section id="pdf-docs-tools" class="space-y-4 border-t border-slate-200 dark:border-slate-800 pt-8">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <span>📄</span> 3. PDF &amp; Document Tools Guide
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              
+              <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <h3 class="font-bold text-base text-slate-900 dark:text-white">PDF &amp; Docs Preview</h3>
+                  <a href="/pdf-docs-viewer.html" class="text-xs text-blue-600 dark:text-blue-400 font-bold hover:underline">Open Tool &rarr;</a>
+                </div>
+                <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Fast in-browser viewer for PDF, Microsoft Word (.docx), Markdown (.md), and Text files. Features interactive keyword search, thumbnail drawer, 90&deg; page rotation, and reading metrics.
+                </p>
+                <div class="text-[11px] font-semibold text-slate-500">Formats: .pdf, .docx, .md, .txt, .json</div>
+              </div>
+
+              <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <h3 class="font-bold text-base text-slate-900 dark:text-white">PDF &amp; Docs Editor</h3>
+                  <a href="/pdf-docs-editor.html" class="text-xs text-blue-600 dark:text-blue-400 font-bold hover:underline">Open Tool &rarr;</a>
+                </div>
+                <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Dual-mode editor featuring a vector PDF annotator (freehand drawing, highlighters, digital signatures pad, shape overlays, page management) and a rich WYSIWYG document editor.
+                </p>
+                <div class="text-[11px] font-semibold text-slate-500">Export: Vector PDF, Word (.docx), TXT</div>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- Section 4: Image Studio -->
+          <section id="image-studio" class="space-y-4 border-t border-slate-200 dark:border-slate-800 pt-8">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <span>🖼️</span> 4. Image Studio &amp; AI Background Removal
+            </h2>
+            <div class="space-y-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              <p>
+                Toolora provides a suite of visual image processing engines designed for eCommerce sellers, photographers, and graphic designers:
+              </p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                  <strong class="text-slate-900 dark:text-white">MultiCrop Studio</strong>: Crop multiple sections or products from single or bulk photos with uniform aspect ratios.
+                </div>
+                <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                  <strong class="text-slate-900 dark:text-white">AI Background Remover</strong>: Neural foreground segmentation running via client-side WebAssembly with zero data transmission.
+                </div>
+                <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                  <strong class="text-slate-900 dark:text-white">Batch Image Compressor</strong>: Compress images under 50KB, 100KB, or 200KB for government portals and passport applications.
+                </div>
+                <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                  <strong class="text-slate-900 dark:text-white">Format Converter</strong>: Seamlessly convert between WEBP, PNG, JPG, AVIF, BMP, and SVG formats.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 5: Developer Utilities -->
+          <section id="developer-utilities" class="space-y-4 border-t border-slate-200 dark:border-slate-800 pt-8">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <span>💻</span> 5. Developer &amp; Code Tools
+            </h2>
+            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Engineered for web developers and DevOps engineers requiring rapid, private encoding and formatting:
+            </p>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs text-center font-medium">
+              <a href="/json-formatter.html" class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500">JSON Formatter</a>
+              <a href="/sql-formatter.html" class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500">SQL Formatter</a>
+              <a href="/jwt-decoder.html" class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500">JWT Decoder</a>
+              <a href="/base64-converter.html" class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500">Base64 Converter</a>
+              <a href="/uuid-generator.html" class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500">UUID Generator</a>
+              <a href="/hash-generator.html" class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500">SHA/MD5 Hasher</a>
+              <a href="/regex-tester.html" class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500">Regex Tester</a>
+              <a href="/code-minifier.html" class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500">Code Minifier</a>
+            </div>
+          </section>
+
+          <!-- Section 6: Text & Calculators -->
+          <section id="text-calculators" class="space-y-4 border-t border-slate-200 dark:border-slate-800 pt-8">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <span>🧮</span> 6. Text Manipulation &amp; Calculators
+            </h2>
+            <div class="space-y-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              <p>
+                From counting characters and calculating reading readability scores to determining loan amortization schedules and date differences:
+              </p>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+                <a href="/word-counter.html" class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:text-blue-600 font-medium">📝 Word &amp; Char Counter</a>
+                <a href="/case-converter.html" class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:text-blue-600 font-medium">🔤 Case Converter</a>
+                <a href="/text-diff.html" class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:text-blue-600 font-medium">🔍 Text Diff Checker</a>
+                <a href="/discount-calculator.html" class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:text-blue-600 font-medium">🏷️ Discount Calculator</a>
+                <a href="/gst-calculator.html" class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:text-blue-600 font-medium">📊 GST Calculator</a>
+                <a href="/emi-calculator.html" class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:text-blue-600 font-medium">💳 Loan EMI Calculator</a>
+              </div>
+            </div>
+          </section>
+
+          <!-- Section 7: FAQ -->
+          <section id="faq" class="space-y-4 border-t border-slate-200 dark:border-slate-800 pt-8">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <span>❓</span> 7. Frequently Asked Questions
+            </h2>
+            <div class="space-y-3 text-xs">
+              <details class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 group">
+                <summary class="font-bold text-sm text-slate-900 dark:text-white cursor-pointer select-none">
+                  Which browsers are supported?
+                </summary>
+                <p class="mt-2 text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Toolora supports all modern Evergreen browsers including Google Chrome, Microsoft Edge, Mozilla Firefox, Apple Safari, Opera, and Brave on Desktop, Android, and iOS.
+                </p>
+              </details>
+
+              <details class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 group">
+                <summary class="font-bold text-sm text-slate-900 dark:text-white cursor-pointer select-none">
+                  Is there any file size limit?
+                </summary>
+                <p class="mt-2 text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Because processing occurs in your device's RAM, limits depend solely on your computer or phone's memory. Most desktop browsers comfortably process 50MB-100MB documents without lag.
+                </p>
+              </details>
+
+              <details class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 group">
+                <summary class="font-bold text-sm text-slate-900 dark:text-white cursor-pointer select-none">
+                  Can I use Toolora without an internet connection?
+                </summary>
+                <p class="mt-2 text-slate-600 dark:text-slate-400 leading-relaxed">
+                  Yes! Once a tool is opened in your browser tab, all JavaScript and WebAssembly modules are cached locally. You can disconnect your network and continue using the tool indefinitely.
+                </p>
+              </details>
+            </div>
+          </section>
+
+          <!-- Section 8: Developer & Community -->
+          <section id="developer-support" class="space-y-6 border-t border-slate-200 dark:border-slate-800 pt-8">
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <span>👨‍💻</span> 8. Developer &amp; Community Channels
+            </h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+                <div class="font-bold text-sm text-slate-900 dark:text-white">Direct Developer Contact</div>
+                <div class="space-y-1.5 text-xs">
+                  <div><strong>Developer Chat:</strong> <a href="https://t.me/R3V_X" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">@R3V_X (Telegram)</a></div>
+                  <div><strong>Community Channel:</strong> <a href="https://t.me/allinformation0173" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">@allinformation0173</a></div>
+                  <div><strong>Instagram:</strong> <a href="https://www.instagram.com/opeditzxx/?utm_source=qr&amp;r=nametag" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">@opeditzxx</a></div>
+                </div>
+              </div>
+
+              <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+                <div class="font-bold text-sm text-slate-900 dark:text-white">Developer Projects</div>
+                <div class="space-y-1.5 text-xs">
+                  <div><strong>GitHub:</strong> <a href="https://github.com/v54087912-collab" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">v54087912-collab</a></div>
+                  <div><strong>Portfolio:</strong> <a href="https://aboutmee.pages.dev/" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">aboutmee.pages.dev</a></div>
+                  <div><strong>MyStore:</strong> <a href="https://mystoree.pages.dev/" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">mystoree.pages.dev</a></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/40 flex items-center justify-between flex-wrap gap-3">
+              <div class="text-xs text-slate-700 dark:text-slate-300">
+                Found a bug or have a suggestion? Join our Telegram discussion group!
+              </div>
+              <a
+                href="https://t.me/+gQawrH0MFs00M2Y1"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm transition-colors"
+              >
+                Report &amp; Feedback Group
+              </a>
+            </div>
+
+          </section>
+
+        </article>
+      </div>
+    </div>
+
+    <!-- Shared Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-8 text-center text-xs text-slate-500">
+      <div class="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-2 font-bold text-slate-800 dark:text-slate-200">
+          <img src="/logo-light.jpg" alt="Toolora" class="w-6 h-6 rounded-lg object-contain shadow-xs logo-light dark:hidden" />
+          <img src="/logo-dark.jpg" alt="Toolora" class="w-6 h-6 rounded-lg object-contain shadow-xs logo-dark hidden dark:block" />
+          <span>Toolora &bull; 100% In-Browser Private Utilities</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <a href="/docs.html" class="hover:underline font-semibold text-blue-600 dark:text-blue-400">Documentation</a>
+          <a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a>
+          <a href="/terms.html" class="hover:underline">Terms</a>
+          <a href="/contact.html" class="hover:underline">Contact</a>
+          <a href="https://t.me/+gQawrH0MFs00M2Y1" target="_blank" rel="noopener noreferrer" class="hover:underline">Report a Bug / Feedback</a>
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/shared/site-shell.ts"></script>
+  </body>
+</html>
